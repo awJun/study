@@ -6,7 +6,8 @@ from tensorflow.keras.layers import Dense
 x = np.array([[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
               [1, 1, 1, 1, 2, 1.3, 1.4, 1.5, 1.6, 1.4],
               [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]]
-             )    # (2,10)
+             )    # (2,10)  원래는 10행 2열의 데이터를 사용해야하지만 2행 10열인 데이터이므로
+                  # 트랜스포스 하여서 사용
 
 # 대활호 하나 = 리스트  
 
@@ -46,7 +47,7 @@ model.fit(x, y, epochs=100, batch_size=3)
 loss = model.evaluate(x, y)
 print('lose : ', loss)
 
-result = model.predict([[10, 1.4, 0]])  # (1, 1, 3)
+result = model.predict([[[10, 1.4, 0]]])  # (1, 3)
 print('[10, 1.4, 0]의 예측값 : ', result)
 
 # lose :  0.000930643524043262
