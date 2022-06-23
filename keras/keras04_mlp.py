@@ -54,8 +54,3 @@ result = model.predict([[10, 1.4]])  #값 20
 print('[10, 1.4]의 예측값 : ', result)
 
 
-
-
-
-
-
