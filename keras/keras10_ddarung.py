@@ -29,6 +29,9 @@ test_set = pd.read_csv(path + 'test.csv', index_col=0)
 print(test_set)
 print(test_set.shape)  # [715 rows x 9 columns]
                        # (715, 9)
+                       
+test_set = test_set.fillna(method='backfill')    
+
 
 """
     RMSE는 제곱하면 값이 너무 커지므로 루트를 씌워서 값을 다시 줄이는 것
@@ -103,22 +106,13 @@ model.add(Dense(1))
 '''
 #2. 모델구성
 model = Sequential()
-model.add(Dense(500, input_dim=9))  # 첫번째 히든에 1넣으면 성능 아작난다.
-model.add(Dense(700))
-model.add(Dense(600))
-model.add(Dense(700))
-model.add(Dense(700))
-model.add(Dense(500))
-model.add(Dense(500))
-model.add(Dense(700))
-model.add(Dense(500))
-model.add(Dense(300))
-model.add(Dense(1))
+model.add(Dense(1, input_dim=9))  # 첫번째 히든에 1넣으면 성능 아작난다.
+
 
 #3. 컴파일, 훈련
 model.compile(loss='mae', optimizer='adam')
-model.fit(x_train, y_train, epochs=300                     ###################################
-          , batch_size=30)
+model.fit(x_train, y_train, epochs=1                    ###################################
+          , batch_size=3)
 
 #4. 결과, 예측
 loss = model.evaluate(x_test, y_test)
@@ -127,12 +121,57 @@ print('lose : ', loss)
 y_predict = model.predict(x_test)
 def RMSE(a, b):
     return np.sqrt(mean_squared_error(a, b))
-  # return np.sqrt(mean_squared_error(y_test, y_predict))를 반환한다.
-  # sqrt는 루트이다 (mean_squared_error(y_test, y_predict))에 루트(제곱, 제곱근)를 함
-  # 100에 루트를하면 10    /  루트를하면 제곱이 줄어든다.
 
 rmse = RMSE(y_test, y_predict)
 print("RMSE : ", rmse)
+
+
+#####################################################
+
+y_summit = model.predict(test_set)
+
+#print(y_summit)
+#print(y_summit.shape)    # (715, 1)
+
+############# .to_csv()
+##### submission.csv를 완성하시오. 
+
+     
+      
+submissin_set = pd.read_csv(path + 'submission.csv', index_col=0)
+   # print(submissin.shape)   # (715, 1)
+      
+submissin_set['count'] = y_summit
+
+
+submissin_set.to_csv('./_data/ddarung/submission.csv', index = True)
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 """
 
