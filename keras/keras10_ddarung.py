@@ -89,6 +89,7 @@ x_train, x_test, y_train, y_test = train_test_split(x, y,
                                                     random_state=1450  # 1430
                                                     )
 # 114     1450(49)  
+
 '''
 #2. 모델구성
 model = Sequential()
@@ -111,7 +112,7 @@ model.add(Dense(1, input_dim=9))  # 첫번째 히든에 1넣으면 성능 아작
 
 #3. 컴파일, 훈련
 model.compile(loss='mae', optimizer='adam')
-model.fit(x_train, y_train, epochs=1                    ###################################
+model.fit(x_train, y_train, epochs=1                   
           , batch_size=3)
 
 #4. 결과, 예측
@@ -133,8 +134,8 @@ y_summit = model.predict(test_set)
 #print(y_summit)
 #print(y_summit.shape)    # (715, 1)
 
-############# .to_csv()
-##### submission.csv를 완성하시오. 
+     ############# .to_csv() 
+     ##### submission.csv를 완성하시오. 
 
      
       
