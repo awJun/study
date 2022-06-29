@@ -10,7 +10,7 @@ from sklearn.metrics import r2_score, mean_squared_error
 
 #1. 데이터
 path = './_data/kaggle_bike/'  
-  
+
      # 결측치는 없는 것으로 판명                                                               
 train_set = pd.read_csv(path + 'train.csv', index_col=0)  
   # (10886, 11)                

@@ -84,9 +84,9 @@ print(y.shape)   # (1459,) output = 1개
 
 
 x_train, x_test, y_train, y_test = train_test_split(x, y,
-                                                    train_size=0.8,
+                                                    train_size=0.9,
                                                     shuffle=True,
-                                                    random_state=1450  # 1430
+                                                    random_state=100  # 1430
                                                     )
 # 114     1450(49)  
 
