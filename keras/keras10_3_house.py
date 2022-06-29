@@ -225,7 +225,7 @@ y = train_set['SalePrice']
 
 x_train, x_test, y_train, y_test = train_test_split(x,y,
                                                     train_size=0.75,
-                                                    random_state=80
+                                                    random_state=100
                                                     )
 print(x_train)
 print(y_train)
@@ -234,12 +234,11 @@ print(y_train)
 model = Sequential()
 model.add(Dense(100, activation='swish', input_dim=12))
 model.add(Dense(100, activation='swish'))
-model.add(Dense(100 , activation='swish'))
 model.add(Dense(1))
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')
-model.fit(x_train, y_train, epochs=5000, batch_size=100, verbose=1)
+model.fit(x_train, y_train, epochs=5000, batch_size=50, verbose=1)
 
 #4. 평가, 예측
 loss = model.evaluate(x_test, y_test) 
@@ -283,6 +282,42 @@ r2스코어 :  0.8949266056165663
 
 loss :  511977856.0
 RMSE :  22626.927351608643
-r2스코어 :  0.8967151617186039
+r2스코어 :  0.8967151617186039      0.16559
 
+loss :  650527552.0
+RMSE :  25505.440872134546
+r2스코어 :  0.8866326433666379      0.15941
+
+loss :  482705760.0
+RMSE :  21970.56646423742
+r2스코어 :  0.8818992685731528      0.16086
+
+loss :  859110080.0
+RMSE :  29310.582654824815
+r2스코어 :  0.8502829524935626      0.16350
+
+loss :  631949696.0
+RMSE :  25138.611875613406
+r2스코어 :  0.8898701782823613     0.19017
+
+
+loss :  629103360.0
+RMSE :  25081.933890325603
+r2스코어 :  0.8903662199773063     0.16558
+
+loss :  759523968.0
+RMSE :  27559.464163578672
+r2스코어 :  0.8676378267134035
+
+loss :  563917248.0
+RMSE :  23746.941493205344
+r2스코어 :  0.8892981571218583
+
+loss :  624675968.0
+RMSE :  24993.518348052756
+r2스코어 :  0.8911377908878053
+
+
+
+ 
 '''
