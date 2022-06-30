@@ -1,4 +1,7 @@
 import numpy as np
+import pandas as ap
+import matplotlib.pyplot as plt
+
 from tensorflow.python.keras.models import Sequential
 from tensorflow.python.keras.layers import Dense
 from sklearn.model_selection import train_test_split
@@ -47,8 +50,8 @@ print('r2스코어 : ', r2)
 # loss :  4.4386515617370605
 # r2스코어 :  0.6140832517852677
 
-
-
+plt_scatter = plt.scatter(y_test, y_predict)
+print(plt_scatter)
 
 
 
