@@ -9,8 +9,14 @@ class Unit:   # 부모 클래스 생성
     def attack(self):
         print(self.name, "이(가) 공격을 수행합니다. [전투력:", self.power, "]")
         
-    
+class Monster(Unit):
+    def __init__(self,name,power, type):
+        self.name = name
+        self.power = power
+        self.type = type
 
+monster = Monster("슬라임", 10, "초급")    
+monster.attack()
 
 
 

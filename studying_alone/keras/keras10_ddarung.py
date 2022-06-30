@@ -42,7 +42,7 @@ model.add(Dense(1, activation = 'swish', input_dim=9))
 
 #3. 컴파일, 훈련
 model.compile(loss='mae', optimizer='adam')
-model.fit(x_train, y_train, epochs=1, batch_size=3)
+model.fit(x_train, y_train, epochs=11111, batch_size=3)
 
 #4. 결과, 예측
 loss = model.evaluate(x_test, y_test)
