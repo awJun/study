@@ -30,7 +30,7 @@ model.add(Dense(1))
 
 #3. 컴파일. 훈련
 model.compile(loss='mae', optimizer='adam')
-model.fit(x_train, y_train, epochs=100, batch_size=1)
+model.fit(x_train, y_train, epochs=100, batch_size=1, validation_split=0.25)
 
 #4. 평가, 예측
 loss = model.evaluate(x_test, y_test)
@@ -49,14 +49,6 @@ print('r2스코어 : ', r2)
 #  validation_split=0.2 결과
 # loss :  4.4386515617370605
 # r2스코어 :  0.6140832517852677
-
-plt_scatter = plt.scatter(y_test, y_predict)
-print(plt_scatter)
-
-
-
-
-
 
 
 
