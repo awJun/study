@@ -14,6 +14,8 @@ print(datasets.feature_names)
 
 x = datasets.data  # [data] = /data 안에 키 벨류가 있으므로 똑같은 형태다.
 y = datasets.target 
+print(x)
+print(y)
 
 # print(x.shape, y.shape) (569, 30) (569,)  y는 569개
 
@@ -62,18 +64,19 @@ print("걸린시간 : ", end_time)
 y_predict = model.predict(x_test)
 
 ## 과제: 아래 accuracy 스코어 완성
-# from sklearn.metrics import r2_score, accuracy_score
+from sklearn.metrics import r2_score, accuracy_score
+acc = accuracy_score(y_test, y_predict)
+print('accuracy : ', acc)
 
 # # r2 = r2_score(y_test, y_predict)   # 0 ~ 1까지 지표를 나타낸다 (1에 가까우면 가장 좋다 (1에 마출 것.))
-# acc = accuracy_score(y_test, y_predict)
-# print('r2스코어 : ', acc)
+
 print(y_predict)
 
 import matplotlib.pyplot as plt
 plt.figure(figsize = (9,6))     # figsize(가로길이,세로길이)
 plt.plot(hist.history['loss'], marker='.', color='red', label='loss')
 plt.plot(hist.history['val_loss'], marker='.', color='blue', label='val_loss')
-plt.grid()                      # plt.grid(True)
+plt.grid(True, axis=('x'))                      # plt.grid(True)
 plt.title('asaql')
 plt.ylabel('loss')
 plt.xlabel('epochs')
@@ -85,7 +88,6 @@ plt.show()
 # loss :  0.09797556698322296
 # 걸린시간 :  1656658585.353482
 # r2스코어 :  0.592937553253402
-
 
 
 
