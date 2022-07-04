@@ -35,14 +35,14 @@ model.fit(x_train, y_train, epochs=100, batch_size=100, validation_split=0.25)
 
 #4. 평가, 예측
 loss = model.evaluate(x_test, y_test)
-print('loss : ', loss)
 
 y_predict = model.predict(x_test)
 
 from sklearn.metrics import r2_score
 r2 = r2_score(y_test, y_predict)   
-print('r2스코어 : ', r2)
 
+print('loss : ', loss)
+print('r2스코어 : ', r2)
 
 # loss :  0.6617991328239441
 # r2스코어 :  0.2960765025760209
