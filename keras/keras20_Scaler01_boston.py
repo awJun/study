@@ -1,12 +1,15 @@
 import numpy as np
+import time
  
 from sklearn.datasets import load_boston
 from sklearn.model_selection import train_test_split # 함수 가능성이 높음
 from sklearn.preprocessing import MinMaxScaler, StandardScaler # 클래스 가능성이 높음
+from sklearn.preprocessing import MaxAbsScaler, RobustScaler
  
 from tensorflow.python.keras.models import Sequential
 from tensorflow.python.keras.layers import Dense
 
+# 아래 두 가지를 알아보고 12개에 적용
 
 datasets = load_boston()
 x = datasets.data 
@@ -24,11 +27,15 @@ y = datasets.target
  
 x_train, x_test, y_train, y_test = train_test_split(x, y,
                                                     train_size=0.7,
-                                                    random_state=66,
+                                                    random_state=100,
                                                     )
  
 # scaler =  MinMaxScaler()
-scaler = StandardScaler()
+# scaler = StandardScaler()
+# scaler = MaxAbsScaler()
+scaler = RobustScaler()
+
+
 
 scaler.fit(x_train)
 x_train = scaler.transform(x_train) # x_train을 수치로 변환해준다.
@@ -57,9 +64,20 @@ model.add(Dense(220))
 model.add(Dense(1))
 
 
+
 #3. 컴파일. 훈련
 model.compile(loss='mae', optimizer='adam')
-model.fit(x_train, y_train, epochs=3000, batch_size=1)
+
+from tensorflow.python.keras.callbacks import EarlyStopping
+earlyStopping = EarlyStopping(monitor='val_loss', patience=100, mode='auto', verbose=1,
+                              restore_best_weights=True) 
+
+start_time = time.time()
+model.fit(x_train, y_train, epochs=10000, batch_size=100, verbose=1, validation_split=0.2,
+                 callbacks=[earlyStopping])  
+end_time = time.time() -start_time
+
+
 
 
 #4. 평가, 예측
@@ -72,17 +90,49 @@ r2 = r2_score(y_test, y_predict)
 
 print('loss : ', loss)
 print('r2스코어 : ', r2)
+print("걸린시간 : ", end_time)
  
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+#########################################################
+"""
+scaler 사용 안함
+
+loss :  3.8592958450317383
+r2스코어 :  0.6372426021180102        
+걸린시간 :  37.72577524185181
+"""
+#########################################################
+"""  
+scaler = StandardScaler()
+
+loss :  3.538557291030884
+r2스코어 :  0.6525740215917608
+걸린시간 :  6.980016231536865
+""" 
+#########################################################
+"""
+scaler =  MinMaxScaler()
+
+loss :  3.4968221187591553
+r2스코어 :  0.629320025789293
+걸린시간 :  11.156143188476562
+"""
+#########################################################
+"""
+scaler = MaxAbsScaler()
+
+loss :  3.5338006019592285
+r2스코어 :  0.6566347177735201
+걸린시간 :  6.393912315368652
+"""
+#########################################################
+"""
+scaler = RobustScaler()
+
+loss :  3.4373526573181152
+r2스코어 :  0.6522324456885593
+걸린시간 :  8.193526268005371
+"""  
+#########################################################
  
  
  
