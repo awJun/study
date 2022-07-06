@@ -38,7 +38,9 @@ PassengerId                    ...
 ################################################################################
 """
 print(train_set.describe())  # describe 해당 데이터에 상세 내용을 볼 수 있다.
+
 https://www.geeksforgeeks.org/python-pandas-dataframe-describe-method/    ## describe 관련 링크 ##
+
          Survived  ...        Fare
 count  891.000000  ...  891.000000
 mean     0.383838  ...   32.204208
@@ -213,4 +215,18 @@ submission = submission.astype(int)
 submission.to_csv('test21.csv',index=True)
 
 
-
+# model.summary()
+# Model: "sequential"
+# _________________________________________________________________
+# Layer (type)                 Output Shape              Param #
+# =================================================================
+# dense (Dense)                (None, 100)               1000
+# _________________________________________________________________
+# dense_1 (Dense)              (None, 100)               10100
+# _________________________________________________________________
+# dense_2 (Dense)              (None, 1)                 101
+# =================================================================
+# Total params: 11,201
+# Trainable params: 11,201
+# Non-trainable params: 0
+# _________________________________________________________________

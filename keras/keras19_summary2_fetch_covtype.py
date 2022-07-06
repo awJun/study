@@ -1,3 +1,9 @@
+# keras18-gpu_test3파ㅣ일의 서머리를 확인해보시오
+# 서머리와 시간!!!
+# 애포 10개로
+
+
+
 import numpy as np
 import pandas as pd
 from sklearn.datasets import load_iris
@@ -55,7 +61,7 @@ print(y)
 
 x_train, x_test, y_train, y_test = train_test_split(x,y,
                                                     train_size=0.7,
-                                                    random_state=66
+                                                    random_state=100
                                                     )
 
 print(y_test)
@@ -80,12 +86,15 @@ model.compile(loss='categorical_crossentropy', optimizer='adam', # 다중 분류
 
 es = EarlyStopping(monitor='val_loss', patience=1000, mode='auto', verbose=1, 
                               restore_best_weights=True)   
+
+
 start_time = time.time()
-model.fit(x_train, y_train, epochs=10, batch_size=100,
+model.fit(x_train, y_train, epochs=10, batch_size=1500,
                  validation_split=0.2,
                  callbacks=[es],
                  verbose=1)
-end_time = time.time()
+end_time = time.time()   -start_time
+
 
 #4. 평가, 예측
 # loss, acc= model.evaluate(x_test, y_test)
@@ -117,6 +126,29 @@ print('acc스코어 : ', acc)
 print(" end_time : ", end_time)
 
 
+model.summary()
+
+# Model: "sequential"
+# _________________________________________________________________
+# Layer (type)                 Output Shape              Param #
+# =================================================================
+# dense (Dense)                (None, 500)               27500
+# _________________________________________________________________
+# dense_1 (Dense)              (None, 400)               200400
+# _________________________________________________________________
+# dense_2 (Dense)              (None, 300)               120300
+# _________________________________________________________________
+# dense_3 (Dense)              (None, 400)               120400
+# _________________________________________________________________
+# dense_4 (Dense)              (None, 7)                 2807
+# =================================================================
+# Total params: 471,407
+# Trainable params: 471,407
+# Non-trainable params: 0
+# _________________________________________________________________
+
+
+
 
 
 # gpu
@@ -126,6 +158,94 @@ print(" end_time : ", end_time)
 # cpu
 # acc스코어 :  0.5900208830548926
 #  end_time :  1657067971.4939573
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
