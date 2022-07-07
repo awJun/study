@@ -2,8 +2,7 @@
 import numpy as np
 import pandas as pd
 from sqlalchemy import true #pandas : 엑셀땡겨올때 씀
-from tensorflow.python.keras.models import Sequential
-from tensorflow.python.keras.layers import Dense
+
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score, mean_squared_error
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
@@ -53,16 +52,17 @@ x_train, x_test, y_train, y_test = train_test_split(x,y,
 
 
 
-scaler =  MinMaxScaler()
-# scaler = StandardScaler()
-# scaler = MaxAbsScaler()
-# scaler = RobustScaler()
+# scaler =  MinMaxScaler()
+# # scaler = StandardScaler()
+# # scaler = MaxAbsScaler()
+# # scaler = RobustScaler()
 
-scaler.fit(x_train)
-x_train = scaler.transform(x_train) # x_train을 수치로 변환해준다.
-x_test = scaler.transform(x_test) # 
+# scaler.fit(x_train)
+# x_train = scaler.transform(x_train) # x_train을 수치로 변환해준다.
+# x_test = scaler.transform(x_test) # 
 
-test_set = scaler.transform(test_set) # 마지막에 사용할 test_set을 전처리 작업
+# test_set = scaler.transform(test_set) # 마지막에 사용할 test_set을 전처리 작업
+
 
 # print(np.min(x_train))   # 0.0
 # print(np.max(x_train))   # 1.0000000000000002
@@ -81,14 +81,25 @@ test_set = scaler.transform(test_set) # 마지막에 사용할 test_set을 전�
 
 
 #2. 모델구성
+from tensorflow.python.keras.models import Sequential, Model
+from tensorflow.python.keras.layers import Dense, Input
+"""
+### 기존 모델 ###
+
 model = Sequential()
 model.add(Dense(100, activation='selu', input_dim=9))
 model.add(Dense(100, activation='selu'))
 model.add(Dense(100, activation='relu'))
 model.add(Dense(100, activation='selu'))
 model.add(Dense(1))
-
-
+"""
+### 새로운 모델 ###
+input1 = Input(shape=(9,))   # 처음에 Input 명시하고 Input 대한 shape 명시해준다.
+dense1 = Dense(100)(input1)   # Dense 구성을하고  node 값을 넣고 받아오고 싶은 변수 받아온다.
+dense2 = Dense(100, activation = 'relu')(dense1)    # 받아온 변수를 통해 훈련의 순서를 사용자가 원하는대로 할 수 있다.
+dense3 = Dense(100, activation = 'sigmoid')(dense2)
+output1 = Dense(1)(dense3)
+model = Model(inputs=input1, outputs=output1) # 해당 모델의 input과 output을 설정한다.
 
 
 #3. 컴파일, 훈련
@@ -97,13 +108,11 @@ earlyStopping = EarlyStopping(monitor='val_loss', patience=500, mode='min', verb
                               restore_best_weights=True)
 
 
-
-
 start_time = time.time()
 model.compile(loss='mse', optimizer='adam', metrics=['mae'])
-model.fit(x_train, y_train, epochs=10000, batch_size=100, verbose=1, validation_split=0.2, callbacks=[earlyStopping])
+model.fit(x_train, y_train, epochs=10000, batch_size=100,
+          verbose=1, validation_split=0.2, callbacks=[earlyStopping])
 end_time = time.time()  -start_time
-
 
 
 
@@ -129,6 +138,16 @@ print('r2스코어 : ', r2)
 print("걸린시간:", end_time )
 
 
+#########################################################
+"""   [best_scaler]
+
+scaler 사용 안함
+
+loss :  1130.216552734375
+RMSE :  42.79421311713388
+r2스코어 :  0.7578134065573953
+걸린시간: 59.628963470458984
+"""
 #########################################################
 """   
 scaler 사용 안함

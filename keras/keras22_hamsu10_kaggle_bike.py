@@ -1,8 +1,7 @@
 # 캐글 바이크 문제풀이
 import numpy as np
 import pandas as pd
-from tensorflow.python.keras.models import Sequential
-from tensorflow.python.keras.layers import Dense
+
 import time
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score, mean_squared_error 
@@ -37,14 +36,14 @@ x_train, x_test, y_train, y_test = train_test_split(x, y,
 
 
 # scaler =  MinMaxScaler()
-# scaler = StandardScaler()
+scaler = StandardScaler()
 # scaler = MaxAbsScaler()
 # scaler = RobustScaler()
 
-# scaler.fit(x_train)
-# x_train = scaler.transform(x_train) # x_train을 수치로 변환해준다.
-# x_test = scaler.transform(x_test) # 
-# test_set = scaler.transform(test_set) # 
+scaler.fit(x_train)
+x_train = scaler.transform(x_train) # x_train을 수치로 변환해준다.
+x_test = scaler.transform(x_test) # 
+test_set = scaler.transform(test_set) # 
 
 # print(np.min(x_train))   # 0.0
 # print(np.max(x_train))   # 1.0000000000000002
@@ -56,11 +55,25 @@ x_train, x_test, y_train, y_test = train_test_split(x, y,
 
 
 #2. 모델구성
+from tensorflow.python.keras.models import Sequential, Model
+from tensorflow.python.keras.layers import Dense, Input
+"""
+### 기존 모델 ###
+
 model = Sequential()
 model.add(Dense(100, activation = 'swish', input_dim=8))
 model.add(Dense(100, activation = 'swish'))
 model.add(Dense(100, activation = 'swish'))
 model.add(Dense(1))
+"""
+### 새로운 모델 ###
+input1 = Input(shape=(8,))   # 처음에 Input 명시하고 Input 대한 shape 명시해준다.
+dense1 = Dense(100)(input1)   # Dense 구성을하고  node 값을 넣고 받아오고 싶은 변수 받아온다.
+dense2 = Dense(100, activation = 'relu')(dense1)    # 받아온 변수를 통해 훈련의 순서를 사용자가 원하는대로 할 수 있다.
+dense3 = Dense(100, activation = 'sigmoid')(dense2)
+output1 = Dense(1)(dense3)
+model = Model(inputs=input1, outputs=output1) # 해당 모델의 input과 output을 설정한다.
+
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')
@@ -108,7 +121,16 @@ print("걸린시간 : ", end_time)
       
       
       
+#########################################################
+"""   [best_scaler]
 
+scaler = StandardScaler()
+
+loss :  22122.166015625
+RMSE :  148.73522881662836
+r2스코어 :  0.3154347265087888
+걸린시간 :  12.737728595733643
+"""
 #########################################################
 """   
 scaler 사용 안함

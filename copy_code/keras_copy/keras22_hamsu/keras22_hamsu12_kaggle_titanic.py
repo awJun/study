@@ -1,8 +1,7 @@
 from pydoc import describe
 import numpy as np
 import pandas as pd   # https://pandas.pydata.org/docs/index.html pandas 종합 설명 사이트
-from tensorflow.python.keras.models import Sequential
-from tensorflow.python.keras.layers import Dense
+
 from sklearn.model_selection import train_test_split
 from tensorflow.python.keras.callbacks import EarlyStopping
 from sklearn.metrics import accuracy_score
@@ -158,9 +157,9 @@ x_train, x_test, y_train, y_test = train_test_split(x,y,
 
 
 
-# scaler =  MinMaxScaler()
+scaler =  MinMaxScaler()
 # scaler = StandardScaler()
-scaler = MaxAbsScaler()
+# scaler = MaxAbsScaler()
 # scaler = RobustScaler()
 
 scaler.fit(x_train)
@@ -178,6 +177,10 @@ test_set = scaler.transform(test_set) #
 
 
 #2. 모델 구성
+from tensorflow.python.keras.models import Sequential, Model
+from tensorflow.python.keras.layers import Dense, Input
+"""
+### 기존 모델 ###
 
 model = Sequential()
 model.add(Dense(100,input_dim=9))
@@ -185,8 +188,14 @@ model.add(Dense(100, activation='relu'))
 model.add(Dense(1, activation='sigmoid'))
 #다중 분류로 나오는 아웃풋 노드의 개수는 y 값의 클래스의 수와 같다.활성화함수 'softmax'를 통해 
 # 아웃풋의 합은 1이 된다.
-
-
+"""
+### 새로운 모델 ###
+input1 = Input(shape=(9,))   # 처음에 Input 명시하고 Input 대한 shape 명시해준다.
+dense1 = Dense(100)(input1)   # Dense 구성을하고  node 값을 넣고 받아오고 싶은 변수 받아온다.
+dense2 = Dense(100, activation = 'relu')(dense1)    # 받아온 변수를 통해 훈련의 순서를 사용자가 원하는대로 할 수 있다.
+dense3 = Dense(100, activation = 'sigmoid')(dense2)
+output1 = Dense(1, activation='sigmoid')(dense3)
+model = Model(inputs=input1, outputs=output1) # 해당 모델의 input과 output을 설정한다.
 
 
 
@@ -288,6 +297,16 @@ print("걸린시간 : ", end_time)
 # _________________________________________________________________
 
 
+
+#########################################################
+"""   [best_scaler]
+
+scaler =  MinMaxScaler()
+
+loss : 0.4683985710144043
+acc 스코어 : 0.7901234567901234
+걸린시간 :  4.877824306488037
+"""
 #########################################################
 """   
 scaler 사용 안함
