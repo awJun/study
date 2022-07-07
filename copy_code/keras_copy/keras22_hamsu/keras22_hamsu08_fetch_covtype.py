@@ -93,7 +93,7 @@ model.add(Dense(400, activation='linear'))
 model.add(Dense(7, activation='softmax'))             # softmax : 다중분류일때 아웃풋에 활성화함수로 넣어줌, 아웃풋에서 소프트맥스 활성화 함수를 씌워 주면 그 합은 무조건 1로 변함
                                                                  # ex 70, 20, 10 -> 0.7, 0.2, 0.1
 """
-### 새로운 모델 ###
+### 함수형 모델 ###
 input1 = Input(shape=(54,))   # 처음에 Input 명시하고 Input 대한 shape 명시해준다.
 dense1 = Dense(500)(input1)   # Dense 구성을하고  node 값을 넣고 받아오고 싶은 변수 받아온다.
 dense2 = Dense(400, activation = 'relu')(dense1)    # 받아온 변수를 통해 훈련의 순서를 사용자가 원하는대로 할 수 있다.
@@ -138,7 +138,6 @@ print(y_test)
 # y_test = np.argmax(y_test, axis= 1)
 print(np.unique(y_predict))
 print(np.unique(y_test))
-
 
 
 acc= accuracy_score(y_test, y_predict)
@@ -199,6 +198,7 @@ end_time :  140.73249101638794
 """  
 #########################################################
  
+
 
 
 

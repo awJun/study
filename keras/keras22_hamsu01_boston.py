@@ -68,7 +68,7 @@ model.add(Dense(220))
 model.add(Dense(1))
 """
 
-### 새로운 모델 ###
+### 함수형 모델 ###
 input1 = Input(shape=(13,))   # 처음에 Input 명시하고 Input 대한 shape 명시해준다.
 dense1 = Dense(300)(input1)   # Dense 구성을하고  node 값을 넣고 받아오고 싶은 변수 받아온다.
 dense2 = Dense(240, activation = 'relu')(dense1)    # 받아온 변수를 통해 훈련의 순서를 사용자가 원하는대로 할 수 있다.
