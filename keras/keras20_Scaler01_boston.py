@@ -45,6 +45,12 @@ x_test = scaler.transform(x_test) #
 # print(np.min(x_test))   # -0.06141956477526944
 # print(np.max(x_test))   # 1.1478180091225068
  
+ 
+ 
+# 위에 3줄을 2줄로 줄임
+# x_train = scaler.fit_transform(x_train)
+# x_test = scaler.transform(x_test)
+
 
 
 ##### [ 3가지 성능 비교 ] #####
