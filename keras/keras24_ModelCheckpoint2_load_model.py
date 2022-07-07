@@ -2,6 +2,7 @@ from msilib.schema import MsiPatchHeaders
 import numpy as np
 import time
 
+from tensorflow.python.keras.models import Sequential, load_model  
 from tensorflow.python.keras.callbacks import EarlyStopping, ModelCheckpoint
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
@@ -73,7 +74,8 @@ x_test = scaler.transform(x_test) #
 # end_time = time.time() -start_time
 
 
-model = model_model('./_ModelCheckPoint/keras24_ModelCheckPoint.hdf5')
+model = load_model('./_ModelCheckPoint/keras24_ModelCheckPoint.hdf5')
+
 
 #4. 평가, 예측
 ################################################################################
