@@ -265,7 +265,6 @@ submission.to_csv('test21.csv',index=True)
 print("걸린시간 : ", end_time)
 
 
-
 #########################################################
 """
 Dropout 사용안함
