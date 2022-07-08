@@ -61,13 +61,16 @@ print(date)
 
 filepath = './_ModelCheckPoint/'
 filename = '{epoch:04d}-{val_loss:.4f}.hdf5'
+# {epoch:04d} epoch를 4자리까지 제한을 하겠다. 
+# {val_loss:.4f} val_loss 뒤에 소수점을 4자리까지로 제한하겠다.
 
 earlyStopping = EarlyStopping(monitor='val_loss', patience=10, mode='auto', verbose=1, 
                               restore_best_weights=True)        
 
 mcp = ModelCheckpoint(monitor='val_loss', mode='auto', verbose=1, save_best_only=True, 
                       filepath= "".join([filepath, 'k24_', date, '_', filename])
-                      )
+                      ) # filepath= ""  -->  ""를 사용해서 빈공간 생성
+                        # join()안에 항목을 합쳐서 출력하겠다. 
 
 hist = model.fit(x_train, y_train, epochs=100, batch_size=100,
                  validation_split=0.2,

@@ -43,6 +43,8 @@ x_test = scaler.transform(x_test)
 
 # model.save("./_save/keras23_1_save_model.h5")
 model = load_model("./_save/keras23_1_save_model.h5")
+# 해당 경로에 있는 저장된 모델과 가중치 값을 가져온다
+# 해당 모델을 만들 때 나왔던 가중치 값이 그대로 저장되고 그 값을 가져옴
 # 해당 경로에 있는 모델을 불러옴
 
 model.summary()

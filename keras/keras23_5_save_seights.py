@@ -46,47 +46,6 @@ model.save_weights("./_save/keras23_5_save_weights1.h5")
 
 # model = load_model("./_save/keras23_3_save_model.h5")
 
-
-
-# 3. 컴파일, 훈련
-model.compile(loss='mse', optimizer='adam')
-
-
-
-from tensorflow.python.keras.callbacks import EarlyStopping
-earlyStopping = EarlyStopping(monitor='val_loss', patience=300, mode='auto', verbose=1, 
-                              restore_best_weights=True)        
-
-model.fit(x_train, y_train, epochs=3000, batch_size=100,
-                 validation_split=0.2,
-                 callbacks=[earlyStopping],
-                 verbose=1)
-
-
-
-# model.save("./_save/keras23_3_save_model.h5")
-
-model.save_weights("./_save/keras23_5_save_weights2.h5")
-
-# model = load_model("./_save/keras23_3_save_model.h5")
-
-end_time = time.time() - start_time
-
-#4. 평가, 예측
-loss = model.evaluate(x_test, y_test)
-y_predict = model.predict(x_test)
-from sklearn.metrics import r2_score
-r2 = r2_score(y_test, y_predict)
-print('loss : ' , loss)
-print('r2스코어 : ', r2)
-print("걸린시간 : ", end_time)
-
-
-# model = load_model("./_save/keras23_3_save_model.h5")
-      # 위에서 해당 경로의 모델을 가져와서 훈련을 시킬 경우 해당 모델에서
-      # 저장된 가중치 값을 버리고 아래에서 훈련을 거쳐서 나온 가중치 값으로 된다. 
-      
-      
       
 model.save_weights("keras23_5_save_weights1.h5")
       
@@ -102,6 +61,8 @@ model.fit(x_train, y_train, epochs=10000, batch_size=1000, verbose=1, validation
                  callbacks=[earlyStopping])  
 end_time = time.time() -start_time
 
+
+#########################################
 model.save("./_save/keras23_3_save_model.h5")
 
 

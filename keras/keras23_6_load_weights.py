@@ -44,7 +44,7 @@ model.summary()
 
 
 model.load_weights("./_save/keras23_5_save_weights2.h5")
-
+# 모든 레이어 가중치를 로드합니다.
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')

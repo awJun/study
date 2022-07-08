@@ -1,5 +1,7 @@
 import numpy as np
 
+from tensorflow.python.keras.models import Sequential
+from tensorflow.python.keras.layers import Dense, Dropout #(데이터의 노드를 중간중간 날려줌)
 import time
 from sklearn.model_selection import train_test_split
 from sklearn.datasets import load_iris
@@ -40,8 +42,8 @@ x_train, x_test, y_train, y_test = train_test_split(x, y,
 # print(y_test)
 
 # scaler =  MinMaxScaler()
-scaler = StandardScaler()
-# scaler = MaxAbsScaler()
+# scaler = StandardScaler()
+scaler = MaxAbsScaler()
 # scaler = RobustScaler()
 
 scaler.fit(x_train)
@@ -53,25 +55,13 @@ x_test = scaler.transform(x_test) #
 # print(np.max(x_test))   # 1.1478180091225068
 
 #2. 모델구성
-from tensorflow.python.keras.models import Sequential, Model
-from tensorflow.python.keras.layers import Dense, Input
-"""
-### 기존 모델 ###
-
 model = Sequential()
 model.add(Dense(100, activation='relu', input_dim=4))
-model.add(Dense(100, activation='relu'))
-model.add(Dense(100, activation='relu'))
-model.add(Dense(100, activation='relu'))
+model.add(Dropout(0.3))      # 30%만큼 노드를 지워버리겠다 (이빨을 빼버리겠다.)
+model.add(Dense(50, activation='relu'))
+model.add(Dropout(0.2))       # 20%만큼 노드를 지워버리겠다 (이빨을 빼버리겠다.)
+model.add(Dense(16, activation='relu'))
 model.add(Dense(3, activation='softmax'))  
-"""
-### 새로운 모델 ###
-input1 = Input(shape=(4,))   # 처음에 Input 명시하고 Input 대한 shape 명시해준다.
-dense1 = Dense(100)(input1)   # Dense 구성을하고  node 값을 넣고 받아오고 싶은 변수 받아온다.
-dense2 = Dense(100, activation = 'relu')(dense1)    # 받아온 변수를 통해 훈련의 순서를 사용자가 원하는대로 할 수 있다.
-dense3 = Dense(100, activation = 'sigmoid')(dense2)
-output1 = Dense(3, activation='softmax')(dense3)
-model = Model(inputs=input1, outputs=output1) # 해당 모델의 input과 output을 설정한다.
 
 
 #3. 컴파일. 훈련
@@ -90,16 +80,8 @@ hist = model.fit(x_train, y_train, epochs=10, batch_size=100,
                  callbacks=[earlyStopping])  
 end_time = time.time() -start_time  
 
-model.save("./_save/keras23_5_save_iris.h5")
-
 #4. 평가, 예측
 
-#########################################################
-"""
-
-
-
-"""
 ################################################################################
 loss, acc = model.evaluate(x_test, y_test)  # loss acc 각각 다른 리스트로 출력
                                             # loss = loss / acc = metrics에서 나온 accuracy 값
@@ -125,56 +107,18 @@ print("걸린시간 : ", end_time)
 
 
 #########################################################
-"""   [best_scaler]
-
-scaler = StandardScaler()
-
-loss :  0.8956488370895386
-accuracy :  0.36666666666666664
-걸린시간 :  0.701758623123169
 """
-#########################################################
-"""   
-scaler 사용 안함
+Dropout 사용안함
 
-loss :  0.6515936255455017
-accuracy :  0.8666666666666667
-걸린시간 :  1.2761118412017822
+
 """
 #########################################################
 """
-scaler = StandardScaler()
+Dropout 사용
 
-loss :  0.5778014659881592
-accuracy :  0.9
-걸린시간 :  1.3281612396240234
-"""
-#########################################################
-"""
-scaler =  MinMaxScaler()
-
-loss :  0.900397002696991
-accuracy :  0.8
-걸린시간 :  1.288456678390503
-"""
-#########################################################
-"""
-scaler = MaxAbsScaler()
-
-loss :  0.9513155817985535
-accuracy :  0.8333333333333334
-걸린시간 :  1.2626690864562988
-"""
-#########################################################
-"""
-scaler = RobustScaler()
-
-loss :  0.7073577642440796
-accuracy :  0.9333333333333333
-걸린시간 :  1.3117668628692627
+loss :  1.0119949579238892
+accuracy :  0.9666666666666667
+걸린시간 :  0.7453169822692871
 """  
 #########################################################
  
-
-
-
