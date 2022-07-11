@@ -18,6 +18,7 @@ print(y.shape)       # (581012,)
 print(np.unique(y, return_counts=True))   # (1, 2, 3, 4, 5, 6, 7)
 
 
+
 from tensorflow.keras.utils import to_categorical 
 y = to_categorical(y)
 print(y)
