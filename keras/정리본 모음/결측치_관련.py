@@ -1,0 +1,75 @@
+"""
+===[ 결측치 해결 ]==============================================================================================
+
+ - .info()
+
+print(train_set.info())  # 결측치 위치를 알려준다
+ #   Column                  Non-Null Count  Dtype  
+---  ------                  --------------  -----  
+ 0   hour                    1459 non-null   int64  
+ 1   hour_bef_temperature    1457 non-null   float64
+ 2   hour_bef_precipitation  1457 non-null   float64
+ 3   hour_bef_windspeed      1450 non-null   float64
+ 4   hour_bef_humidity       1457 non-null   float64
+ 5   hour_bef_visibility     1457 non-null   float64
+ 6   hour_bef_ozone          1383 non-null   float64
+ 7   hour_bef_pm10           1369 non-null   float64
+ 8   hour_bef_pm2.5          1342 non-null   float64
+ 9   count                   1459 non-null   float64
+dtypes: float64(9), int64(1)
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+- .describe()  
+
+print(train_set.describe())    # describe: 서술하다 묘사하다.  해당 값 묘사해서 알려줌
+
+              hour  ...        count
+count  1459.000000  ...  1459.000000
+mean     11.493489  ...   108.563400
+std       6.922790  ...    82.631733
+min       0.000000  ...     1.000000
+25%       5.500000  ...    37.000000
+50%      11.000000  ...    96.000000
+75%      17.500000  ...   150.000000
+max      23.000000  ...   431.000000
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+ - .isnull().sum()
+
+print(train_set.isnull().sum()) 
+
+print(train_set.isnull().sum()) # null의 합을 구하겠다.
+hour                        0
+hour_bef_temperature        2
+hour_bef_precipitation      2
+hour_bef_windspeed          9
+hour_bef_humidity           2
+hour_bef_visibility         2
+hour_bef_ozone             76
+hour_bef_pm10              90
+hour_bef_pm2.5            117
+count                       0
+dtype: int64
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+ - .dropna()     # [결측치 전체제거]
+
+train_set = train_set.dropna()    # nall이 있는 행 부분을 전체 삭제 
+                                  # 해당 행 부분의 데이터를 다 삭제하므로 데이터 손실이 크다.
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+ - .drop()       # [결측치 부분제거]  
+                 # 괄호안에 데이터를 제거한다
+          
+ x = train_set.drop(['count'], inplace=True, axis=1)   # drop: 빼버린다. count 제거
+                             # axis=1   -->   0 =행 / 1 = 열
+
+
+# inplace bool, 기본값 False
+  False이면 복사본을 반환합니다. 그렇지 않으면 제자리에서 작업을 수행하고 None을 반환합니다.
+========================================================================================================================
+"""
