@@ -39,46 +39,41 @@ start_time = time.time()
 # model.add(Dense(1))
 # model.summary()
 
-
 # model.save("./_save/keras23_1_save_model.h5")
 
-# model = load_model("./_save/keras23_3_save_model.h5")
-
-
+model = load_model("./_save/keras23_3_save_model.h5")
+# [중요] 이미 저장된 상태에서 모델 아래쪽에 위치시키고 컴파일, 훈련을 적용시켜주면
+# 저장된 파일에서 새로운 가중치(랜덤)로 값 갱신
 
 #3. 컴파일, 훈련
-# model.compile(loss='mse', optimizer='adam')
+model.compile(loss='mse', optimizer='adam')
 
+from tensorflow.python.keras.callbacks import EarlyStopping
+earlyStopping =EarlyStopping(monitor='val_loss', patience=10, mode='auto', verbose=1, 
+                             restore_best_weights=True) 
 
-
-# from tensorflow.python.keras.callbacks import EarlyStopping
-# earlyStopping = EarlyStopping(monitor='val_loss', patience=300, mode='auto', verbose=1, 
-#                               restore_best_weights=True)        
-
-# model.fit(x_train, y_train, epochs=3000, batch_size=100,
-#                  validation_split=0.2,
-#                  callbacks=[earlyStopping],
-#                  verbose=1)
-
-
-
-# model.save("./_save/keras23_3_save_model.h5")
-
-model = load_model("./_save/keras23_3_save_model.h5")
-#               해당 경로에 있는 모델을 가져옴
-#               해당 경로에 있는 저장된 모델과 가중치 값을 가져온다
-#               해당 모델을 만들 때 나왔던 가중치 값이 그대로 저장되고 그 값을 가져옴
+import time
+start_time = time.time()
+hist = model.fit(x_train, y_train, epochs=100, batch_size=20, 
+                validation_split=0.2,
+                callbacks=[earlyStopping],
+                verbose=1) #verbose=0 일때는 훈련과정을 보여주지 않음
 
 end_time = time.time() - start_time
 
+model.save("./_save/keras23_3_save_model.h5")   # 새로운 가중치 값이 들어감
+
+
+model = load_model("./_save/keras23_3_save_model.h5") # 위에서 세이브한 모델을 바로 가져옴
+
 #4. 평가, 예측
 loss = model.evaluate(x_test, y_test)
+print('loss : ', loss)
+
 y_predict = model.predict(x_test)
 from sklearn.metrics import r2_score
 r2 = r2_score(y_test, y_predict)
-print('loss : ' , loss)
-print('r2스코어 : ', r2)
-print("걸린시간 : ", end_time)
+print('r2 스코어 : ', r2)
 
 
 # loss :  11.555453300476074

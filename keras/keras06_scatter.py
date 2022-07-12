@@ -1,3 +1,13 @@
+"""=[ import matplotlib.pyplot as plt 사용 ]=======================================================
+
+plt.scatter(x, y)    # 점을 흩뿌려서 찍어주는 것       / scatter: 흩뿌리다.
+plt.plot(x, y_predict, color='red')  # plot 선을 그리다.
+
+plt.show()    # # 그래프로 보여줌   
+
+========================================================================================================================
+"""   
+ 
 import numpy as np
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
@@ -35,7 +45,8 @@ y_predict = model.predict(x)
 
 import matplotlib.pyplot as plt     
 
-plt.scatter(x, y)    # scatter: 흩뿌리다.
+plt.scatter(x, y)    # 점을 흩뿌려서 찍어주는 것       / scatter: 흩뿌리다.
 plt.plot(x, y_predict, color='red')  # plot 선을 그리다.
 
-plt.show()            
+plt.show()    # # 그래프로 보여줌     
+    

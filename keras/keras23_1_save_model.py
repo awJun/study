@@ -1,3 +1,43 @@
+"""=[ .save 설명 ]==============================================================================================
+
+model.save("./_save/keras23_1_save_model.h5")  <-- 사용자가 원하는 경로로 넣어서 사용하면 된다.
+# 모델에 관련 정보를 해당 경로에 세이브 해둠
+
+===[ 모델구성만 세이브 ]==============================================================================================
+
+
+#2. 모델구성
+model = Sequential()
+model.add(Dense(64, input_dim=13))
+model.add(Dense(32, activation ='relu'))
+model.add(Dense(16, activation ='relu'))
+model.add(Dense(8, activation ='relu'))
+model.add(Dense(1))
+
+model.save("./_save/keras23_1_save_model.h5")
+# 아래에서 사용할 경우 모델구성만 세이브
+
+
+===[ 모델과 weight까지 세이브 ]==============================================================================================
+
+#3. 컴파일. 훈련
+model.compile(loss='mse', optimizer='adam')
+
+from tensorflow.python.keras.callbacks import EarlyStopping
+earlyStopping = EarlyStopping(monitor='val_loss', patience=100, mode='min', verbose=1,
+                              restore_best_weights=True) 
+
+start_time = time.time()
+model.fit(x_train, y_train, epochs=10000, batch_size=50, verbose=1, validation_split=0.2,
+                 callbacks=[earlyStopping])  
+end_time = time.time() -start_time
+
+model.save("./_save/keras23_1_save_model.h5")
+# fit 단계 다음에 해주면 모델과 weight 까지 저장됨
+
+========================================================================================================================
+"""   
+
 import numpy as np
 import pandas as pd
 import time

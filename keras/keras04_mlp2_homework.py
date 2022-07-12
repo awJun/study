@@ -17,14 +17,14 @@ y = np.array([11, 12, 13, 14, 15, 16, 17, 18, 19, 20])  # (10, )
 
 # y=w(1)x + b(10) x 1번째 데이터와 y비교
 
-print(x.shape)  # (3, 10)
+print(x.shape)  # (2, 10)
 print(y.shape)  # (10, )
 
 # x = x.T             # 행과 열을 바꾼다
 x = x.transpose()   # 행과 열을 바꾼다.
 # x = x.reshape(10,2)   # 순서 유지
 print(x)     
-print(x.shape)  #(10, 3)
+print(x.shape)  #(10, 2)
 
 
 """

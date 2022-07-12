@@ -16,6 +16,8 @@ datasets = load_wine()
 x = datasets.data
 y = datasets.target
 
+print(datasets.DESCR)
+
 
 # print(x.shape)         # (178, 13)
 # print(y.shape)         # (178,)

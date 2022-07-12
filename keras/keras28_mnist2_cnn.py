@@ -1,119 +1,94 @@
 from tensorflow.python.keras.models import Sequential
-from tensorflow.python.keras.layers import Dense, Conv2D, Flatten, MaxPool2D 
-
+from tensorflow.python.keras.layers import Dense, Conv2D, Flatten, MaxPooling2D, Dropout
+from tensorflow.keras.datasets import mnist
+from tensorflow.python.keras.callbacks import EarlyStopping, ModelCheckpoint
 import numpy as np
-from tensorflow.keras.datasets import mnist, fashion_mnist, cifar10, cifar100
-
-(x_train, y_train), (x_test, y_test) = mnist.load_data()
-x_train = x_train.reshape(60000, 28, 28, 1)
-x_test = x_test.reshape(10000, 28, 28, 1)
-
-
-
-# print(x_train.shape)
-# print(np.unique(y_train, return_counts=True))
-
-# 만들어보기
-# acc 0.98 이상
-
-
-
-# print(x_train.shape, y_train.shape)  # (60000, 28, 28) (60000,)
-# print(x_test.shape, y_test.shape)    # (10000, 28, 28) (10000,)
-
-print(x_train[0])  # 첫번째 x_train에 있는 값이 출력된다.  
-                   # 리스트로 5를 그린 데이터가 있음.
-                   
-print("========================================")
-print(y_train[0]) # 실제값이 들어있어서 5라는 숫자를 출력해준다
-
+import time
 import matplotlib.pyplot as plt
-plt.imshow(x_train[5], 'gray')
-plt.show()
-
-
-
-
-
-
-# model = Sequential()
-
-
-# #----------------------------------------------------------------------------
-# # 위 아래 같은 것                                  #
-# model.add(Conv2D(filters=64, kernel_size=(3,3),  # 출력 (N, 4, 4, 10)
-#                 #  padding='same',   # padding은 원래 shape를 그대로 유지하고 싶을 때 사용한다.
-#                  input_shape=(28, 28, 1)))     #(batsh_size, row, columns, channels)
-# # padding은 현재 쉐이프를 다음 레이어에 그대로 사용하고 싶을 때 사용한다.
-
-# model.add(MaxPool2D())  #kernel_size=(3,3)로 잘랏을 때 자를 때 마다 해당 안에 최대값만 남긴다.
-
-# #  channels는 장수  / 1장 2장
-# model.add(Conv2D(32, (2, 2),  
-#                 #  padding='valid',   # padding='valid' 디폴트 값 
-#                                     # 위에서 padding='same'을 하여 자동으로 들어감
-#                                     # 생략가능
-#                  activation='relu'))     # 출력(N 3, 3, 7)
-
-# # 이미지 데이터는 하나로 쫙~ 펼쳐서 연산을 한다.
-# #              v--- 데이터를 하나로 쫙 펼쳐줌
-# model.add(Flatten())  # (N, 63)   # 출력(N 3, 3, 7)  -->  3 * 3 * 7 = 27
-# model.add(Dense(32, activation='relu'))
-# model.add(Dense(32, activation='relu'))
-# model.add(Dense(10, activation='softmax'))
-# #---------------------------------------------------------------------------
-
-
-
-# model.summary()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+from matplotlib import font_manager, rc
+
+
+#1. 데이터
+(x_train, y_train), (x_test, y_test) = mnist.load_data()
+
+print(x_train.shape, y_train.shape)     # (60000, 28, 28) (60000,)
+print(x_test.shape, y_test.shape)       # (10000, 28, 28) (10000,)
+
+x_train = x_train.reshape(60000, 28, 28, 1)  # (60000, 28, 28) (60000,)
+x_test = x_test.reshape(10000, 28, 28, 1)   # (10000, 28, 28) (10000,)
+# print(x_train.shape)    # (60000, 28, 28)
+print(np.unique(x_train, return_counts=True))  # [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+
+
+# [실습] 
+# acc 0.98 이상
+# convolution 3개 이상 사용
+
+
+# One Hot Encoding
+import pandas as pd
+# df = pd.DataFrame(y)
+y_train = pd.get_dummies(y_train)
+y_test = pd.get_dummies(y_test)
+print(y_train)
+print(y_train.shape)
+
+
+#2. 모델링 
+model = Sequential()
+model.add(Conv2D(filters=32, kernel_size=(4, 4),    
+                 padding='same', 
+                 input_shape=(28, 28, 1)))      
+model.add(MaxPooling2D(2, 2))           
+model.add(Dropout(0.2))
+model.add(Conv2D(64, (4, 4), padding='valid', activation='relu'))                
+model.add(MaxPooling2D(2, 2))          
+model.add(Dropout(0.2))
+model.add(Conv2D(64, (4, 4), padding='same', activation='relu'))
+model.add(Dropout(0.2))
+
+model.add(Flatten())    # (N, 63)  (N, 175)
+model.add(Dense(128, activation='relu'))
+model.add(Dropout(0.2))
+model.add(Dense(64, activation='relu'))
+model.add(Dense(10, activation='softmax'))
+model.summary()
+
+
+#3. 컴파일, 훈련
+model.compile(loss = 'categorical_crossentropy', optimizer='adam', 
+              metrics=['accuracy'])
+
+import datetime
+date = datetime.datetime.now()      
+date = date.strftime("%m%d_%H%M")  
+print(date)
+
+filepath = './_ModelCheckPoint/k28/'
+filename = '{epoch:04d}-{val_loss:.4f}.hdf5'
+
+earlyStopping = EarlyStopping(monitor='val_loss', patience=20, mode='auto',
+                              restore_best_weights=True,
+                              verbose=1)
+mcp = ModelCheckpoint(monitor='val_loss', mode='auto', verbose=1, 
+                      save_best_only=True, 
+                      filepath="".join([filepath, '01_', date, '_', filename])
+                      )
+start_time = time.time()
+hist = model.fit(x_train, y_train, epochs=50, batch_size=32,
+                 validation_split=0.2,
+                 callbacks=[earlyStopping, mcp],
+                 verbose=1)
+end_time = time.time() - start_time
+
+
+#4. 평가, 예측
+loss, acc = model.evaluate(x_test, y_test)
+print('loss : ', loss)
+print('accuracy : ', acc)
+
+import tensorflow as tf
+y_predict = model.predict(x_test)
+y_predict = tf.argmax(y_predict, axis=1)    
+y_test = tf.argmax(y_test, axis=1)          

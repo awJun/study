@@ -269,3 +269,19 @@ hist = model.fit(x_train, y_train, epochs=100, batch_size=100,
 
 
 
+"""
+keras31_cnn01_boston.py
+keras31_cnn02_california.py
+
+
+keras31_cnn03_diabetsa.py
+keras31_cnn04_cancer.py
+keras31_cnn05_iris.py
+keras31_cnn06_wine
+keras31_cnn07_digit.py
+keras31_cnn08_fetch_covtype.py
+keras31_cnn09_ddarung.py
+keras31_cnn010_kaggle_bike.py
+keras31_cnn011_kaggle_house.py
+keras31_cnn012_kaggle_titanic.py
+"""

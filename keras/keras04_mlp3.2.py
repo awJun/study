@@ -1,14 +1,24 @@
+"""
+output이 3개  <-- 출력 데이터도 3개가 출력된다.
+"""
+
 import numpy as np
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 
 #1. 데이터
-x = np.array([range(10), range(21, 31), range(201, 211)])  
- # range: 해당 범위 안의 정수를 담고 있는 함수 0 ~ 10-1
- # 여기서 range은 열로 사용한다. 그러므로 위에 x는 3차원 열을 가지고 있다.
- 
-# for i in range(10):
-    # print(i)
+x = np.array([range(10), range(21, 31), range(201, 211)])
+# print(range(10)) # range: 범위, 거리 0~10까지의 정수형 숫자 
+
+#---[ 알고만 있기 ]------------------------------
+# for i in range(10):          # for :반복하라 
+#     print(i)
+#---------------------------------------------
+
+# print(x) # (3, 10)
+# [[  0   1   2   3   4   5   6   7   8   9]
+#  [ 21  22  23  24  25  26  27  28  29  30]
+#  [201 202 203 204 205 206 207 208 209 210]]
 
 print(x.shape) # (3, 10)
 

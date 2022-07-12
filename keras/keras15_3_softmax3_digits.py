@@ -19,7 +19,7 @@ print(y.shape)        # (1797,)
 print(np.unique(y, return_counts=True)) # (10) 고유
 print(np.unique(x, return_counts=True)) # (13) 고유
 '''
-# (1797, 64) 
+# (1797, 64)
 # (1797,)
 # (array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]),
 # array([178, 182, 177, 183, 181, 182, 181, 179, 174, 180], dtype=int64))
@@ -31,28 +31,14 @@ print(np.unique(x, return_counts=True)) # (13) 고유
 # plt.show()
 
 
-print(y)
 from tensorflow.keras.utils import to_categorical 
 y = to_categorical(y)
-print("+++++++++++++++++++++++++")
 print(y)
+print("+++++++++++++++++++++++++")
+print(x)
 
-# [0 1 2 ... 8 9 8]         
-# +++++++++++++++++++++++++
-# [[1. 0. 0. ... 0. 0. 0.]
-#  [0. 1. 0. ... 0. 0. 0.]
-#  [0. 0. 1. ... 0. 0. 0.]
-#  ...
-#  [0. 0. 0. ... 0. 1. 0.]
-#  [0. 0. 0. ... 0. 0. 1.]
-#  [0. 0. 0. ... 0. 1. 0.]]
-
-
-
-# print(x)
-
-# print(x.shape) # (1797, 64)
-# print(y.shape)   # (1797, 10)
+print(x.shape) # (1797, 64)
+print(y.shape)   # (1797, 10)
 
 
 

@@ -1,3 +1,14 @@
+"""=[ sigmoid 사용방법 ]===================================================================================================
+
+model.add(Dense(1, activation='sigmoid'))
+model.compile(loss='binary_crossentropy', optimizer='adam',
+
+# sigmoid를 사용하고 난 후 losss는 무조건 binary_crossentropy를 사용해야한다.
+
+========================================================================================================================
+"""   
+ 
+
 import numpy as np
 from sklearn.datasets import load_breast_cancer
 from tensorflow.python.keras.models import Sequential
@@ -34,7 +45,7 @@ model.add(Dense(100, activation='linear', input_dim=30))
 model.add(Dense(100, activation='sigmoid'))
 model.add(Dense(100, activation='relu'))
 model.add(Dense(100, activation='linear'))
-model.add(Dense(1, activation='sigmoid'))
+model.add(Dense(1, activation='sigmoid')) # sigmoid의 output = 1개다 다중에선 유니크값 만큼 아웃풋
 
 #3. 컴파일. 훈련
 model.compile(loss='binary_crossentropy', optimizer='adam',

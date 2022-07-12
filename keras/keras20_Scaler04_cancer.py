@@ -11,7 +11,7 @@ from sklearn.preprocessing import MaxAbsScaler, RobustScaler
 #1. 데이터
 datasets = load_breast_cancer()
 # print(datasets)
-# print(datasets.DESCR )
+print(datasets.DESCR )
 # # (569, 30)
 print(datasets.feature_names)
 

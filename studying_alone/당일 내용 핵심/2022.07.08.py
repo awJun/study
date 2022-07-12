@@ -63,7 +63,7 @@ model.add(Dense(1))
  #2. 모델구성
 input1 = Input(shape=(3,))
 dense1 = Dense(10)(input1)
-dense2 = Dense(15, activation'relu')(dense1)
+dense2 = Dense(15, activation='relu')(dense1)
 drop1 = Dropout(0.2)(dense2)
 dense3 = Dense(10)(dense2)
 output1 = Dense(1)(dense3)

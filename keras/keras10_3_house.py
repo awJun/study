@@ -230,15 +230,18 @@ x_train, x_test, y_train, y_test = train_test_split(x,y,
 print(x_train)
 print(y_train)
 
+
 #2. 모델구성
 model = Sequential()
 model.add(Dense(100, activation='swish', input_dim=12))
 model.add(Dense(100, activation='swish'))
 model.add(Dense(1))
 
+
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')
 model.fit(x_train, y_train, epochs=5000, batch_size=50, verbose=1)
+
 
 #4. 평가, 예측
 loss = model.evaluate(x_test, y_test) 
@@ -270,7 +273,7 @@ print(submission_set)
 
 
 submission_set.to_csv(path + 'submission.csv', index = True)
-
+ # index : 행 인덱스 번호를 쓸지 여부. 기본값(default)은 True입니다.
 '''
 loss :  16742.416015625
 RMSE :  23433.21392641122

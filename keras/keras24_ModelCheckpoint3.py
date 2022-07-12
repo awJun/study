@@ -34,53 +34,65 @@ model.add(Dense(1))
 model.summary()
 
 
-#3. 컴파일, 훈련
 
+# 3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')
 
 from tensorflow.python.keras.callbacks import EarlyStopping, ModelCheckpoint
-earlyStopping = EarlyStopping(monitor='val_loss', patience=300, mode='auto', verbose=1, 
-                              restore_best_weights=True)        
+earlyStopping =EarlyStopping(monitor='val_loss', patience=10, mode='min', verbose=1, 
+                             restore_best_weights=True) 
 
-mcp = ModelCheckpoint(monitor='val_loss', mode='auto', verbose=1, save_best_only=True, 
-                      filepath='./_ModelCheckPoint/keras24_ModelCheckPoint3.hdf5')
+mcp = ModelCheckpoint(monitor='val_loss', mode='auto', verbose=1, # 가장 좋은 가중치 저장 위해 / mode가 모니터한 가장 최적 값, val 최저값, accuracy 최고값
+                      save_best_only=True,
+                      filepath='./_ModelCheckPoint/keras24_ModelCheckPoint3.hdf5' # 가장 낮은 지점이 이 경로에 저장, 낮은 값이 나올 때마다 계속적으로 갱신하여 저장
+                      )
 
-hist = model.fit(x_train, y_train, epochs=1000, batch_size=100,
-                 validation_split=0.2,
-                 callbacks=[earlyStopping, mcp],
-                 verbose=1)
-
-end_time = time.time() - start_time
+# start_time = time.time()
+hist = model.fit(x_train, y_train, epochs=1000, batch_size=20, 
+                validation_split=0.2,
+                callbacks=[earlyStopping, mcp], # 최저값을 체크해 반환해줌
+                verbose=1)
+# end_time = time.time()
 
 model.save('./_save/keras24_3_save_model.h5')
 
-
-#4. 평가, 예측
-
-print("=============================1. 기본 출력=================================")
+# 4. 평가, 예측
+print("==================== 1. 기본 출력 ====================")
 loss = model.evaluate(x_test, y_test)
+print('loss : ', loss)
+
 y_predict = model.predict(x_test)
 from sklearn.metrics import r2_score
 r2 = r2_score(y_test, y_predict)
-print('loss : ' , loss)
-print('r2스코어 : ', r2)
-print("걸린시간 : ", end_time)
+print('r2 스코어 : ', r2)
 
-print("=============================2. load_model 출력=================================")
+# 최저값이 개선되면 다음과 같은 메시지, Epoch 00077: val_loss improved from 24.99981 to 24.95374, saving model to ./_ModelCheckPoint\keras24_ModelCheckPoint.hdf5
+# 최저값이 개선되지 않으면 다음과 같은 메시지, Epoch 00087: val_loss did not improve from 19.53281
+# Epoch 00087: early stopping
+# 4/4 [==============================] - 0s 664us/step - loss: 10.4859
+# loss :  10.485852241516113
+# r2 스코어 :  0.8745455756521225
+
+print("==================== 2. load_model 출력 ====================")
 model2 = load_model('./_save/keras24_3_save_model.h5')
 loss2 = model2.evaluate(x_test, y_test)
-y_predict2 = model.predict(x_test)
-r2 = r2_score(y_test, y_predict2)
 
 print('loss2 : ', loss2)
-print('r2스코어 : ', r2)
 
-print("=============================3. ModelCheckPoint 출력=================================")
+y_predict2 = model.predict(x_test)
+from sklearn.metrics import r2_score
+r2 = r2_score(y_test, y_predict2)
+print('r2 스코어 : ', r2)
+
+# 저장한 것을 불러와서 평가와 예측을 하겠다.
+
+print("==================== 3. ModelCheckpoint 출력 ====================")
 model3 = load_model('./_ModelCheckPoint/keras24_ModelCheckPoint3.hdf5')
 loss3 = model3.evaluate(x_test, y_test)
-y_predict3 = model.predict(x_test)
-r2 = r2_score(y_test, y_predict3)
 
 print('loss3 : ', loss3)
-print('r2스코어 : ', r2)
 
+y_predict3 = model.predict(x_test)
+from sklearn.metrics import r2_score
+r2 = r2_score(y_test, y_predict3)
+print('r2 스코어 : ', r2)

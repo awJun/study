@@ -14,7 +14,7 @@ from sklearn.preprocessing import MaxAbsScaler, RobustScaler
 x=datasets.data
 y=datasets.target
 
-
+print(datasets.DESCR)
 
 
 x_train, x_test, y_train, y_test = train_test_split(x, y,
@@ -32,7 +32,11 @@ scaler = MaxAbsScaler()
 
 scaler.fit(x_train)
 x_train = scaler.transform(x_train) # x_train을 수치로 변환해준다.
-x_test = scaler.transform(x_test) # 
+x_test = scaler.transform(x_test) # 테스트 셋은 비교 데이터 이므로  fit을 하면 데이터 손실 날 수 있음
+
+# fit 작업: 특성 열의 최소값과 최대값을 찾습니다
+# (이 스케일링은 데이터 프레임 속성/열 각각에 대해 별도로 적용됨을 염두에 두십시오)
+
 # print(np.min(x_train))   # 0.0
 # print(np.max(x_train))   # 1.0000000000000002
 # print(np.min(x_test))   # -0.06141956477526944

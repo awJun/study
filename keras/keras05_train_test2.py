@@ -1,3 +1,17 @@
+"""=[ 넘파이 리스트의 슬라이싱를 이용해서 데이터를 train과 test로 나눠서 사용 ]=======================================================
+
+ - 원래 데이터
+x = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+
+ -  x_train = x[0:7]
+print(x_train)    # [1 2 3 4 5 6 7]
+
+ -  x_test = x[7:10]
+print(x_test)     # [ 8  9 10]
+
+========================================================================================================================
+"""
+
 import numpy as np
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
@@ -16,6 +30,7 @@ x_test = x[7:10]
 
 y_train = y[0:7]
 y_test = y[7:10]
+
 
 
 
