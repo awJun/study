@@ -1,327 +1,197 @@
-# # 데이콘 따릉이 문제풀이
-# import numpy as np
-# import pandas as pd
-#   # pandas = 데이터를 불러올 때 사용 (이외에도 기능도 많다.)
-
-# from tensorflow.python.keras.models import Sequential
-# from tensorflow.python.keras.layers import Dense
-# from sklearn.model_selection import train_test_split
-# from sklearn.metrics import r2_score, mean_squared_error 
-#   # mean_squared_error: mse이다. 여기서 루트를 하면 rmse가 된다.
-
-# #1. 데이터
-# # "". 현재폴더 / 하단에" 라는 뜻
-# path = './_data/ddarung/'   # <- 폴더 경로만 있다. 폴더 안에 어던 데이터셋을 가져올지 선언은 안함
-#                             # 그러므로 'train.csv' 를 통해서 데이터를 가져옴
-                            
-                            
-# train_set = pd.read_csv(path + 'train.csv', index_col=0)  
-#              # https://mizykk.tistory.com/16
-#              # path + 'train.csv   ==   './_data/ddarung/train.csv'
-#              # index_col=  첫 번째 열로 정할 인덱스 번호를 입력
-             
-# print(train_set)
-
-# print(train_set.shape) # (1459, 10) 원래 열이 11개지만, id를 인덱스로 제외하여 10개
-#                        # [1459 rows x 10 columns]
-#                        # (1459, 10)
-
-# # # test_set는 예측에서 쓸 예정 ~
-# test_set = pd.read_csv(path + 'test.csv', index_col=0) 
-# print(test_set)
-# print(test_set.shape)  # [715 rows x 9 columns]
-#                        # (715, 9)
-                       
-# test_set = test_set.fillna(method='backfill')    
-
-
-# """
-# 대회사이트 링크  https://dacon.io/competitions/open/235576/data
-
-
-# train.csv 안에서 데이터셋과 테스트셋을 모두 알아서하여 회귀모델을 만들고 test.csv로 y 제출
-
-# 데이터셋 안에 맨뒤에 있는 count은 결과값이므로 제외시키고 사용
-# 맨 앞은 index_col으로 앞으로 뺌
-# """
-
-
-
-# print(test_set.columns)  # 컬럼의 이름을 알려줌
-# print(train_set.info())  # non-null -> 데이터가 빠져있다.   null 값이없다          
-#                          # 이빨이 빠진 데이터 이것을 결측치 라고한다.
-
-# print(train_set.describe())  # describe: 서술하다 묘사하다.  해당 값 묘사해서 알려줌
-
-# #### 결측치 처리 1. 제거 ####
-# print(train_set.isnull().sum()) # null의 합을 구하겠다.
-# train_set = train_set.dropna()  # nall이 있는 행 부분을 전체 삭제 
-#                                 # 해당 행 부분의 데이터를 다 삭제하므로 데이터 손실이 크다.
-# print(train_set.isnull().sum())
-# print(train_set.shape)          # (1328, 10)   <- 살아남은 데이터양
-# ############################\
-
-
-#   # x 선언
-# x = train_set.drop(['count'], axis=1)   # drop: 빼버린다. count 제거
-
-# print(x)
-# print(x.columns)
-# print(x.shape)  # (1459, 9) inpip dim = 9  <- 원래 데이터양은 위에 train_set.dropna를 
-#                 #                             거쳐서 데이터가 줄었다. (현재는 이 값이 아니다.)
-                                               
-                                               
-
-#   # y 선언
-# y = train_set['count']  # x에 대한 해답지인 count
-
-# print(y)
-# print(y.shape)   # (1459,) output = 1개
-
-
-
-
-
-# x_train, x_test, y_train, y_test = train_test_split(x, y,
-#                                                     train_size=0.9,
-#                                                     shuffle=True,
-#                                                     random_state=100  # 1430
-#                                                     )
-# # 114     1450(49)  
-
-# '''
-# #2. 모델구성
-# model = Sequential()
-# model.add(Dense(50, input_dim=9))  # 첫번째 히든에 1넣으면 성능 아작난다.
-# model.add(Dense(70))
-# model.add(Dense(60))
-# model.add(Dense(70))
-# model.add(Dense(70))
-# model.add(Dense(50))
-# model.add(Dense(50))
-# model.add(Dense(70))
-# model.add(Dense(50))
-# model.add(Dense(30))
-# model.add(Dense(1))
-# '''
-# #2. 모델구성
-# model = Sequential()
-# model.add(Dense(1, input_dim=9))  # 첫번째 히든에 1넣으면 성능 아작난다.
-
-
-# #3. 컴파일, 훈련
-# model.compile(loss='mae', optimizer='adam')
-# model.fit(x_train, y_train, epochs=1                   
-#           , batch_size=3)
-
-# #4. 결과, 예측
-# loss = model.evaluate(x_test, y_test)
-# print('lose : ', loss)
-
-# y_predict = model.predict(x_test)
-# def RMSE(a, b):
-#     return np.sqrt(mean_squared_error(a, b))
-
-# rmse = RMSE(y_test, y_predict)
-# print("RMSE : ", rmse)
-
-
-# #####################################################
-
-# y_summit = model.predict(test_set)
-
-# #print(y_summit)
-# #print(y_summit.shape)    # (715, 1)
-
-#      ############# .to_csv() 
-#      ##### submission.csv를 완성하시오. 
-
-     
-      
-# submissin_set = pd.read_csv(path + 'submission.csv', index_col=0)
-#    # print(submissin.shape)   # (715, 1)
-      
-
-# submissin_set['count'] = y_summit
-
-
-# submissin_set.to_csv('./_data/ddarung/submission.csv', index = True)
-
-
-
-#=============================================================================================      
-
 import numpy as np
 import pandas as pd
-  # pandas = 데이터를 불러올 때 사용 (이외에도 기능도 많다.)
-  
-from tensorflow.python.keras.models import Sequential
-from tensorflow.python.keras.layers import Dense
+from sklearn import datasets
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import r2_score, mean_squared_error 
-  # mean_squared_error: mse이다. 여기서 루트를 하면 rmse가 된다.
-
-#1. 데이터
-path = './_data/dacon_shopping/'   # <- 폴더 경로만 있다. 폴더 안에 어던 데이터셋을 가져올지 선언은 안함
-                            # 그러므로 'train.csv' 를 통해서 데이터를 가져옴
-
-train_set = pd.read_csv(path + 'train.csv', index_col=0)  
-             # https://mizykk.tistory.com/16
-             # path + 'train.csv   ==   './_data/ddarung/train.csv'
-             # index_col=  첫 번째 열로 정할 인덱스 번호를 입력
-
-             
-# print(train_set)
-#       Store  ... Weekly_Sales
-# id           ...
-# 1         1  ...   1643690.90
-# 2         1  ...   1641957.44
-# 3         1  ...   1611968.17
-# 4         1  ...   1409727.59
-# 5         1  ...   1554806.68
-# ...     ...  ...          ...
-# 6251     45  ...    734297.87
-# 6252     45  ...    766512.66
-# 6253     45  ...    702238.27
-# 6254     45  ...    723086.20
-# 6255     45  ...    713173.95
-
-# [6255 rows x 12 columns]
-
-# print(train_set.shape) #  (6255, 12)
+from sklearn.preprocessing import MinMaxScaler, StandardScaler, MaxAbsScaler, RobustScaler
+from tensorflow.python.keras.models import Sequential, Model
+from tensorflow.python.keras.layers import Dense, Input, Dropout
+from tensorflow.python.keras.callbacks import EarlyStopping
+from sklearn.metrics import r2_score, accuracy_score, mean_squared_error
+import time
+import matplotlib.pyplot as plt
+from matplotlib import font_manager, rc
+from scipy.stats import norm, skew
 
 
-# print(train_set.info())
-#  #   Column        Non-Null Count  Dtype        
-# ---  ------        --------------  -----        
-#  0   Store         6255 non-null   int64        
-#  1   Date          6255 non-null   object       
-#  2   Temperature   6255 non-null   float64      
-#  3   Fuel_Price    6255 non-null   float64      
-#  4   Promotion1    2102 non-null   float64      
-#  5   Promotion2    1592 non-null   float64      
-#  6   Promotion3    1885 non-null   float64      
-#  7   Promotion4    1819 non-null   float64      
-#  8   Promotion5    2115 non-null   float64      
-#  9   Unemployment  6255 non-null   float64      
-#  10  IsHoliday     6255 non-null   bool
-#  11  Weekly_Sales  6255 non-null   float64      
-# dtypes: bool(1), float64(9), int64(1), object(1)memory usage: 592.5+ KB
-# None
+#1. 데이타 
+path = './_data/dacon_shopping/'                                         
+train_set = pd.read_csv(path + 'train.csv', index_col=0)                              
 
-# print(train_set.isnull().sum()) 
-# Store              0
-# Date               0
-# Temperature        0
-# Fuel_Price         0
-# Promotion1      4153
-# Promotion2      4663
-# Promotion3      4370
-# Promotion4      4436
-# Promotion5      4140
-# Unemployment       0
-# IsHoliday          0
-# Weekly_Sales       0
-# dtype: int64
+print(train_set)
+print(train_set.shape)   # (6255, 12)
+print(train_set.columns)
+# ['Store', 'Date', 'Temperature', 'Fuel_Price', 'Promotion1', 'Promotion2', 'Promotion3', 'Promotion4', 'Promotion5', 'Unemployment', 'IsHoliday', 'Weekly_Sales']
 
-train_set = train_set.fillna(method='backfill')  
+test_set = pd.read_csv(path + 'test.csv', index_col=0)    
+print(test_set.columns)
+# ['Store', 'Date', 'Temperature', 'Fuel_Price', 'Promotion1', 'Promotion2', 'Promotion3', 'Promotion4', 'Promotion5', 'Unemployment', 'IsHoliday'] !!! Weekly_Sales !!!
+
+print(test_set.shape)    # (180, 11)
 
 
 
-# test_set는 예측에서 쓸 예정 ~
-test_set = pd.read_csv(path + 'test.csv', index_col=0) 
+
+print(train_set.isnull().sum()) 
+print(test_set.isnull().sum()) 
+# print(train_set.describe()) 
 
 
-# print(test_set)
-#      Store        Date  ...  Unemployment  IsHoliday
-# id                      ...
-
-# 1        1  05/10/2012  ...         6.573      False
-# 2        1  12/10/2012  ...         6.573      False
-# 3        1  19/10/2012  ...         6.573      False
-# 4        1  26/10/2012  ...         6.573      False
-# 5        2  05/10/2012  ...         6.170      False
-# ..     ...         ...  ...           ...       
-#  ...
-# 176     44  26/10/2012  ...         5.217      False
-# 177     45  05/10/2012  ...         8.667      False
-# 178     45  12/10/2012  ...         8.667      False
-# 179     45  19/10/2012  ...         8.667      False
-# 180     45  26/10/2012  ...         8.667      False
-
-# [180 rows x 11 columns]
-
-
-# print(test_set.shape)  # (6255, 12)
-                       
-
-  
-# print(test_set.info())
-#  #   Column        Non-Null Count  Dtype        
-# ---  ------        --------------  -----        
-#  0   Store         180 non-null    int64        
-#  1   Date          180 non-null    object       
-#  2   Temperature   180 non-null    float64      
-#  3   Fuel_Price    180 non-null    float64      
-#  4   Promotion1    178 non-null    float64      
-#  5   Promotion2    45 non-null     float64      
-#  6   Promotion3    161 non-null    float64      
-#  7   Promotion4    146 non-null    float64      
-#  8   Promotion5    180 non-null    float64      
-#  9   Unemployment  180 non-null    float64      
-#  10  IsHoliday     180 non-null    bool
-# dtypes: bool(1), float64(
-    
-# print(test_set.isnull().sum()) 
-# Store             0
-# Date              0
-# Temperature       0
-# Fuel_Price        0
-# Promotion1        2
-# Promotion2      135
-# Promotion3       19
-# Promotion4       34
-# Promotion5        0
-# Unemployment      0
-# IsHoliday         0
-# dtype: int64
-
-test_set = test_set.fillna(method='backfill')  
+"""
+Store              0
+Date               0
+Temperature        0
+Fuel_Price         0
+Promotion1      4153
+Promotion2      4663
+Promotion3      4370
+Promotion4      4436
+Promotion5      4140
+Unemployment       0
+IsHoliday          0
+Weekly_Sales       0
+"""
+train_set = train_set.dropna()
+test_set = test_set.fillna(test_set.mean())
+print(train_set.isnull().sum())
+print(train_set.shape)
+print(test_set.shape)
 
 
-# print(train_set.isnull().sum()) 
+# date를 month로 문자를 숫자로 변환  "월"은 "31/08/2012" 형태의 값 중 4번째~5번째 글자
+# Date에서 월을 Month 컬럼으로 분리시킨다 그리고 Date컬럼을 없앤다
 
-# print(test_set.isnull().sum()) 
+# def get_month(date):
+#     month = date[3:5]
+#     month = int(month)
+#     return month
 
+# train_set['Month'] = train_set['Date'].apply(get_month)
+# test_set['Month'] = test_set['Date'].apply(get_month)
 
-#   # x 선언
-# x = train_set.drop(['count'], axis=1)   # drop: 빼버린다. count 제거
-
-# print(x)
-# print(x.columns)
-# print(x.shape)  # (1459, 9) inpip dim = 9  <- 원래 데이터양은 위에 train_set.dropna를 
-#                 #                             거쳐서 데이터가 줄었다. (현재는 이 값이 아니다.)
-                                               
-                                               
-
-#   # y 선언
-# y = train_set['count']  # x에 대한 해답지인 count
-
-# print(y)
-# print(y.shape)   # (1459,) output = 1개
+train_set = train_set.drop(['Date'], axis=1)
+test_set = test_set.drop(['Date'], axis=1)
+# , 'Promotion1', 'Promotion2', 'Promotion3', 'Promotion4', 'Promotion5'
+print(train_set.columns)
 
 
-print("")
+# boolean값이 단일 열 일때 0 or 1로 변환
+train_set["IsHoliday"] = train_set["IsHoliday"].astype(int)
+test_set["IsHoliday"] = test_set["IsHoliday"].astype(int)
+
+
+# train_set['Promotion1'] = train_set['Promotion1'].fillna(train_set.mean())  
+# test_set['Promotion1'] = test_set['Promotion1'].fillna(test_set.mean())  
+# train_set['Promotion2'] = train_set['Promotion2'].fillna(train_set.mean())  
+# test_set['Promotion2'] = test_set['Promotion2'].fillna(test_set.mean())  
+# train_set['Promotion3'] = train_set['Promotion3'].fillna(train_set.mean())  
+# test_set['Promotion3'] = test_set['Promotion3'].fillna(test_set.mean())  
+# train_set['Promotion4'] = train_set['Promotion4'].fillna(train_set.mean())  
+# test_set['Promotion4'] = test_set['Promotion4'].fillna(test_set.mean())  
+# train_set['Promotion5'] = train_set['Promotion5'].fillna(train_set.mean())  
+# test_set['Promotion5'] = test_set['Promotion5'].fillna(test_set.mean())  
+
+
+
+print(train_set)
+
+
+
+x = train_set.drop(['Weekly_Sales', 'Promotion1', 'Promotion2', 'Promotion3', 'Promotion4', 'Promotion5'], axis=1)
 print(x.columns)
+# ['Store', 'Date', 'Temperature', 'Fuel_Price', 'Promotion1', 'Promotion2', 'Promotion3', 'Promotion4', 'Promotion5', 'Unemployment', 'IsHoliday']
+
+y = train_set['Weekly_Sales']
+print(y)
+print(y.shape)
+
+print(train_set)
+print(test_set)
+
+
+
+x_train, x_test, y_train, y_test = train_test_split(
+    x, y, train_size=0.75, shuffle=True, random_state=3
+)
+
+
+# scaler = MinMaxScaler() 
+scaler = StandardScaler()
+# scaler = MaxAbsScaler()
+# scaler = RobustScaler()
+
+scaler.fit(x_train)                      # 스케일링을 했다.
+x_train = scaler.transform(x_train)      # 변환해준다  x_train이 0과 1사이가 된다.
+x_test = scaler.transform(x_test)        # train이 변한 범위에 맞춰서 변환됨
+# test_set = scaler.transform(test_set)  
+# y_summit = model.predict(test_set) test셋은 스케일링이 상태가 아니니 summit전에 스케일링을 해서  y_summit = model.predict(test_set) 에 넣어줘야 한다 
+# summit하기 전에만 해주면 상관이 없다
+
+print(np.min(x_train))  # 0.0                   0과 1사이
+print(np.max(x_train))  # 1.0000000000000002    0과 1사이
+print(np.min(x_test))   # -0.06141956477526944  0미만
+print(np.max(x_test))   # 1.1478180091225068    0초과 범위
+
+
+
+#2. 모델구성
+input_01 = Input(shape=(5,))
+dense_01 = Dense(100)(input_01)
+dropout_01 = Dropout(0.2)(dense_01)
+dense_02 = Dense(100, activation="relu")(dropout_01)
+dropout_02 = Dropout(0.3)(dense_02)
+dense_03 = Dense(100, activation="relu")(dropout_02)
+dropout_03 = Dropout(0.5)(dense_03)
+dense_04 = Dense(100, activation="relu")(dropout_03)
+dropout_04 = Dropout(0.2)(dense_04)
+dense_05 = Dense(100, activation="relu")(dropout_04)
+output_01 = Dense(1)(dense_05)
+model = Model(inputs=input_01, outputs=output_01)
+model.summary()
 
 
 
 
 
+#3. 컴파일, 훈련
+model.compile(loss='mae', optimizer='adam', metrics=['mse'])                                                 
+from tensorflow.python.keras.callbacks import EarlyStopping      
+earlyStopping = EarlyStopping(monitor='val_loss', patience=50, mode='min', verbose=1, restore_best_weights=True)          
+hist = model.fit(x_train, y_train, epochs=300, batch_size=10, validation_split=0.2, callbacks=[earlyStopping], verbose=1)   # callbacks=[earlyStopping] 이것도 리스트 형태 2가지 이상
+
+
+
+#4. 평가, 예측
+loss = model.evaluate(x_test, y_test)
+print('loss :', loss)     
+
+y_predict = model.predict(x_test) 
+r2 = r2_score(y_test, y_predict)
+print('r2스코어 :', r2)
+
+def RMSE(y_test, y_predict):  
+    return np.sqrt(mean_squared_error(y_test, y_predict))  
 
 
 
 
+rmse = RMSE(y_test, y_predict)  
+print("RMSE :", rmse)           
+
+
+
+
+y_summit = model.predict(test_set)
+# y_summit = abs(y_summit)
+print(y_summit)
+print(y_summit.shape) # (715, 1)
+
+
+
+
+# sampleSubmission = pd.read_csv('./_data/dacon_shopping/sample_submission.csv')
+# sampleSubmission['Weekly_Sales'] = y_summit
+# print(sampleSubmission)
+# sampleSubmission.to_csv('./_data/dacon_shopping/sample_submission_m.csv', index = False)
 
 
 
