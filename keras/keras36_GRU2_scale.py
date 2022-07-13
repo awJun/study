@@ -165,3 +165,12 @@ model.summary()  # https://velog.io/@yelim421/%EC%88%9C%ED%99%98-%EC%8B%A0%EA%B2
 # Trainable params: 462,401
 # Non-trainable params: 0
 # _________________________________________________________________
+
+
+
+
+
+
+
+
+
