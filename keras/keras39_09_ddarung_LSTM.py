@@ -1,6 +1,6 @@
 # 데이콘 따릉이 문제풀이
 from sklearn.metrics import r2_score, accuracy_score
-from tensorflow.python.keras.layers import Dense, Conv2D, Flatten, MaxPooling2D ,Dropout   
+from tensorflow.python.keras.layers import Dense, Conv2D, Flatten, MaxPooling2D, Dropout, LSTM   
 from tensorflow.python.keras.models import Sequential
 import pandas as pd
 import numpy as np
@@ -77,8 +77,8 @@ x_train = scaler.transform(x_train) # x_train을 수치로 변환해준다.
 x_test = scaler.transform(x_test) # 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #--[차원 변형 작업]- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-x_train = x_train.reshape(1167, 3, 3, 1)               
-x_test = x_test.reshape(292, 3, 3, 1)
+x_train = x_train.reshape(1167, 3, 3)               
+x_test = x_test.reshape(292, 3, 3)
 
 # print(x_train.shape)  # (1167, 3, 3, 1)     <-- "32, 2 ,1"는 input_shape값
 # print(x_test.shape)   # (292, 3, 3, 1)
@@ -90,27 +90,22 @@ x_test = x_test.reshape(292, 3, 3, 1)
 # print(y_train.shape, y_test.shape) # (1167, 432) (292, 403)
 
 
+
 #2. 모델구성
 model = Sequential()
-model.add(Conv2D(filters=50, kernel_size=(2,2),  
-                 input_shape=(3, 3, 1)))     #(batsh_size, row, columns, channels)
-                                                                        # channels는 장수  / 1장 2장
-model.add(Dropout(0.2))
-model.add(Conv2D(64, (1, 1), padding='valid', activation='relu'))     # valid 디폴트이므로 패딩 안하겠다 라는 뜻.                     
-model.add(Dropout(0.2))
-model.add(Conv2D(32, (1, 1), padding='same', activation='relu'))
-model.add(Dropout(0.2))
-model.add(Conv2D(128, (1, 1), padding='valid', activation='relu'))                         
-model.add(Dropout(0.2))
-model.add(Conv2D(128, (1, 1), padding='same', activation='relu'))
-model.add(Dropout(0.2))
-
-model.add(Flatten())    
+model.add(LSTM(units=100 ,input_length=3, input_dim=3))   #SimpleRNN  또는 LSTM를 거치면 3차원이 2차원으로 변형되어서 다음 레어어에 간다.
+# model.add(SimpleRNN(10))       # <-- 3차원이 아니라 2차원을 넣어서 에러가 발생함.[참고]
+model.add(Dense(300, activation='relu'))
+model.add(Dense(300, activation='relu'))
+model.add(Dense(300, activation='relu'))
+model.add(Dense(100, activation='relu'))   
 model.add(Dense(128, activation='relu'))
 model.add(Dropout(0.2))
 model.add(Dense(128, activation='relu'))
-model.add(Dense(1)) # sigmoid에선 output은 1이다. (softmax에서는 유니크 갯수만큼)
+model.add(Dense(8, activation='softmax')) # sigmoid에선 output은 1이다. (softmax에서는 유니크 갯수만큼)
 model.summary()
+
+
 
 #3. 컴파일 훈련
 
@@ -152,14 +147,10 @@ print("RMSE : ", rmse)
 print('r2스코어 : ', r2)
 print("걸린시간:", end_time )
 
-# loss :  0.002475520595908165
-# acc :  0.9975186586380005
-# RMSE :  143.04490864903565
-# r2스코어 :  -1.7059814658803703
-# 걸린시간: 3.5423083305358887
-
-
-
+# loss :  20433.466796875
+# RMSE :  139.8785187224972
+# r2스코어 :  -1.5875101222528052
+# 걸린시간: 3.324416399002075
 
 
 

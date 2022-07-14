@@ -1,16 +1,14 @@
-from sklearn.metrics import r2_score, accuracy_score
-from tensorflow.python.keras.layers import Dense, Conv2D, Flatten, MaxPooling2D ,Dropout   
+from tensorflow.python.keras.layers import Dense, Conv2D, Flatten, MaxPooling2D, Dropout, Conv1D   
 from tensorflow.python.keras.models import Sequential
-from keras.datasets import mnist,cifar10,cifar100,fashion_mnist
 import pandas as pd
 import numpy as np
 import tensorflow as tf       
 import time
+from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split # 함수 가능성이 높음
 from sklearn.preprocessing import MinMaxScaler, StandardScaler # 클래스 가능성이 높음
 from sklearn.preprocessing import MaxAbsScaler, RobustScaler
-from sklearn.datasets import load_breast_cancer
-
+ 
 #1. 데이터
 datasets = load_breast_cancer()
 # print(datasets)
@@ -55,8 +53,8 @@ x_train = scaler.transform(x_train) # x_train을 수치로 변환해준다.
 x_test = scaler.transform(x_test) # 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #--[차원 변형 작업]- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ( [중요]!! 회귀형에서는 할 필요없음  )
-x_train = x_train.reshape(398, 6, 5, 1)              
-x_test = x_test.reshape(171, 6, 5, 1)
+x_train = x_train.reshape(398, 6, 5)              
+x_test = x_test.reshape(171, 6, 5)
 
 print(x_train.shape)  # (398, 6, 5, 1)  <-- "6, 5 ,1"는 input_shape값
 print(x_test.shape)   # (171, 6, 5, 1)
@@ -64,17 +62,17 @@ print(x_test.shape)   # (171, 6, 5, 1)
 
 # #2. 모델구성
 model = Sequential()
-model.add(Conv2D(filters=50, kernel_size=(2,2),  
-                 input_shape=(6, 5, 1)))     #(batsh_size, row, columns, channels)
+model.add(Conv1D(filters=50, kernel_size=(2),  
+                 input_shape=(6, 5)))     #(batsh_size, row, columns, channels)
                                                                         # channels는 장수  / 1장 2장
 model.add(Dropout(0.2))
-model.add(Conv2D(64, (1, 1), padding='valid', activation='relu'))                         
+model.add(Conv1D(64, (1), padding='valid', activation='relu'))                         
 model.add(Dropout(0.2))
-model.add(Conv2D(32, (1, 1), padding='same', activation='relu'))
+model.add(Conv1D(32, (1), padding='same', activation='relu'))
 model.add(Dropout(0.2))
-model.add(Conv2D(128, (1, 1), padding='valid', activation='relu'))                         
+model.add(Conv1D(128, (1), padding='valid', activation='relu'))                         
 model.add(Dropout(0.2))
-model.add(Conv2D(128, (1, 1), padding='same', activation='relu'))
+model.add(Conv1D(128, (1), padding='same', activation='relu'))
 model.add(Dropout(0.2))
 
 model.add(Flatten())    
@@ -118,9 +116,6 @@ print('accuracy : ', acc)
 
 print("걸린시간 : ", end_time)
 
-
-# loss :  [0.08719909191131592, 0.9824561476707458]
+# loss :  0.07069073617458344
 # accuracy :  0.9824561403508771
-# 걸린시간 :  1657597318.398175
-
-
+# 걸린시간 :  1657793821.7218528

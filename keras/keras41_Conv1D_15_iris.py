@@ -1,15 +1,14 @@
-from sklearn.metrics import r2_score, accuracy_score
-from tensorflow.python.keras.layers import Dense, Conv2D, Flatten, MaxPooling2D ,Dropout   
+from tensorflow.python.keras.layers import Dense, Conv2D, Flatten, MaxPooling2D, Dropout, Conv1D   
 from tensorflow.python.keras.models import Sequential
-from keras.datasets import mnist,cifar10,cifar100,fashion_mnist
 import pandas as pd
 import numpy as np
 import tensorflow as tf       
 import time
+from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split # 함수 가능성이 높음
 from sklearn.preprocessing import MinMaxScaler, StandardScaler # 클래스 가능성이 높음
 from sklearn.preprocessing import MaxAbsScaler, RobustScaler
-from sklearn.datasets import load_iris
+ 
 
 import tensorflow as tf
 tf.random.set_seed(66)  # 텐서플로우의 난수를 66으로 넣어서 사용하겠다. weight의 난수
@@ -52,8 +51,8 @@ x_train = scaler.transform(x_train) # x_train을 수치로 변환해준다.
 x_test = scaler.transform(x_test) # 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #--[차원 변형 작업]- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-x_train = x_train.reshape(120, 2, 2, 1)              
-x_test = x_test.reshape(30, 2, 2, 1)
+x_train = x_train.reshape(120, 2, 2)              
+x_test = x_test.reshape(30, 2, 2)
 
 # print(x_train.shape)  # (120, 2, 2, 1)  <-- "2, 2 ,1"는 input_shape값
 # print(x_test.shape)   # (30, 2, 2, 1)  
@@ -66,17 +65,17 @@ print(y_train.shape, y_test.shape) #(120, 3) (30, 3)
 
 # #2. 모델구성
 model = Sequential()
-model.add(Conv2D(filters=50, kernel_size=(1,1),  
-                 input_shape=(2, 2, 1)))     #(batsh_size, row, columns, channels)
+model.add(Conv1D(filters=50, kernel_size=(1),    # Conv2D는 kernel_size=(1)로 해줘야함 왜냐면 1줄로 뽑았을 때 아래칸이 없기 때문
+                 input_shape=(2, 2)))     #(batsh_size, row, columns, channels)
                                                                         # channels는 장수  / 1장 2장
 model.add(Dropout(0.2))
-model.add(Conv2D(64, (1, 1), padding='valid', activation='relu'))                         
+model.add(Conv1D(64, (1), padding='valid', activation='relu'))                         
 model.add(Dropout(0.2))
-model.add(Conv2D(32, (1, 1), padding='same', activation='relu'))
+model.add(Conv1D(32, (1), padding='same', activation='relu'))
 model.add(Dropout(0.2))
-model.add(Conv2D(128, (1, 1), padding='valid', activation='relu'))                         
+model.add(Conv1D(128, (1), padding='valid', activation='relu'))                         
 model.add(Dropout(0.2))
-model.add(Conv2D(128, (1, 1), padding='same', activation='relu'))
+model.add(Conv1D(128, (1), padding='same', activation='relu'))
 model.add(Dropout(0.2))
 
 model.add(Flatten())    
@@ -126,11 +125,6 @@ print('accuracy : ', acc)
 
 print("걸린시간 : ", end_time)
 
-# loss :  0.5425326228141785
-# accuracy :  0.8
-# 걸린시간 :  2.840120553970337
-
-
-
-
- 
+# loss :  0.6873946785926819
+# accuracy :  0.9333333333333333
+# 걸린시간 :  1.0738434791564941

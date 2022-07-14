@@ -1,20 +1,16 @@
-from sklearn.metrics import r2_score, accuracy_score
-from tensorflow.python.keras.layers import Dense, Conv2D, Flatten, MaxPooling2D ,Dropout   
+from tensorflow.python.keras.layers import Dense, Conv2D, Flatten, MaxPooling2D, Dropout, Conv1D   
 from tensorflow.python.keras.models import Sequential
-
 import pandas as pd
 import numpy as np
 import tensorflow as tf       
 import time
+from sklearn.datasets import fetch_covtype
 from sklearn.model_selection import train_test_split # 함수 가능성이 높음
 from sklearn.preprocessing import MinMaxScaler, StandardScaler # 클래스 가능성이 높음
 from sklearn.preprocessing import MaxAbsScaler, RobustScaler
-from sklearn.datasets import fetch_covtype
-from tensorflow.python.keras.callbacks import EarlyStopping
-
+from sklearn.metrics import r2_score, accuracy_score
 
 #1. 데이터
-
 datasets = fetch_covtype()
 x = datasets.data
 y = datasets.target
@@ -49,8 +45,8 @@ x_train = scaler.transform(x_train) # x_train을 수치로 변환해준다.
 x_test = scaler.transform(x_test) # 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #--[차원 변형 작업]- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-x_train = x_train.reshape(406708, 18, 3, 1)               
-x_test = x_test.reshape(174304, 18, 3, 1)
+x_train = x_train.reshape(406708, 18, 3)               
+x_test = x_test.reshape(174304, 18, 3)
 
 # print(x_train.shape)  # (406708, 18, 3, 1)     <-- "32, 2 ,1"는 input_shape값
 # print(x_test.shape)   # (174304, 18, 3, 1)
@@ -64,17 +60,17 @@ print(y_train.shape, y_test.shape) # (406708, 8) (174304, 8)
 
 #2. 모델구성
 model = Sequential()
-model.add(Conv2D(filters=50, kernel_size=(2,2),  
-                 input_shape=(18, 3, 1)))     #(batsh_size, row, columns, channels)
+model.add(Conv1D(filters=50, kernel_size=(2),  
+                 input_shape=(18, 3)))     #(batsh_size, row, columns, channels)
                                                                         # channels는 장수  / 1장 2장
 model.add(Dropout(0.2))
-model.add(Conv2D(64, (1, 1), padding='valid', activation='relu'))                         
+model.add(Conv1D(64, (1), padding='valid', activation='relu'))                         
 model.add(Dropout(0.2))
-model.add(Conv2D(32, (1, 1), padding='same', activation='relu'))
+model.add(Conv1D(32, (1), padding='same', activation='relu'))
 model.add(Dropout(0.2))
-model.add(Conv2D(128, (1, 1), padding='valid', activation='relu'))                         
+model.add(Conv1D(128, (1), padding='valid', activation='relu'))                         
 model.add(Dropout(0.2))
-model.add(Conv2D(128, (1, 1), padding='same', activation='relu'))
+model.add(Conv1D(128, (1), padding='same', activation='relu'))
 model.add(Dropout(0.2))
 
 model.add(Flatten())    
@@ -89,10 +85,11 @@ model.add(Dense(8, activation='softmax')) # sigmoid에선 output은 1이다. (so
 model.compile(loss='categorical_crossentropy', optimizer='adam', # 다중 분류에서는 로스함수를 'categorical_crossentropy' 로 써준다 (99퍼센트로)
               metrics=['accuracy'])
 
+from tensorflow.python.keras.callbacks import EarlyStopping
 es = EarlyStopping(monitor='val_loss', patience=1000, mode='auto', verbose=1, 
                               restore_best_weights=True)   
 start_time = time.time()
-model.fit(x_train, y_train, epochs=10, batch_size=100,
+model.fit(x_train, y_train, epochs=1, batch_size=100,
                  validation_split=0.2,
                  callbacks=[es],
                  verbose=1)
@@ -127,7 +124,6 @@ print('acc스코어 : ', acc)
 
 print(" end_time : ", end_time)
 
-# loss :  0.3605811595916748
-# accuracy :  0.8533539175987244
-# acc스코어 :  0.8533539104093997
-#  end_time :  254.83087182044983
+# loss :  0.5591983199119568
+# acc스코어 :  0.7578827795116578
+#  end_time :  36.481510400772095

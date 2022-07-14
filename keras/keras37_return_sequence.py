@@ -36,11 +36,13 @@ y = np.array([4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 50, 60, 70])        # 80이라�
 from tensorflow.python.keras.models import Sequential              
 from tensorflow.python.keras.layers import LSTM, Dense              
 
+##########################################################################
 model = Sequential()                                            #  return_sequences=True 해당 레이어에서 던져주는 것들을 리쉐입을 안해도 3차원으로 던져줘서 그대로 넘어간다.
 model.add(LSTM(10, return_sequences=True, input_shape=(3, 1)))  #  (N, 3, 1)  -->  (N, 3, 10) 필터부분만 변경됨
 model.add(LSTM(5, return_sequences=False))      # True면 차원이 늘어난다 / False가 디폴트값 차원이 안들어남 즉! 사용하나 마다 ~~ 위에서 3차원으로 받아야할 때  False하면 바로 에러남
 model.add(Dense(1))
 model.summary()
+############################################################################
 
 # Model: "sequential"
 # _________________________________________________________________

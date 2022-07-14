@@ -66,7 +66,7 @@ scaler.fit(x_train)
 x_train = scaler.transform(x_train) # x_train을 수치로 변환해준다.
 x_test = scaler.transform(x_test) 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-#--[차원 변형 작업]- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+#--[차원 변형 작업]- - - - - - - - - - - - - - - - - - - - - - - 
 x_train = x_train.reshape(10, 3, 1)              
 x_test = x_test.reshape(3, 3, 1)
 

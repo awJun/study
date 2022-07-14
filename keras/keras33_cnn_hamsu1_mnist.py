@@ -40,10 +40,10 @@ print(x_train.shape)  # (60000, 784)
 print(x_test.shape)   # (10000, 784)
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #--[ 스케일러 작업]- - - - - - - - - - - - - - - - - -(데이터 안에 값들의 차이을 줄여줌(평균으로 만들어주는 작업))
-scaler =  MinMaxScaler()
+# scaler =  MinMaxScaler()
 scaler = StandardScaler()
-scaler = MaxAbsScaler()
-scaler = RobustScaler()
+# scaler = MaxAbsScaler()
+# scaler = RobustScaler()
                                 
 scaler.fit(x_train)
 x_train = scaler.transform(x_train) # x_train을 수치로 변환해준다.
@@ -56,7 +56,7 @@ x_test = x_test.reshape(10000, 196, 4, 1)
 print(x_train.shape)  # (120, 2, 2, 1)  <-- "2, 2 ,1"는 input_shape값
 print(x_test.shape)   # (30, 2, 2, 1)  
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-#- -[y데이터를 x와 동일한 차원 형태로 변환] - - - - - - - - - - - - - 
+#- -[y데이터를 x와 동일한 차원 형태로 변환] - - - - - - - - - - ( [중요]!! 회귀형에서는 할 필요없음  )
 from tensorflow.python.keras.utils.np_utils import to_categorical
 # y_train = to_categorical(y_train)
 # y_test = to_categorical(y_test)
@@ -96,60 +96,60 @@ flatten_01 = Flatten()(conv2D_04)   # 4차원을 2차원에서 돌아갈 수 있
 dense_01 = Dense(32, activation='relu')(flatten_01)  
 dropout_01 = Dropout(0.2)(dense_01)
 dense_02 = Dense(32, activation='relu')(dropout_01)
-output_01 = Dense(1)(dense_02)
+output_01 = Dense(3, activation='softmax')(dense_02)
 model = Model(inputs=input_01, outputs=output_01)  # 해당 모델의 input과 output을 설정한다.
 model.summary()
 
 
 
-# #3. 컴파일. 훈련
-# model.compile(loss = 'categorical_crossentropy', optimizer='adam', 
-#               metrics=['accuracy'])
+#3. 컴파일. 훈련
+model.compile(loss = 'categorical_crossentropy', optimizer='adam', 
+              metrics=['accuracy'])
 
-# import datetime
-# date = datetime.datetime.now()      
-# date = date.strftime("%m%d_%H%M")  
-# print(date)
+import datetime
+date = datetime.datetime.now()      
+date = date.strftime("%m%d_%H%M")  
+print(date)
 
-# filepath = './_ModelCheckPoint/k28/'
-# filename = '{epoch:04d}-{val_loss:.4f}.hdf5'
+filepath = './_ModelCheckPoint/k28/'
+filename = '{epoch:04d}-{val_loss:.4f}.hdf5'
 
-# earlyStopping = EarlyStopping(monitor='val_loss', patience=20, mode='auto',
-#                               restore_best_weights=True,
-#                               verbose=1)
-# mcp = ModelCheckpoint(monitor='val_loss', mode='auto', verbose=1, 
-#                       save_best_only=True, 
-#                       filepath="".join([filepath, '01_', date, '_', filename])
-#                       )
-# start_time = time.time()
-# hist = model.fit(x_train, y_train, epochs=50, batch_size=32,
-#                  validation_split=0.2,
-#                  callbacks=[earlyStopping, mcp],
-#                  verbose=1)
-# end_time = time.time() - start_time
-
-
-# #4. 평가, 예측
-# loss, acc = model.evaluate(x_test, y_test)  # loss acc 각각 다른 리스트로 출력
-#                                             # loss = loss / acc = metrics에서 나온 accuracy 값
-# print('loss : ', loss)
-# print('acc : ', acc)
+earlyStopping = EarlyStopping(monitor='val_loss', patience=20, mode='auto',
+                              restore_best_weights=True,
+                              verbose=1)
+mcp = ModelCheckpoint(monitor='val_loss', mode='auto', verbose=1, 
+                      save_best_only=True, 
+                      filepath="".join([filepath, '01_', date, '_', filename])
+                      )
+start_time = time.time()
+hist = model.fit(x_train, y_train, epochs=50, batch_size=32,
+                 validation_split=0.2,
+                 callbacks=[earlyStopping, mcp],
+                 verbose=1)
+end_time = time.time() - start_time
 
 
-# result = model.evaluate(x_test, y_test)  # loss acc 각각 다른 리스트로 출력
+#4. 평가, 예측
+loss, acc = model.evaluate(x_test, y_test)  # loss acc 각각 다른 리스트로 출력
+                                            # loss = loss / acc = metrics에서 나온 accuracy 값
+print('loss : ', loss)
+print('acc : ', acc)
 
-# from sklearn.metrics import accuracy_score
-# y_predict = model.predict(x_test)
-# y_predict = np.argmax(y_predict, axis=1)
-# # print(y_predict)
 
-# y_test = np.argmax(y_test, axis=1)
-# # print(y_test)
+result = model.evaluate(x_test, y_test)  # loss acc 각각 다른 리스트로 출력
 
-# acc = accuracy_score(y_test, y_predict)
-# print('accuracy : ', acc)
+from sklearn.metrics import accuracy_score
+y_predict = model.predict(x_test)
+y_predict = np.argmax(y_predict, axis=1)
+# print(y_predict)
 
-# print("걸린시간 : ", end_time)
+y_test = np.argmax(y_test, axis=1)
+# print(y_test)
+
+acc = accuracy_score(y_test, y_predict)
+print('accuracy : ', acc)
+
+print("걸린시간 : ", end_time)
 
 
 

@@ -53,7 +53,7 @@ x_test = x_test.reshape(36, 13, 1, 1)
 # print(x_train.shape)  # (142, 13, 1, 1))  <-- "13, 1 ,1"는 input_shape값
 # print(x_test.shape)   # (36, 13, 1, 1)
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-#- -[y데이터를 x와 동일한 차원 형태로 변환] - - - - - - - - - - - - - 
+#- -[y데이터를 x와 동일한 차원 형태로 변환] - - - - - - - - - - - - - - - - ( [중요]!! 회귀형에서는 할 필요없음  )
 from tensorflow.python.keras.utils.np_utils import to_categorical
 y_train = to_categorical(y_train)
 y_test = to_categorical(y_test)

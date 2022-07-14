@@ -2,7 +2,7 @@ from tensorflow.python.keras.callbacks import EarlyStopping, ModelCheckpoint
 import matplotlib.pyplot as plt
 from matplotlib import font_manager, rc
 from sklearn.metrics import r2_score, accuracy_score
-from tensorflow.python.keras.layers import Dense, Conv2D, Flatten, MaxPooling2D ,Dropout, Input
+from tensorflow.python.keras.layers import Dense, Conv2D, Flatten, MaxPooling2D, Dropout, Input, LSTM
 from tensorflow.python.keras.models import Sequential, Model
 from keras.datasets import mnist,cifar10,cifar100,fashion_mnist
 import pandas as pd
@@ -20,7 +20,7 @@ from sklearn.preprocessing import MaxAbsScaler, RobustScaler
 
 #--[해당 데이터의 unique형태 확인]- - - - - - - - - - - - - - - - - 
 # print(np.unique(x_train, return_counts=True))
-# print(np.unique(y_train, return_counts=True))    # <--- 이 항목은 확인 필수 [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] 다중분류 모델이다.
+print(np.unique(y_train, return_counts=True))    # <--- 이 항목은 확인 필수 [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] 다중분류 모델이다.
 # print(np.unique(x_test, return_counts=True))   
 # print(np.unique(y_test, return_counts=True))
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -50,8 +50,8 @@ x_train = scaler.transform(x_train) # x_train을 수치로 변환해준다.
 x_test = scaler.transform(x_test) 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #--[차원 변형 작업]- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-x_train = x_train.reshape(60000, 196, 4, 1)              
-x_test = x_test.reshape(10000, 196, 4, 1)
+x_train = x_train.reshape(60000, 196, 4)              
+x_test = x_test.reshape(10000, 196, 4)
 
 # print(x_train.shape)  # (120, 2, 2, 1)  <-- "2, 2 ,1"는 input_shape값
 # print(x_test.shape)   # (30, 2, 2, 1)  
@@ -63,22 +63,19 @@ y_test = to_categorical(y_test)
 # print(y_train.shape, y_test.shape) #(60000, 10) (10000, 10)   
 
 
-#2. 모델구성   # 함수형
-input_01 = Input(shape=(2, 2, 1))  # Dense 구성을하고  node 값을 넣고 받아오고 싶은 변수 받아온다.
-conv2D_01 = Conv2D(32, (1,1), padding='valid', activation='relu')(input_01)   # 받아온 변수를 통해 훈련의 순서를 사용자가 원하는대로 할 수 있다.
-conv2D_02 = Conv2D(32, (1,1), activation='relu')(conv2D_01)
-conv2D_03 = Conv2D(32, (1,1), activation='relu')(conv2D_02)
-conv2D_04 = Conv2D(32, (1,1), activation='relu')(conv2D_03)
-
-flatten_01 = Flatten()(conv2D_04)   # 4차원을 2차원에서 돌아갈 수 있게 해결해주는 역할
-dense_01 = Dense(32, activation='relu')(flatten_01)  
-dropout_01 = Dropout(0.2)(dense_01)
-dense_02 = Dense(32, activation='relu')(dropout_01)
-output_01 = Dense(10)(dense_02)
-model = Model(inputs=input_01, outputs=output_01)  # 해당 모델의 input과 output을 설정한다.
-model.summary()
-
-
+#2. 모델구성
+model = Sequential()
+model.add(LSTM(units=100 ,input_length=196, input_dim=4))   #SimpleRNN  또는 LSTM를 거치면 3차원이 2차원으로 변형되어서 다음 레어어에 간다.
+# model.add(SimpleRNN(10))       # <-- 3차원이 아니라 2차원을 넣어서 에러가 발생함.[참고]
+model.add(Dense(300, activation='relu'))
+model.add(Dense(300, activation='relu'))
+model.add(Dense(300, activation='relu'))
+model.add(Dense(100, activation='relu'))   
+model.add(Dense(128, activation='relu'))
+model.add(Dropout(0.2))
+model.add(Dense(128, activation='relu'))
+model.add(Dense(10, activation='softmax')) # sigmoid에선 output은 1이다. (softmax에서는 유니크 갯수만큼)
+# model.summary()
 
 #3. 컴파일. 훈련
 model.compile(loss = 'categorical_crossentropy', optimizer='adam', 
@@ -100,7 +97,7 @@ mcp = ModelCheckpoint(monitor='val_loss', mode='auto', verbose=1,
                       filepath="".join([filepath, '01_', date, '_', filename])
                       )
 start_time = time.time()
-hist = model.fit(x_train, y_train, epochs=50, batch_size=32,
+hist = model.fit(x_train, y_train, epochs=1, batch_size=32,
                  validation_split=0.2,
                  callbacks=[earlyStopping, mcp],
                  verbose=1)
@@ -127,4 +124,6 @@ print('accuracy : ', acc)
 
 print("걸린시간 : ", end_time)
 
-#수정 필요 ~
+# loss :  1.1714454889297485
+# accuracy :  0.565699994564056
+# 걸린시간 :  108.71524214744568
