@@ -20,6 +20,8 @@
 # LSTM가 SimpleRNN보다 성능이 좋다 (그만큼 연산량이 많다.)
 # LSTM 설명 링크  https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=magnking&logNo=221311273459
 
+# model.add(LSTM(10, return_sequences=True, input_shape=(3, 1)))   /  return_sequences=True는 RNN에서만 사용가능하다.
+
 #=======================================================================================================================
 
 import numpy as np

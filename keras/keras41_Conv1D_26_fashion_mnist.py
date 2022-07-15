@@ -112,6 +112,8 @@ print("걸린시간 : ", end_time)
 
 
 
+
+
 # #그래프로 비교
 # font_path = 'C:\Windows\Fonts\malgun.ttf'
 # font = font_manager.FontProperties(fname=font_path).get_name()
