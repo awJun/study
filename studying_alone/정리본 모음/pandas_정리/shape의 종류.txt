@@ -1,0 +1,30 @@
+# https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf 판다스 시트자료
+# https://pandas.pydata.org/docs/user_guide/10min.html 판다스 10분 종 합문서
+
+import pandas as pd
+import seaborn as sns  # 보통 시각화를 할때 사용하는 데이터셋 seaborn을 불러옴
+
+df = sns.load_dataset('iris')   # seaborn을 이용해서 iris데이터를 가져옴
+
+
+
+# print(df.shape)  # (150, 5)
+
+
+
+# print(df.shape[0])   # df.shape[0] 행의 갯수만 출력  /  [1]일 경우 열의 갯수만 출력
+
+
+
+# print(len(df))   # 150  행의 갯수를 알려준다.
+
+
+
+# print(len(df) == df.shape[0])  # True
+
+
+
+
+
+
+

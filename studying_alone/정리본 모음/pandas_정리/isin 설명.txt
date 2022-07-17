@@ -1,0 +1,45 @@
+import pandas as pd
+# https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf 판다스 시트자료
+# https://pandas.pydata.org/docs/user_guide/10min.html 판다스 10분 종 합문서
+
+# 1번 데이터
+df = pd.DataFrame(
+    {"a" : [4 ,5, 6, 6],
+    "b" : [7, 8, 9, 9],
+    "c" : [10, 11, 12, 12]},
+    index = pd.MultiIndex.from_tuples(   # MultiIndex를 사용해서 index를 튜플로 지정해서  n와 v라는 두 개의 인덱스를 생성
+    [('d', 1), ('d', 2), ('e', 2), ('e', 3)],                  # n와 v라는 인덱스를 생성하여 이름을 붙힘
+     names=['n', 'v']))
+
+
+#--[두 개는 같은 뜻]---------------------------------------------------------------------------------------------
+
+# df = df.a.isin([6])    # df.column.isin(values)   # .isin 리스트안에서 해당 컬럼에 해당 벨류가 있는지 알려줌
+# print(df)
+n  v
+d  1    False
+   2    False
+e  2     True
+   3     True
+Name: a, dtype: bool
+
+df = df["a"].isin([6])    # df.column.isin(values)   # .isin 리스트안에서 해당 컬럼에 해당 벨류가 있는지 알려줌
+print(df)
+n  v
+d  1    False
+   2    False
+e  2     True
+   3     True
+Name: a, dtype: bool
+
+#---------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+

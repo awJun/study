@@ -1,0 +1,20 @@
+import pandas as pd
+import seaborn as sns  # 보통 시각화를 할때 사용하는 데이터셋 seaborn을 불러옴
+
+df = sns.load_dataset('iris')   # seaborn을 이용해서 iris데이터를 가져옴
+
+--[ pd.DataFrame으로 묶기 전 ]- - - - - - - - - - - -
+
+# print(df['species'].value_counts())      # df['w'].value_counts()  <-- 각각의 값을 그룹화해서 갯수를 세어준다.  / 숫자 데이터, 문자 데이터 모두 사용가능하다.
+# setosa        50        # 꽃의 이름이 적혀있는데 각각의 꽃이 50개씩 있다는 것을 알 수 있었음.
+# versicolor    50
+# virginica     50
+
+--[ pd.DataFrame으로 묶은 후 ]- - - - - - - - - - - -
+
+# 새로운 데이터셋을 만듬
+# print(pd.DataFrame(df['species'].value_counts()))
+#             species
+# setosa           50
+# versicolor       50
+# virginica        50

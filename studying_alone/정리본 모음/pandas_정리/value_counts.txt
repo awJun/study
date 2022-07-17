@@ -1,0 +1,70 @@
+# https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf 판다스 시트자료
+# https://pandas.pydata.org/docs/user_guide/10min.html 판다스 10분 종 합문서
+
+import pandas as pd
+import seaborn as sns  # 보통 시각화를 할때 사용하는 데이터셋 seaborn을 불러옴
+
+df = sns.load_dataset('iris')   # seaborn을 이용해서 iris데이터를 가져옴
+
+# print(df.shape)   # (150, 5)
+
+
+
+
+# print(df['species'].value_counts())      # df['w'].value_counts()  <-- 각각의 값을 그룹화해서 갯수를 세어준다.  / 숫자 데이터, 문자 데이터 모두 사용가능하다.
+# setosa        50        # 꽃의 이름이 적혀있는데 각각의 꽃이 50개씩 있다는 것을 알 수 있었음.
+# versicolor    50
+# virginica     50
+
+
+
+
+
+
+
+
+# print(df['petal_width'].value_counts())
+# 0.2    29
+# 1.3    13
+# 1.8    12
+# 1.5    12
+# 1.4     8
+# 2.3     8
+# 1.0     7
+# 0.4     7
+# 0.3     7
+# 2.1     6
+# 2.0     6
+# 0.1     5
+# 1.2     5
+# 1.9     5
+# 1.6     4
+# 2.5     3
+# 2.2     3
+# 2.4     3
+# 1.1     3
+# 1.7     2
+# 0.6     1
+# 0.5     1
+
+
+
+
+# print(pd.DataFrame(df['species'].value_counts()))
+
+[[a]] = pd.DataFrame(df['species'].value_counts())
+#             species
+# setosa           50
+# versicolor       50
+# virginica        50
+print([[a]])
+# print(df.head())
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,22 @@
+# https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf 판다스 시트자료
+# https://pandas.pydata.org/docs/user_guide/10min.html 판다스 10분 종 합문서
+
+
+# [해당 컬럼의 고유값을 알려준다.]
+
+
+import pandas as pd
+import seaborn as sns  # 보통 시각화를 할때 사용하는 데이터셋 seaborn을 불러옴
+
+df = sns.load_dataset('iris')   # seaborn을 이용해서 iris데이터를 가져옴
+
+print(df['species'].nunique())  # 3  / 해당 컬럼(열)의 고유값이 3개이다. 즉 꽃의 종류가 3개이다. 라는 걸 알려줬다.
+# 더 쉽게 설명하면 1이라는 데이터가 20개, 2라는 데이터가 20개, 3이라는 데이터가 20개 여기서는 1, 2 ,3 즉! 3개의 데이터가 고유값이므로 고유값의 갯수는 3개가 된다.
+
+
+print(df['sepal_width'].nunique())  # 해당 컬럼은 23개의 고유값
+
+# 유니크한 값들 안에 몇 개의 데이터가 들어있는지 알고 싶으면 df['petal_width'].value_counts()를 사용하면 된다.
+
+
+

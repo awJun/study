@@ -1,0 +1,111 @@
+import pandas as pd
+# https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf 판다스 시트자료
+# https://pandas.pydata.org/docs/user_guide/10min.html 판다스 10분 종 합문서
+
+import numpy as np
+
+# 1번 데이터
+df = pd.DataFrame(
+    {"a" : [4 ,5, 6, 6, np.nan],    # numpy를 이용해서 np.nan 난수를 만들어줌
+    "b" : [7, 8, np.nan, 9, 9],
+    "c" : [10, 11, 12, np.nan, 12]},
+    index = pd.MultiIndex.from_tuples(   # MultiIndex를 사용해서 index를 튜플로 지정해서  n와 v라는 두 개의 인덱스를 생성
+    [('d', 1), ('d', 2), ('e', 2), ('e', 3), ('e', 4)],                  # n와 v라는 인덱스를 생성하여 이름을 붙힘
+     names=['n', 'v']))
+
+#==[전체 데이터의 null값 확인방법]==========================
+
+# print(pd.isnull(df))  # df의 데이터중 null인 값에 True를 찍어준다.
+#          a      b      c
+# n v
+# d 1  False  False  False
+#   2  False  False  False
+# e 2  False   True  False
+#   3  False  False   True
+#   4   True  False  False
+
+#--[특정 컬럼(열)에 null값 확인방법]- - - - - - - - - - - - - -
+
+# print(df['a'].isnull())    # a 컬럼의 데이터중 null인 값에 True를 찍어준다.
+# n  v
+# d  1    False
+#    2    False
+# e  2    False
+#    3    False
+#    4     True
+# Name: a, dtype: bool
+
+#--[특정 컬럼(열)에 null값의 갯수 구하는 방법]- - - - - - - - - - - - - -
+
+# print(df['a'].isnull().sum())   # a 컬럼의 데이터중 null인 값의 총 갯수는 1개이다. 라고 갯수를 출력해줌
+# 1
+
+#--[해당 데이터에 null이 아닌 값을 구하는 방법]- - - - - - - - - - - - - -
+
+# print(pd.notnull(df))      # 해당 표에서 null인 값에 False로 찍어준다
+#          a      b      c
+# n v
+# d 1   True   True   True
+#   2   True   True   True
+# e 2   True  False   True
+#   3   True   True  False
+#   4  False   True   True
+
+#- - -[ 위 아래는 같은거임  ] - - - - - - -
+
+# print(df.notnull())
+#         a      b      c
+# n v
+# d 1   True   True   True
+#   2   True   True   True
+# e 2   True  False   True
+#   3   True   True  False
+#   4  False   True   True
+  
+#--[해당 데이터에 null이 아닌 값의 총 갯수를 구하는 방법]- - - - - - - - - - - - - -
+
+# print(pd.notnull(df).sum())
+# a    4
+# b    4
+# c    4
+
+#--[해당 컬럼의 데이터에서 null이 아닌 값을 구하는 방법]
+
+# print(df.a.notnull())
+# n  v
+# d  1     True
+#    2     True
+# e  2     True
+#    3     True
+#    4    False
+# Name: a, dtype: bool
+
+
+
+
+
+
+#데이터 프레임에선 아래의 연산자를 이용해야한다.
+#==[그냥 긁어옴 필요하면 쓰자 ㅋ]==================================================================
+
+< Less than != Not equal to
+> Greater than df.column.isin(values) Group membership
+== Equals pd.isnull(obj) Is NaN
+<= Less than or equals pd.notnull(obj) Is not NaN
+>= Greater than or equals 
+&,|,~,^,df.any(),df.all() Logical and, or, not, xor, any, all
+
+------------------------------------------------------------------------------------------
+
+#[예시중 하나 ㅋ]----------------------------------------------------------------------------
+
+# print(df[df.b == 7])    # b의 컬럼 안에 데이터중 7과 같은 데이터가 있으면 출력해라! 라는 뜻
+#        a    b     c
+# n v
+# d 1  4.0  7.0  10.0
+
+
+
+
+
+

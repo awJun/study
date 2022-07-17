@@ -1,0 +1,24 @@
+# https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf 판다스 시트자료
+# https://pandas.pydata.org/docs/user_guide/10min.html 판다스 10분 종 합문서
+
+import pandas as pd
+import seaborn as sns  # 보통 시각화를 할때 사용하는 데이터셋 seaborn을 불러옴
+
+df = sns.load_dataset('iris')   # seaborn을 이용해서 iris데이터를 가져옴
+
+# print(df.shape)   # (150, 5)
+# print(df.head())  # 데이터 표를 뽑아줌 head()안에 공란이면 전체데이터 / ()안에 보고싶은 행의 갯수를 입력하면 그 수만큼만 출력
+#    sepal_length  sepal_width  petal_length  petal_width species
+# 0           5.1          3.5           1.4          0.2  setosa
+# 1           4.9          3.0           1.4          0.2  setosa
+# 2           4.7          3.2           1.3          0.2  setosa
+# 3           4.6          3.1           1.5          0.2  setosa
+# 4           5.0          3.6           1.4          0.2  setosa
+
+# print(df.head(2))  # ()안에 보고싶은 행의 갯수를 입력하면 그 수만큼만 출력 
+#    sepal_length  sepal_width  petal_length  petal_width species
+# 0           5.1          3.5           1.4          0.2  setosa
+# 1           4.9          3.0           1.4          0.2  setosa
+
+
+
