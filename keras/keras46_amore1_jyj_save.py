@@ -21,9 +21,9 @@ path = './_data/test_amore_0718/'
 
 아모레_데이터 = pd.read_csv(path + '아모레220718.csv', thousands=",", encoding='cp949')
 
-data_amore = 삼성_데이터.sort_values(by='일자', ascending=True) 
-data_samsung = 아모레_데이터.sort_values(by='일자', ascending=True) #오름차순 정렬
-# print(data_amore.head(), data_samsung.head()) 정상~~~~
+# data_amore = 삼성_데이터.sort_values(by='일자', ascending=True) 
+# data_samsung = 아모레_데이터.sort_values(by='일자', ascending=True) #오름차순 정렬
+# # print(data_amore.head(), data_samsung.head()) 
 
 
 size = 1

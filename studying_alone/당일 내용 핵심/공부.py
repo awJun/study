@@ -1,122 +1,144 @@
-# 시험~
+# https://pandas.pydata.org/pandas-docs/version/1.0.1/reference/api/pandas.to_datetime.html  판다스 공식 사이트
 
-from sklearn.metrics import r2_score, accuracy_score
-from tensorflow.python.keras.layers import Dense, Conv2D, Flatten, MaxPooling2D, Dropout, LSTM   
-from tensorflow.python.keras.models import Sequential
-import pandas as pd
 import numpy as np
-import tensorflow as tf       
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from tensorflow.python.keras.models import Sequential, Model, load_model
+from tensorflow.python.keras.layers import LSTM, Dense, Input
+from tensorflow.python.keras.callbacks import EarlyStopping, ModelCheckpoint
 import time
-from sklearn.model_selection import train_test_split # 함수 가능성이 높음
-from sklearn.preprocessing import MinMaxScaler, StandardScaler # 클래스 가능성이 높음
-from sklearn.preprocessing import MaxAbsScaler, RobustScaler
-from sklearn.datasets import fetch_covtype
-from tensorflow.python.keras.callbacks import EarlyStopping
-from sklearn.metrics import r2_score, mean_squared_error
-#삼전 10/03/24부터 모레 09/09/01 
+import matplotlib.pyplot as plt
+from matplotlib import font_manager, rc
+import tensorflow as tf
+# print(tf.__version__)   # 2.8.2
+
 
 #1. 데이터
 path = './_data/test_amore_0718/'
-삼성_데이터 = pd.read_csv(path + '삼성전자_데이터.csv', thousands=",", encoding='cp949') # index_col=n n번째 컬럼을 인덱스로 인식
-
-아모레_데이터 = pd.read_csv(path + '아모레_데이터.csv', thousands=",", encoding='cp949')
-
-
-def split_x(a, b):
-    임의의_리스트선언 = []
-    for i in range(len(a) - b + 1):   # 10 - 5 + 1  =6 /  i가 반복하는 건 6번  /  0 1 2 3 4 5 <--  i가 들어가는 값의 순서
-        subset = a[i : (i + b)]    #  subset = dataset[0 : 5]   1, 2, 3, 4, 5 
-        임의의_리스트선언.append(subset)   
-    
-       
-    return np.array(임의의_리스트선언)
-
-#--[trainset 만드는 과정]-----------
-size = 16   #  x = 4개  y는 1개
-train = split_x(아모레_데이터, size)
-
-# print(train)         
-# print(train.shape)    # (3165, 16, 17)
-# #-----------------------------------
-
-
-#---[trainset에서 x와 y데이터를 추출하는 과정]---------------------------------------------------------------------------------------------------------
-# 1, 2, 3, 4를 x데이터로 만드는 과정 5번째 열은 뺌 / 왜냐하면 "1, 2, 3, 4에 대한 예측은 5"라는 형태의 데이터로 만들기 위해 y에서 사용할 것이기 때문이다.
-x = train[:, :-1]     
-# # x에서 빼버린 5번째 열을 y데이터로 사용하겟다는 뜻 ~ 
-y = train[:, -1]       
-#-----------------------------------------------------------------------------------------------------------------------------------------------------
-print(x)
-
-# #-[예측 단계중 predict에서 사용 할 데이터 만드는 과정]- - - - - - - - - - -
-# size = 4
-# test = split_x(testset, size)
-
-# # print(test)
-# # print(x.shape, y.shape, test.shape)
-
-# #- - - - - - - - - - - - - - - - -
-
-# # 모델 구성 및 평가 예측할 것.
-
-# x_train, x_test, y_train, y_test = train_test_split(x, y,
-#                                                     train_size=0.8,
-#                                                     shuffle=True,
-#                                                     random_state=100
-#                                                     )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+amore = pd.read_csv(path +"아모레220718.csv", thousands=",", encoding='cp949')  # 마이크로소프트 'cp949' / 맥과 리눅스는 'utf8'
+                                                                                # thousands=","는 값을 찍을 때 ,를 없애준다(describe에서 확인가능)
+# print(amore.shape)    # (3180, 17)
+# print(amore.describe)
+# print(amore.head(5))
+# print(amore.isnull().sum())
+# print(amore.info())
+
+# #일자 변환
+amore['일자'] = pd.to_datetime(amore['일자'], infer_datetime_format=True)  #infer_datetime_format bool, 기본값은 False
+# True이고 형식 이 지정되지 않은 경우 날짜/시간 문자열의 형식을 유추하려고 시도하고 유추할 수 있는 경우 더 빠른 구문 분석 방법으로 전환합니다.
+# 어떤 경우에는 파싱 속도를 ~5-10배까지 높일 수 있습니다.
+
+#과거에서 현재 순으로 행을 역순 시켜줌
+amore = amore.loc[::-1].reset_index(drop=True)
+amore = amore.drop(range(0, 2062), axis=0)
+amore = amore.drop(columns=['전일비'], axis=1)
+
+print(amore.head(5))
+print(amore.describe)
+print(amore.shape)  # (1118, 16)
+
+amore = amore.apply(pd.to_numeric) # convert all columns of DataFrame
+print(amore.info())
+print(amore.head(5))
+print(amore.isnull().sum())
+
+x = amore.drop(columns=['일자', '시가', '금액(백만)', '신용비', '외인(수량)', '프로그램', '외인비'], axis=1) 
+x = np.array(x)
+print(x.shape) # (1118, 9)
+
+y = amore['시가']
+print(y.shape) # (1118,)
+
+time_steps = 5
+y_column = 5
+
+def split_xy(dataset, time_steps, y_column):                 
+    x = []
+    y = []
+    for i in range(len(dataset)):
+        x_end_number = i + time_steps      # 0 + 5   > 5
+        y_end_number = x_end_number + y_column - 1    # 5 + 3 -1 > 7
+        
+        if y_end_number > len(dataset):
+            break
+        tmp_x = dataset[i:x_end_number, 0]                   # 0 : 5 , : -1   > 0행~4행, 마지막열 뺀 전부
+        tmp_y = dataset[x_end_number-1:y_end_number, 0]       # 5 - 1 : 7 , -1  > 마지막 열의 4~6행
+        x.append(tmp_x)
+        y.append(tmp_y)
+    return np.array(x), np.array(y)
+
+x, y = split_xy(x, time_steps, y_column)
+# y_predict = y[-1]
+# print(x.shape, y.shape) # (1110, 5) (1110, 5)
+# print(y_predict)        # [131000. 137500. 138000. 136000. 136500.]
+
+# # 스케일링
+# from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler
+# scaler = MinMaxScaler()
+# #scaler = StandardScaler()
+# #scaler = RobustScaler()
+# #scaler = MaxAbsScaler()
+# scaler.fit(x)
+# x1 = scaler.transform(x)
+
+# x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.6, random_state=66)
+
+# print(x_train.shape, x_test.shape, y_train.shape, y_test.shape) # (666, 5) (444, 5) (666, 5) (444, 5)
+
+# x_train = x_train.reshape(666, 5, 1) 
+# x_test = x_test.reshape(444, 5, 1)
+# print(x_train.shape)    
+# print(np.unique(x_train, return_counts=True))
+
+
+# #2. 모델구성
+# model = Sequential()
+# model.add(LSTM(100, return_sequences=True, 
+#                activation='linear', input_shape=(5,1)))
+# model.add(LSTM(100, return_sequences=False, 
+#                activation='relu'))   
+# model.add(Dense(100, activation='relu'))
+# model.add(Dense(100, activation='relu'))
+# model.add(Dense(1, activation='linear'))
+# model.summary()
+
+
+# #3.컴파일, 훈련
+# model.compile(loss='mse', optimizer='adam') 
+
+# import datetime
+# date = datetime.datetime.now()      
+# date = date.strftime("%m%d_%H%M")   
+# print(date)
+
+# filepath = './_ModelCheckPoint/k46/'
+# filename = '{epoch:04d}-{val_loss:.4f}.hdf5'
+
+# earlyStopping = EarlyStopping(monitor = 'val_loss', patience=100, mode='min', verbose=1, 
+#                               restore_best_weights=True)
+# mcp = ModelCheckpoint(monitor='val_loss', mode='auto', verbose=1, 
+#                       save_best_only=True, 
+#                       filepath="".join([filepath, '_', date, '_', filename])
+#                       )
+# start_time = time.time() 
+# history = model.fit(x_train, y_train, epochs=500, batch_size=128,
+#                     validation_split=0.2, callbacks=[earlyStopping],
+#                     verbose=1)
+# end_time = time.time() - start_time
+
+
+# #4. 평가, 예측
+# loss = model.evaluate(x_test, y_test, batch_size=1)
+# print('loss :', loss) 
+
+# y_pred = np.array(y_predict).reshape(1, 5, 1)
+# result = model.predict(y_pred)
+# print('[7월 19일 시가] 예측값 : ', result)
+
+# import matplotlib
+# import matplotlib.pyplot as plt2
+
+# plt2.plot(y_predict, color='red', label='Prediction')
+# plt2.plot(y_test, color='blue', label='Ground Truth')
+# plt2.legend(loc='upper left')
+# plt2.show()
