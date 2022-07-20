@@ -61,9 +61,13 @@ xy_test = train_datagen.flow_from_directory(   # directory : 폴더   / 즉! 폴
 # print(xy_train[0])     # <keras.preprocessing.image.DirectoryIterator object at 0x00000198C5295F70>
 # array([1., 1., 0., 0., 1.]    batch_size가 5이므로 5개 나옴 ..  ???
 
+
+
 # 그냥 참고용
 # print(xy_train[32]) 
 # 즉! 160개중에 5개씩 잘려서 31개가 있는데 너는 32개를 요청해서 에러를 냈어 ! 라는뜻
+
+
 
 # print(xy_train[31])
 # print(xy_train[31][0].shape)   # (5, 150, 150, 3)  3은 칼라/  색을 따로 지정 안했으므로 흑백도 칼라로 인식 상관없음~ 흑백도 굳이 따지만 칼라색임 !
