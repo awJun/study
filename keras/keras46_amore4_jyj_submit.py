@@ -22,14 +22,28 @@ path = './_data/test_amore_0718/'
 아모레_데이터 = pd.read_csv(path + '아모레220718.csv', thousands=",", encoding='cp949')
 
 
-size = 2
-def split_x1(dataset, size):
-    a1 = []
-    for i in range(len(dataset) - size + 1):
-        subset = dataset[i : (i + size)]
-        a1.append(subset)
-        return np.array(a1)
-y_아모레_데이터 = split_x1(아모레_데이터['시가'], size)
+def split_x(seq, size): #함수 split_x는 한 
+    aaa = []
+    for i in range(len(seq) - 24):
+        subset = seq[i:(i+size)]
+        aaa.append(subset)
+    print(type(aaa))
+    return np.array(aaa)
+size=20
+samx = split_x(삼성_데이터,size)
+amorex = split_x(아모레_데이터,size)
+# amorex = split_x(amorex[],size)
+
+size=3
+def split_y(seq, size): #함수 split_x는 한 
+    aaa = []
+    for i in range(len(seq) - 23):
+        subset = seq[i+20:(i+20+size)]
+        aaa.append(subset)
+    print(type(aaa))
+    return np.array(aaa)
+samy = split_y(삼성_데이터,size)
+amorey = split_y(아모레_데이터,size)
 
 #==[아모레 데이터 작업]==========================================================================================================================
 
