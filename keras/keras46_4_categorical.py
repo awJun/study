@@ -37,7 +37,7 @@ xy_train = train_datagen.flow_from_directory(   # directory : 폴더   / 즉! �
    'd:/_data/image/brain/train/',   # 아까 만든 d드라이브에 데이터를 넣어놨는데 그걸 불러오는 것임! 
     target_size=(100, 100),    # <-- 100 x 100을 150으로하면 알아서 크기를 증폭하고 그 반대면 알아서 줄여서 사용한다. 즉! 사용자 맘대로 수치를 정해도됨
     batch_size=5,
-    class_mode='binary',   # 여기서는 정상, 비정상 2가지로 분류하므로 2진법에서 사용하는 binary를 선언!
+    class_mode='categorical',   # categorical을 사용하면 원핫으로 나옴         # 여기서는 정상, 비정상 2가지로 분류하므로 2진법에서 사용하는 binary를 선언!
     shuffle=True,
     color_mode='grayscale'
 )
@@ -51,7 +51,7 @@ xy_test = train_datagen.flow_from_directory(   # directory : 폴더   / 즉! 폴
    'd:/_data/image/brain/test/',   # 아까 만든 d드라이브에 데이터를 넣어놨는데 그걸 불러오는 것임! 
     target_size=(100, 100), 
     batch_size=5,
-    class_mode='binary',   # 여기서는 정상, 비정상 2가지로 분류하므로 2진법에서 사용하는 binary를 선언!
+    class_mode='categorical',   # categorical을 사용하면 원핫으로 나옴         # 여기서는 정상, 비정상 2가지로 분류하므로 2진법에서 사용하는 binary를 선언!
     shuffle=True,
     color_mode='grayscale'
 )
@@ -92,6 +92,11 @@ xy_test = train_datagen.flow_from_directory(   # directory : 폴더   / 즉! 폴
 # print(type(xy_train[0][0])) # <class 'numpy.ndarray'>
 # print(type(xy_train[0][1])) # <class 'numpy.ndarray'>
 #============================================================
+# print(xy_train[0])
+# print(xy_train[0][0])
+# print(xy_train[0][1])
+# print(xy_train[0][0].shape, xy_train[0][1].shape)
+
 
 
 
@@ -99,18 +104,21 @@ xy_test = train_datagen.flow_from_directory(   # directory : 폴더   / 즉! 폴
 
 #2. 모델구성
 from tensorflow.python.keras.models import Sequential
-from tensorflow.python.keras.layers import Dense, Conv2D, Flatten
+from tensorflow.python.keras.layers import Dense, Conv2D, Flatten, MaxPooling2D ,Dropout   
+
 
 model = Sequential()
 model.add(Conv2D(32, (2,2), input_shape=(100, 100, 1), activation='relu'))
+model.add(MaxPooling2D(2, 2))     
 model.add(Conv2D(64, (3,3), activation='relu'))
+model.add(Dropout(0.2))
 model.add(Flatten())
 model.add(Dense(16, activation='relu'))
-model.add(Dense(1, activation='sigmoid'))
+model.add(Dense(2, activation='softmax'))
 
 
 #3. 컴파일, 훈련
-model.compile(loss = 'binary_crossentropy', optimizer='adam', metrics=['accuracy'])   # 
+model.compile(loss = 'categorical_crossentropy', optimizer='adam', metrics=['accuracy'])   # 
 # model.fit(xy_train[0][0], xy_train[0][1])  # 현재 x, y데이터 한덩어리씩 있으므로 이렇게함   해당은 배치사이즈를 최대로 할 경우 가능하다.
 
 # 위에 문제를 해결하기위해 fit_generator를 사용
@@ -120,7 +128,7 @@ hist = model.fit_generator(xy_train, epochs=30,  #  그냥 데이터 통채로 �
                    #[중요!] validation_data=xy_test, validation_steps=4 를 사용해서 아래에서 accuracy = hist.history['accuracy']를 사용하기
                           # 위해서 선언함 / 선언해야지 metrics=['accuracy']와 만나서 아래에서 결과를 도출해줌 !
                   
-                   steps_per_epoch=33,   # batch_size 대신 이걸 사용해야함   /  1 epoch당 훈련하는 양을 조절하는 것임!
+                   steps_per_epoch=33    # batch_size 대신 이걸 사용해야함   /  1 epoch당 훈련하는 양을 조절하는 것임!
                     # 범위는 데이터셋을 batch사이즈로 나눈거 즉!  -->  전체데이터/batch = 160/5 = 32 [정정]
                       # 지금보니까 그냥 제한 범위없음 마음대로 할 것 근데 통상적으로 위에처럼 사용한다고함.
                     # [중요] fit_generator에서는 batch_size를 사용할 수 없다 ~
