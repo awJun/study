@@ -17,11 +17,11 @@ datasets = train_datagen.flow_from_directory(
     class_mode='binary',
     shuffle=True
 )  # Found 1027 images belonging to 2 classes.
-print(datasets[0][0].shape)   # (1027, 150, 150, 3)
-print(datasets[0][1].shape)   # (1027,)
+# print(datasets[0][0].shape)   # (1027, 150, 150, 3)
+# print(datasets[0][1].shape)   # (1027,)
 
-# np.save('D:/study_data/_save/_npy/horse_or_human/keras47_2_x_data.npy', arr=datasets[0][0])
-# np.save('D:/study_data/_save/_npy/horse_or_human/keras47_2_y_data.npy', arr=datasets[0][1])
+np.save('D:/study_data/_save/_npy/horse_or_human/keras47_2_x_data.npy', arr=datasets[0][0])
+np.save('D:/study_data/_save/_npy/horse_or_human/keras47_2_y_data.npy', arr=datasets[0][1])
 
 
 
