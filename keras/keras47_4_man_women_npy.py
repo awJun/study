@@ -4,8 +4,8 @@
 import numpy as np 
 from keras.preprocessing.image import ImageDataGenerator
  
-x = np.load('D:\study_data\_save\_npy/men_women/keras47_04_x.npy.')
-y= np.load('D:\study_data\_save\_npy/men_women/keras47_04_y.npy')
+x = np.load('D:/study_data/_save/_npy/men_women/keras47_04_x.npy.')
+y= np.load('D:/study_data/_save/_npy/men_women/keras47_04_y.npy')
 
 print(x.shape)
 print(y.shape)
@@ -14,7 +14,7 @@ test_image = ImageDataGenerator(
     rescale=1./255)
 
 aaa = test_image.flow_from_directory(
-    'D:\study_data\_data\image\aaa', # 이 경로의 이미지파일을 불러 수치화
+    'D:/study_data/_data/image/aaa', # 이 경로의 이미지파일을 불러 수치화
     target_size=(150,150),# 크기들을 일정하게 맞춰준다.
     batch_size=30,
     class_mode='binary', 
@@ -77,7 +77,7 @@ acc = accuracy_score(y_test,y_predict)
 
 print('acc : ', acc)
 
-# print(y_predict)
+print(y_predict)
 
 
 
