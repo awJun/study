@@ -6,7 +6,7 @@ x = np.array([1, 2, 3])  # 배열 리스트 1, 2, 3   # 리스트 한 덩어리�
 y = np.array([1, 2, 3])
    
       
-#2. 모델구성     
+#2. 모델구성      
  
 from tensorflow.keras.models import Sequential # hiden이 위에서 아래로 내려가는
 # "tensorflow.keras.models" 안에 있는 Seqential를 불러와서 사용하겠다라고 선언.
