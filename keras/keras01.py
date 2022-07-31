@@ -2,7 +2,7 @@
 import numpy as np
 from sklearn.metrics import log_loss
 
-x = np.array([1, 2, 3])  # 배열 리스트 1, 2, 3   # 리스트 한 덩어리가 노드에 들어간다.  
+x = np.array([1, 2, 3])  # 배열 리스트 1, 2, 3   # 리스트 한 덩어리가 노드에 들어간다.   
 y = np.array([1, 2, 3]) 
        
       
