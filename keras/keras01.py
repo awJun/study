@@ -77,6 +77,3 @@ print('4의 예측값 : ', result)
 # zkfmakekd@naver.com  반장 이메일
 # 이메일로 본인 깃허브 주소 보내기
   
- 
- 
- 
