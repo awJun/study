@@ -25,7 +25,7 @@ model.add(Dense(4, input_dim=1)) #dim 디멘션: 차원 1   # 1은 입력값, 4�
 model.add(Dense(5))  # 안의 숫자는 노드의 양
 model.add(Dense(3))  
 model.add(Dense(2))  
-model.add(Dense(1))  # 최종 y의 값
+model.add(Dense(1))  # 최종 y의 값 
 
 #3. 컴파일, 훈련
 model.compile(loss='mse', optimizer='adam')
