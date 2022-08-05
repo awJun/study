@@ -1,5 +1,3 @@
-# 시험~
-
 from sklearn.metrics import r2_score, accuracy_score
 from tensorflow.python.keras.layers import Dense, Conv2D, Flatten, MaxPooling2D, Dropout, LSTM  
 from tensorflow.python.keras.models import Sequential, Input, Model
@@ -10,6 +8,7 @@ import time
 from sklearn.model_selection import train_test_split # 함수 가능성이 높음
 from sklearn.preprocessing import MinMaxScaler, StandardScaler # 클래스 가능성이 높음
 from sklearn.preprocessing import MaxAbsScaler, RobustScaler
+from sklearn.datasets import fetch_covtype
 from tensorflow.python.keras.callbacks import EarlyStopping
 from sklearn.metrics import r2_score, mean_squared_error
 #삼전 10/03/24부터 모레 09/09/01 
@@ -351,113 +350,6 @@ print(y_predict1[-1])
 print('아모레의 r2스코어 : ', y1_r2)
 print('삼성의 r2스코어 : ', y2_r2)
 # print('걸린시간 : ', end_time) 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
