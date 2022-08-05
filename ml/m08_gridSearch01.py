@@ -49,14 +49,19 @@ model = GridSearchCV(SVC(), parameters, cv=kfold, verbose=1,                # 42
 
 
 #3. 컴파일, 훈련
+import time
+start_time = time.time()
 model.fit(x_train, y_train)
+end_time = time.time()  -start_time
 
 print("최적의 매개변수 : ", model.best_estimator_)
 # 최적의 매개변수 :  SVC(C=10, kernel='linear')
+###############################################################[성능에 좌우]
 print("최적의 파라미터 : ", model.best_params_)
 # 최적의 파라미터 :  {'C': 10, 'degree': 3, 'kernel': 'linear'}
 print("best_score_ : ", model.best_score_)
 # best_score_ :  0.975
+################################################################
 print("model.score : ", model.score(x_test, y_test))
 # model.score :  0.9666666666666667
 
@@ -65,6 +70,10 @@ y_predict = model.predict(x_test)
 print("accuracy_score", accuracy_score(y_test, y_predict))
 # accuracy_score 0.9666666666666667
 
-y_pred_best = model.best_estimator_.__prepare__(x_test)
-print('최적 튠 ACC : ', accuracy_score(y_test, y_pred_best))
+# y_pred_best = model.best_estimator_.__prepare__(x_test)
+# print('최적 튠 ACC : ', accuracy_score(y_test, y_pred_best))
 
+print("걸린시간 : ", round(end_time, 2), "초")
+# 걸린시간 :  0.24 초
+
+# 통상적으로 컴퓨터가 좋으면 딥러닝 / 안좋으면 머신러닝을 활용한다.
