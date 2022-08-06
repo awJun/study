@@ -70,7 +70,7 @@ for col in 아모레_데이터.columns:
     # print(col + ': ' + str(missing_rows))
 
 아모레_데이터 = 아모레_데이터.dropna()
-# print(아모레_데이터.isnull().sum())  
+print(아모레_데이터.isnull().sum())  
 
 아모레_데이터 = 아모레_데이터[:1773]
 # print(아모레_데이터.shape) # (1773, 11)
@@ -294,13 +294,13 @@ from tensorflow.python.keras.layers import concatenate, Concatenate  # <- 그냥
 merge1 = concatenate([output1, output2], name='mg1')
 merge2 = Dense(200, activation='relu', name='mg2_15')(merge1)
 merge3 = Dense(300, name='mg3_12')(merge2)
-last_output = Dense(1, name='last')(merge3)   # <-- 레이어이므로 마지막은 1    
+concatenate_output = Dense(10, name='last')(merge3)   # <-- 레이어이므로 마지막은 1    
 
-output41 = Dense(100)(last_output)
+output41 = Dense(100)(concatenate_output)
 output42 = Dense(100)(output41)
 last_output2 = Dense(1, name='last1')(output42)
 
-output51 =  Dense(100)(last_output)
+output51 =  Dense(100)(concatenate_output)
 output52 = Dense(100)(output51)
 last_output3 = Dense(1, name='mg3_1')(output52)
  
@@ -327,7 +327,7 @@ mcp = ModelCheckpoint(monitor='val_loss', mode='auto', verbose=1, save_best_only
                       filepath= "".join([filepath, 'k24_', date, '_', filename])
                       )
 
-hist = model.fit([아모레_x_train, 삼성_x_train], [아모레_y_train, 삼성_y_train], epochs=300, batch_size=50,
+hist = model.fit([아모레_x_train, 삼성_x_train], [아모레_y_train, 삼성_y_train], epochs=1, batch_size=50,
                  validation_split=0.2,
                  callbacks=[earlyStopping, mcp],
                  verbose=1)

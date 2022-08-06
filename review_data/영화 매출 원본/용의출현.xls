@@ -1,0 +1,373 @@
+
+
+
+
+
+
+
+
+
+
+
+<html>
+<head>
+<style>
+html { font-family:'맑은 고딕',Calibri, Arial, Helvetica, sans-serif; font-size:11pt; background-color:white }
+.tbl_tit{width:100%;}
+.tbl_tit em{font-weight: bold;font-style: normal}
+.tbl_tit_sub{background-color: black;color:white;font-size: 13pt;font-weight: bold;}
+.tbl_tit_ser{font-size:10pt; font-weight: bold;background-color:#D8D8D8}
+.tbl_tit_desc{color:#000000;  font-size:9pt}
+.board_tit{font-weight: bold;color: #7891B0;font-size: 11pt;margin-top:10px;margin-bottom: 0px;}
+.tbl_exc{font-size: 10pt;}
+.tbl_exc tr{height:15pt;}
+.tbl_exc td{text-align: center;}
+.tbl_exc th{height:15pt;background-color: black;color:white;font-weight: bold;border-left: 1px solid #FFF;border-right: 1px solid #FFF;}
+.tbl_exc tr.sumTr{background-color:#777; height: 40px; text-align: right;color:white;font-weight: bold;}
+.tal {text-align:left !important;}
+.tar {text-align:right !important;}
+.tac {text-align:center !important;}
+</style>
+</head>
+
+<body>
+	<table border="0" class="tbl_tit">
+		<tr>
+			<td class="tbl_tit_sub" colspan="15">■ '한산: 용의 출현' 일자별 통계정보</td>
+		</tr>
+		<tr>	
+			<td class="tbl_tit_desc" colspan="15">- <em>조회일</em>: 2022-08-05</td>
+		</tr>
+		<tr>
+			<td class="tbl_tit_desc" colspan="15">- <em>출처</em>: 영화진흥위원회 통합전산망 (http://www.kobis.or.kr)</td>
+		</tr>
+	</table>
+
+<table border="1" class="tbl_exc">
+	<thead>
+		<tr>
+			<th scope="col" class="row"><span>날짜</span></th>
+			<th scope="col" class="row"><span>스크린수</span></th>
+			<th scope="col" class="row"><span>스크린점유율</span></th>
+			<th scope="col" class="row"><span>상영횟수</span></th>
+			<th scope="col" class="row"><span>상영점유율</span></th>
+			<th scope="col" class="row"><span>좌석수</span></th>
+			<th scope="col" class="row"><span>좌석점유율</span></th>
+			<th scope="col" class="row"><span>좌석판매율</span></th>
+			<th scope="col" class="row"><span>매출액</span></th>
+			<th scope="col" class="row"><span>매출액증감(전일대비)</span></th>
+			<th scope="col" class="row"><span>관객수</span></th>
+			<th scope="col" class="row"><span>관객수증감(전일대비)</span></th>
+			<th scope="col" class="row"><span>누적매출액</span></th>
+			<th scope="col" class="row"><span>누적관객수</span></th>
+			<!--th scope="col" class="row"><span>예매매출액(점유율)</span></th-->
+			<!--th scope="col" class="row"><span>예매건수(점유율)</span></th-->
+			<th scope="col" class="row"><span>순위</span></th>
+		</tr>
+	</thead>
+	<tbody>
+	
+		<tr>
+			<td>2022-07-19</td>
+			<td>10</td>
+			<td style=mso-number-format:"0.0%">0.2%</td>
+			<td>20</td>
+			<td style=mso-number-format:"0.0%">0.1%</td>
+			<td>2,636</td>
+			<td style=mso-number-format:"0.0%">0.1%</td>
+			<td style=mso-number-format:"0.0%">99.8%</td>
+			<td>27,502,000</td>
+			<td>27502000 (     100.0% )</td>
+			<td>2,632</td>
+			<td>2632 (     100.0% )</td>
+			<td>27,502,000</td>
+			<td>2,632</td>
+			<!--td>(%)</td-->
+			<!--td>(%)</td-->
+			<td>10</td>
+		</tr>
+	
+		<tr>
+			<td>2022-07-21</td>
+			<td>5</td>
+			<td style=mso-number-format:"0.0%">0.1%</td>
+			<td>5</td>
+			<td style=mso-number-format:"0.0%">0%</td>
+			<td>802</td>
+			<td style=mso-number-format:"0.0%">0.0%</td>
+			<td style=mso-number-format:"0.0%">81.9%</td>
+			<td>5,067,000</td>
+			<td>5067000 (     100.0% )</td>
+			<td>657</td>
+			<td>657 (     100.0% )</td>
+			<td>32,569,000</td>
+			<td>3,289</td>
+			<!--td>(%)</td-->
+			<!--td>(%)</td-->
+			<td>14</td>
+		</tr>
+	
+		<tr>
+			<td>2022-07-23</td>
+			<td>9</td>
+			<td style=mso-number-format:"0.0%">0.1%</td>
+			<td>9</td>
+			<td style=mso-number-format:"0.0%">0%</td>
+			<td>2,129</td>
+			<td style=mso-number-format:"0.0%">0.1%</td>
+			<td style=mso-number-format:"0.0%">88.7%</td>
+			<td>24,218,700</td>
+			<td>24218700 (     100.0% )</td>
+			<td>1,888</td>
+			<td>1888 (     100.0% )</td>
+			<td>56,787,700</td>
+			<td>5,177</td>
+			<!--td>(%)</td-->
+			<!--td>(%)</td-->
+			<td>10</td>
+		</tr>
+	
+		<tr>
+			<td>2022-07-24</td>
+			<td>8</td>
+			<td style=mso-number-format:"0.0%">0.1%</td>
+			<td>8</td>
+			<td style=mso-number-format:"0.0%">0%</td>
+			<td>1,712</td>
+			<td style=mso-number-format:"0.0%">0.1%</td>
+			<td style=mso-number-format:"0.0%">88.3%</td>
+			<td>19,058,800</td>
+			<td>-5159900 (     -21.3% )</td>
+			<td>1,511</td>
+			<td>-377 (     -20.0% )</td>
+			<td>75,846,500</td>
+			<td>6,688</td>
+			<!--td>(%)</td-->
+			<!--td>(%)</td-->
+			<td>10</td>
+		</tr>
+	
+		<tr>
+			<td>2022-07-25</td>
+			<td>25</td>
+			<td style=mso-number-format:"0.0%">0.4%</td>
+			<td>25</td>
+			<td style=mso-number-format:"0.0%">0.1%</td>
+			<td>6,364</td>
+			<td style=mso-number-format:"0.0%">0.2%</td>
+			<td style=mso-number-format:"0.0%">100.0%</td>
+			<td>75,532,000</td>
+			<td>56473200 (     296.3% )</td>
+			<td>6,364</td>
+			<td>4853 (     321.2% )</td>
+			<td>151,378,500</td>
+			<td>13,052</td>
+			<!--td>(%)</td-->
+			<!--td>(%)</td-->
+			<td>8</td>
+		</tr>
+	
+		<tr>
+			<td>2022-07-26</td>
+			<td>6</td>
+			<td style=mso-number-format:"0.0%">0.1%</td>
+			<td>8</td>
+			<td style=mso-number-format:"0.0%">0%</td>
+			<td>2,110</td>
+			<td style=mso-number-format:"0.0%">0.1%</td>
+			<td style=mso-number-format:"0.0%">89.2%</td>
+			<td>18,843,000</td>
+			<td>-56689000 (     -75.1% )</td>
+			<td>1,882</td>
+			<td>-4482 (     -70.4% )</td>
+			<td>170,221,500</td>
+			<td>14,934</td>
+			<!--td>(%)</td-->
+			<!--td>(%)</td-->
+			<td>9</td>
+		</tr>
+	
+		<tr>
+			<td>2022-07-27</td>
+			<td>2,223</td>
+			<td style=mso-number-format:"0.0%">38.9%</td>
+			<td>10,631</td>
+			<td style=mso-number-format:"0.0%">56.1%</td>
+			<td>1,686,842</td>
+			<td style=mso-number-format:"0.0%">61.8%</td>
+			<td style=mso-number-format:"0.0%">22.9%</td>
+			<td>3,279,668,746</td>
+			<td>3260825746 (   17305.2% )</td>
+			<td>386,161</td>
+			<td>384279 (   20418.7% )</td>
+			<td>3,449,890,246</td>
+			<td>401,095</td>
+			<!--td>(%)</td-->
+			<!--td>(%)</td-->
+			<td>1</td>
+		</tr>
+	
+		<tr>
+			<td>2022-07-28</td>
+			<td>2,178</td>
+			<td style=mso-number-format:"0.0%">34.2%</td>
+			<td>10,191</td>
+			<td style=mso-number-format:"0.0%">52.6%</td>
+			<td>1,640,604</td>
+			<td style=mso-number-format:"0.0%">59.2%</td>
+			<td style=mso-number-format:"0.0%">14.4%</td>
+			<td>2,392,993,676</td>
+			<td>-886675070 (     -27.0% )</td>
+			<td>236,943</td>
+			<td>-149218 (     -38.6% )</td>
+			<td>5,842,883,922</td>
+			<td>638,038</td>
+			<!--td>(%)</td-->
+			<!--td>(%)</td-->
+			<td>1</td>
+		</tr>
+	
+		<tr>
+			<td>2022-07-29</td>
+			<td>2,164</td>
+			<td style=mso-number-format:"0.0%">33.1%</td>
+			<td>10,243</td>
+			<td style=mso-number-format:"0.0%">51.5%</td>
+			<td>1,653,408</td>
+			<td style=mso-number-format:"0.0%">58.1%</td>
+			<td style=mso-number-format:"0.0%">19.1%</td>
+			<td>3,378,221,252</td>
+			<td>985227576 (      41.2% )</td>
+			<td>315,487</td>
+			<td>78544 (      33.1% )</td>
+			<td>9,221,105,174</td>
+			<td>953,525</td>
+			<!--td>(%)</td-->
+			<!--td>(%)</td-->
+			<td>1</td>
+		</tr>
+	
+		<tr>
+			<td>2022-07-30</td>
+			<td>2,138</td>
+			<td style=mso-number-format:"0.0%">31.9%</td>
+			<td>10,338</td>
+			<td style=mso-number-format:"0.0%">50.3%</td>
+			<td>1,656,870</td>
+			<td style=mso-number-format:"0.0%">56.4%</td>
+			<td style=mso-number-format:"0.0%">39.9%</td>
+			<td>7,129,744,897</td>
+			<td>3751523645 (     111.1% )</td>
+			<td>660,875</td>
+			<td>345388 (     109.5% )</td>
+			<td>16,350,850,071</td>
+			<td>1,614,400</td>
+			<!--td>(%)</td-->
+			<!--td>(%)</td-->
+			<td>1</td>
+		</tr>
+	
+		<tr>
+			<td>2022-07-31</td>
+			<td>2,132</td>
+			<td style=mso-number-format:"0.0%">31.9%</td>
+			<td>10,095</td>
+			<td style=mso-number-format:"0.0%">50%</td>
+			<td>1,619,729</td>
+			<td style=mso-number-format:"0.0%">56.2%</td>
+			<td style=mso-number-format:"0.0%">40.5%</td>
+			<td>7,043,551,621</td>
+			<td>-86193276 (      -1.2% )</td>
+			<td>655,701</td>
+			<td>-5174 (      -0.8% )</td>
+			<td>23,394,401,692</td>
+			<td>2,270,101</td>
+			<!--td>(%)</td-->
+			<!--td>(%)</td-->
+			<td>1</td>
+		</tr>
+	
+		<tr>
+			<td>2022-08-01</td>
+			<td>2,019</td>
+			<td style=mso-number-format:"0.0%">32.6%</td>
+			<td>9,636</td>
+			<td style=mso-number-format:"0.0%">49.9%</td>
+			<td>1,568,214</td>
+			<td style=mso-number-format:"0.0%">56.4%</td>
+			<td style=mso-number-format:"0.0%">24.6%</td>
+			<td>3,864,072,934</td>
+			<td>-3179478687 (     -45.1% )</td>
+			<td>385,984</td>
+			<td>-269717 (     -41.1% )</td>
+			<td>27,258,474,626</td>
+			<td>2,656,085</td>
+			<!--td>(%)</td-->
+			<!--td>(%)</td-->
+			<td>1</td>
+		</tr>
+	
+		<tr>
+			<td>2022-08-02</td>
+			<td>2,030</td>
+			<td style=mso-number-format:"0.0%">32.6%</td>
+			<td>9,659</td>
+			<td style=mso-number-format:"0.0%">49.7%</td>
+			<td>1,573,610</td>
+			<td style=mso-number-format:"0.0%">56.5%</td>
+			<td style=mso-number-format:"0.0%">21.7%</td>
+			<td>3,418,297,205</td>
+			<td>-445775729 (     -11.5% )</td>
+			<td>340,707</td>
+			<td>-45277 (     -11.7% )</td>
+			<td>30,676,771,831</td>
+			<td>2,996,792</td>
+			<!--td>(%)</td-->
+			<!--td>(%)</td-->
+			<td>1</td>
+		</tr>
+	
+		<tr>
+			<td>2022-08-03</td>
+			<td>1,442</td>
+			<td style=mso-number-format:"0.0%">22.4%</td>
+			<td>6,022</td>
+			<td style=mso-number-format:"0.0%">31.8%</td>
+			<td>913,874</td>
+			<td style=mso-number-format:"0.0%">33.8%</td>
+			<td style=mso-number-format:"0.0%">25.8%</td>
+			<td>2,290,748,101</td>
+			<td>-1127549104 (     -33.0% )</td>
+			<td>235,500</td>
+			<td>-105207 (     -30.9% )</td>
+			<td>32,967,519,932</td>
+			<td>3,232,292</td>
+			<!--td>(%)</td-->
+			<!--td>(%)</td-->
+			<td>2</td>
+		</tr>
+	
+		<tr>
+			<td>2022-08-04</td>
+			<td>1,467</td>
+			<td style=mso-number-format:"0.0%">22.1%</td>
+			<td>6,037</td>
+			<td style=mso-number-format:"0.0%">31.6%</td>
+			<td>918,581</td>
+			<td style=mso-number-format:"0.0%">33.6%</td>
+			<td style=mso-number-format:"0.0%">22.8%</td>
+			<td>2,034,590,528</td>
+			<td>-256157573 (     -11.2% )</td>
+			<td>209,349</td>
+			<td>-26151 (     -11.1% )</td>
+			<td>35,002,110,460</td>
+			<td>3,441,641</td>
+			<!--td>(%)</td-->
+			<!--td>(%)</td-->
+			<td>2</td>
+		</tr>
+	
+	</tbody>
+</table>
+</body>
+</html>
