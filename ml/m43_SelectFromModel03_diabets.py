@@ -1,4 +1,4 @@
-from sklearn.datasets import load_iris
+from sklearn.datasets import load_diabetes
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import KFold,StratifiedKFold
 from sklearn.model_selection import train_test_split
@@ -8,16 +8,10 @@ from sklearn.metrics import r2_score, accuracy_score
 from sklearn.feature_selection import SelectFromModel
 
 #1.데이터 
-datasets = load_iris()
+datasets = load_diabetes()
 x = datasets.data
 y = datasets.target 
-# print(x.shape, y.shape) #(442, 10) (442,)
-
-
-import numpy as np
-x = np.delete(x, [2], axis=1)    # []안에 인덱스 번호를 입력 0~n
-# print(x.shape) 
-
+print(x.shape, y.shape) #(442, 10) (442,)
 
 x_train,x_test,y_train,y_test = train_test_split(x,y, train_size=0.8, shuffle=True, random_state=123) # , stratify=y
 
@@ -84,11 +78,11 @@ end_time = time.time() - start_time
 
 
 results = model.score(x_test, y_test)
-print('score :', results)  # 0.9736842105263158
+print('최종점수 :', results)  # 0.9736842105263158
 
-# y_predict = model.predict(x_test)
-# acc = r2_score(y_test, y_predict)
-# print('진짜 최종점수 test 점수 :', acc)
+y_predict = model.predict(x_test)
+acc = r2_score(y_test, y_predict)
+print('진짜 최종점수 test 점수 :', acc)
 
 print(model.feature_importances_)
 # [0.05553258 0.08159578 0.17970088 0.08489988 0.05190951 0.06678733
@@ -117,36 +111,43 @@ for thresh in thresholds:
     
     print("Thresh = %.3f, n=%d, R2: %.2f%% "
           %(thresh, select_x_train.shape[1], score*100))
-    
-    
-print("걸린시간 : ",end_time)
-    
-    
+
+print("걸린시간 : ",end_time) 
+
 ######[ 성능 분석 ]################################################################################################################################    
  
 # [컬럼삭제 안하고]    
-# score : 0.9497811046395627   
-# 걸린시간 :  0.35045790672302246
+# score : 0.4378510933146712
+# 걸린시간 :  0.37661242485046387
  
-# [3번째 컬럼삭제]    
-# score : 0.9431581496426672
-# 걸린시간 :  0.3728170394897461
-    
+
+
 #######[ 결과 ]###################################################################################################################################    
 
-# iris는 컬럼을 삭제하니까 오히려 더 성능이 안좋아짐
+# cancer는 성능이 너무 좋은 컬럼과 안좋은 컬럼을 모두 없애니까 성능이 좋아졌다.
 
-###################################################################################################################################    
-# score : 0.9497811046395627  
+###################################################################################################################################       
     
-# (120, 4) (30, 4)
-# Thresh = 0.000, n=4, R2: 94.98%    <-- 이 수치와 위에 score 스코어와 비교해서 위에 score 스코어랑 같을수록 해당 컬럼이 가장 성능이 좋은 뜻이다.  
-# (120, 4) (30, 4)                         - 이것을 참고해서 성능이 구린 것을 삭제해보고 성능이 올라가는지 판단해볼 것
-# Thresh = 0.000, n=4, R2: 94.98%    <-- 이 수치는 해당 컬럼을 뺏을 때 이정도 성능이 올라갈 수 있다라고 %로 알려주는거임
-# (120, 1) (30, 1) 
-# Thresh = 0.668, n=1, R2: 92.56%    <-- 이 수치는 해당 컬럼을 뺏을 때 이정도 성능이 올라갈 수 있다라고 %로 알려주는거임
-# (120, 2) (30, 2)
-# Thresh = 0.332, n=2, R2: 94.98%    <-- 이 수치는 해당 컬럼을 뺏을 때 이정도 성능이 올라갈 수 있다라고 %로 알려주는거임
-    
-    
-    
+
+# score : 0.4378510933146712
+
+# Thresh = 0.056, n=8, R2: 50.31%     # n은 컬럼의 갯수
+# (353, 5) (89, 5)
+# Thresh = 0.082, n=5, R2: 53.86% 
+# (353, 2) (89, 2)
+# Thresh = 0.180, n=2, R2: 52.62% 
+# (353, 4) (89, 4)
+# Thresh = 0.085, n=4, R2: 51.18% 
+# (353, 10) (89, 10)
+# Thresh = 0.052, n=10, R2: 51.19% 
+# (353, 6) (89, 6)
+# Thresh = 0.067, n=6, R2: 53.41%
+# (353, 9) (89, 9)
+# Thresh = 0.054, n=9, R2: 51.88%
+# (353, 3) (89, 3)
+# Thresh = 0.087, n=3, R2: 50.44%
+# (353, 1) (89, 1)
+# Thresh = 0.276, n=1, R2: 32.91%
+# (353, 7) (89, 7)
+# Thresh = 0.063, n=7, R2: 54.05%   
+

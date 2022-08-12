@@ -65,3 +65,6 @@ knn넣어서 처리
 데이콘
 
 
+https://xgboost.readthedocs.io/en/stable/parameter.html?highlight=subsample
+
+

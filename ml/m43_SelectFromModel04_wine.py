@@ -1,4 +1,4 @@
-from sklearn.datasets import load_diabetes
+from sklearn.datasets import load_wine
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import KFold,StratifiedKFold
 from sklearn.model_selection import train_test_split
@@ -8,7 +8,7 @@ from sklearn.metrics import r2_score, accuracy_score
 from sklearn.feature_selection import SelectFromModel
 
 #1.데이터 
-datasets = load_diabetes()
+datasets = load_wine()
 x = datasets.data
 y = datasets.target 
 print(x.shape, y.shape) #(442, 10) (442,)
@@ -92,7 +92,7 @@ for thresh in thresholds:
     select_x_test = selection.transform(x_test)
     print(select_x_train.shape, select_x_test.shape)  
     
-    selection_model = XGBRegressor(n_jobs=-1,   # 훈련이 11번?
+    selection_model = XGBRegressor(n_jobs=-1,   
                                    random_state=123,
                                    n_estimators=100,
                                    learning_rate=0.1,
@@ -106,3 +106,5 @@ for thresh in thresholds:
     
     print("Thresh = %.3f, n=%d, R2: %.2f%% "
           %(thresh, select_x_train.shape[1], score*100))
+    
+
