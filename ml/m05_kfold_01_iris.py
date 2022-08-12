@@ -1,6 +1,39 @@
+"""
+[핵심]
+KFold는 회귀와 분류 둘 다 사용할 수 있다.
+
+cross_val_score()을 사용하기 위에서 괄호 안의 옵션인 KFold를 
+
+n_splits = 5  
+kfold = KFold(n_splits=n_splits, shuffle=True, random_state=66)
+
+이런 형태로 작성을 한 후에
+
+scores = cross_val_score(model, x, y, cv=kfold)
+print("ACC : ", scores, '\n cross_val_score : ', round(np.mean(scores), 4)) 
+                                                # round를 사용해서 소수 4번째까지 출력해라 라고함
+
+이러한 형태로 사용을 한다 
+이때 round(np.mean(scores), 4))의 의미는 cross_val_score의 값인  score의 값을 평균값으로 변경한 후
+np를 이용해서 반올림 과정을 거친 후 소수 4번째 자리까지 출력하라는 의미이다.
+
+[ cross_val_score 사용하는 이유 ]
+기존의 validation은 train 데이터에서 손해를 보면서 분할을하여 모델 검증 데이터로 사용을 하였는데
+cross_val_score를 사용하면 전체 데이터에서 n_splits 안에 들어있는 변수의 숫자만큼 나누고 fit을 할 때
+마다 나눈 부분을 순차적으로 validation 데이터로 사용한다. 이로인해 train 데이터의 손실을 하지않고
+validation의 역할을 수행할 수 있다. 만약 n_splits = 5 라면 전체 데이터를 5개로 분할하여 순차적으로
+validation 데이터로 사용하게된다.
+
+cross_val_score를 사용하면 train_test_split을 사용할 필요가 없다.
+cross_val_score(model, x, y, cv=kfold) 형태로 사용되기 때문이다.
+cross_val_score(model, x, y, cv=kfold) 과정에서 fit과 컴파일도 같이 진행된다.
+
+
+"""
+
 import numpy as np
 from sklearn.datasets import load_iris
-from sklearn.model_selection import train_test_split, KFold, cross_val_score
+from sklearn.model_selection import KFold, cross_val_score
                         
 #1. 데이터
 datasets = load_iris()
@@ -46,14 +79,4 @@ print("ACC : ", scores, '\n cross_val_score : ', round(np.mean(scores), 4))  # r
 
 
 
-
-
-# 딥러닝과 머신러닝 차이
-# 딥러닝은 레이어를 길게 뺀거
-# 머신러닝은 간결해서 속도가 빠르다.
-
-
-# 원핫 할 필요없음 모델구성에서 알아서 받아짐
-# 컴파일 없음 훈련도 x y만 하면 된다. fit에 컴파일이 아랑서 포함되어 있다 그러므로 컴파일이 없음
-# 훈련에서 튜닝하고 평가랗때 이벨류에이트없고 스코어를 사용한다.
 

@@ -1,3 +1,9 @@
+"""
+[핵심]
+m05과 m04를 같이 활용해서 만드는 것이 주된 목적
+
+"""
+
 import numpy as np
 from sklearn.datasets import load_iris 
 from sklearn.model_selection import train_test_split,KFold, cross_val_score 

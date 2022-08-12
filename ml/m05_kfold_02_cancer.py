@@ -12,17 +12,7 @@ datasets = load_breast_cancer()
 
 x = datasets.data   
 y = datasets.target
-print(x.shape, y.shape) 
-
-
-x_train, x_test, y_train, y_test = train_test_split(x,y,
-                                                    train_size=0.7,shuffle=True, random_state=72)
-scaler = RobustScaler()
-scaler.fit(x_train)
-x_train = scaler.transform(x_train) 
-x_test = scaler.transform(x_test)
-print(np.min(x_train)) #0.0 
-print(np.max(x_train)) #1.0                                 
+print(x.shape, y.shape)                             
                 
 n_splits = 5
 kfold = KFold(n_splits=n_splits, shuffle = True, random_state=66)                                                  

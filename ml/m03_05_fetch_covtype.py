@@ -1,12 +1,30 @@
+"""
+[핵심]
+각 모델 성능 테스트  (해당 모델들은 분류 모델들이다.)
+model_1 = LinearSVC()
+model_2 = Perceptron()
+model_3 = LogisticRegression()
+model_4 = KNeighborsClassifier()
+model_5 = DecisionTreeClassifier()
+model_6 = RandomForestClassifier()
+
+[중요]
+LogisticRegression
+- 이것은 Regression들어가지만 분류 모델이다.
+- LinearRegression 이친구가 회기 모델이다.
+이 친구 빼고는 나머지는 다 Regression이 들어가면 회기 모델로 생각하면 된다.
+
+Classifier가 들어가면 분류 모델로 생각하면 된다.
+
+"""
+
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn.preprocessing import MaxAbsScaler, RobustScaler
-import numpy as np
 import numpy as np
 import pandas as pd
 from sklearn.datasets import load_iris
 from sqlalchemy import false
 from sklearn.model_selection import train_test_split
-from tensorflow.python.keras.callbacks import EarlyStopping
 from sklearn.metrics import r2_score, accuracy_score
 import matplotlib.pyplot as plt
 from matplotlib import font_manager, rc
@@ -15,7 +33,6 @@ font = font_manager.FontProperties(fname=font_path).get_name()
 rc('font', family=font)
 from sklearn.preprocessing import OneHotEncoder  # https://psystat.tistory.com/136 싸이킷런 원핫인코딩
 from sklearn.datasets import fetch_covtype
-import tensorflow as tf
 from sklearn.svm import LinearSVC, LinearSVR
 
 

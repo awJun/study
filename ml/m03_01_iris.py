@@ -1,3 +1,28 @@
+"""
+[핵심]
+각 모델 성능 테스트  (해당 모델들은 분류 모델들이다.)
+model_1 = LinearSVC()
+model_2 = Perceptron()
+model_3 = LogisticRegression()
+model_4 = KNeighborsClassifier()
+model_5 = DecisionTreeClassifier()
+model_6 = RandomForestClassifier()
+
+neighbors, tree, ensemble 모델 정리
+from sklearn.neighbors   # 이웃하는 ..? 검색하자
+from sklearn.tree        # 더 좋은 것을 아래로 뿌리를 내린다(가지치기) 결정나무
+from sklearn.ensemble    # 같이 넣었을 때 더 좋은 것을 캐치
+
+[중요]
+LogisticRegression
+- 이것은 Regression들어가지만 분류 모델이다.
+- LinearRegression 이친구가 회기 모델이다.
+이 친구 빼고는 나머지는 다 Regression이 들어가면 회기 모델로 생각하면 된다.
+
+Classifier가 들어가면 분류 모델로 생각하면 된다.
+
+"""
+
 import numpy as np
 import time
 import sklearn
@@ -24,11 +49,11 @@ x_train, x_test, y_train, y_test = train_test_split(x, y,
                                                     )
 
 #2. 모델구성
-from sklearn.svm import LinearSVC, SVC
-from sklearn.linear_model import Perceptron, LogisticRegression # LogisticRegression는 분류임
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import LinearSVC
+from sklearn.linear_model import Perceptron, LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier   # 이웃하는 ..? 검색하자
+from sklearn.tree import DecisionTreeClassifier      # 더 좋은 것을 아래로 뿌리를 내린다(가지치기) 결정나무
+from sklearn.ensemble import RandomForestClassifier  # 같이 넣었을 때 더 좋은 것을 캐치
 
 model_1 = LinearSVC()
 model_2 = Perceptron()
@@ -101,13 +126,4 @@ print("RandomForestClassifier_결과 acc : ", results_6)
 
 
 
-
-# 딥러닝과 머신러닝 차이
-# 딥러닝은 레이어를 길게 뺀거
-# 머신러닝은 간결해서 속도가 빠르다.
-
-
-# 원핫 할 필요없음 모델구성에서 알아서 받아짐
-# 컴파일 없음 훈련도 x y만 하면 된다. fit에 컴파일이 아랑서 포함되어 있다 그러므로 컴파일이 없음
-# 훈련에서 튜닝하고 평가랗때 이벨류에이트없고 스코어를 사용한다.
 

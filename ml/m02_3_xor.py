@@ -1,3 +1,9 @@
+"""
+XOR
+ - 리스트 안의 값들이 모두 동일하면 0 / 서로 다르면 1을 사용한다.
+ 
+"""
+
 import numpy as np
 from sklearn.metrics import accuracy_score
 from sklearn.svm import LinearSVC
@@ -23,7 +29,7 @@ results = model.score(x_data, y_data)
 print("model.score : ", results)
 
 acc = accuracy_score(y_data, y_predict)
-
+print('acc : ', acc)
 
 
 

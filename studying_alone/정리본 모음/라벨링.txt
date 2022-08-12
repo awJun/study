@@ -1,0 +1,9 @@
+train_set['직업'] = {'Small Business' : 0, 'Salaried' : 1,  'Large Business' : 2, 'Free Lancer' : 3}
+
+
+
+
+
+
+
+

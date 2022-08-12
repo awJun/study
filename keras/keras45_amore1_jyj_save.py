@@ -253,6 +253,7 @@ label_삼성 = label_삼성.to_numpy()
 삼성_y_train = 삼성_y_train.reshape(1418, 1)
 삼성_y_test = 삼성_y_test.reshape(355, 1)
 
+
 #- - -[ 3차원으로 변환 확인 ] - - - - - - - - - - - - - - - - -
 
 # print(아모레_x_train.shape)   # (1418, 10, 1)

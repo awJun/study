@@ -4,7 +4,7 @@ ValueError: Data cardinality is ambiguous:
   x sizes: 28, 28, 28, 28, 24
   y sizes: 28, 28, 28, 28, 24
 Make sure all arrays contain the same number of samples.
-reshape 입력 형태불일치로 인한 에러  https://github.com/tensorflow/tensorflow/issues/38702
+앙상블 모델의 행이 달라서 에러가 발생한 것이였음.. ㅠ
 
 
 
@@ -17,15 +17,16 @@ import pandas as pd
 아이언맨 = pd.read_csv('./review_data/영화 훈련 데이터/아이언맨.csv', sep='\t') 
 어벤져스 = pd.read_csv('./review_data/영화 훈련 데이터/어벤져스.csv', sep='\t') 
 엔드게임 = pd.read_csv('./review_data/영화 훈련 데이터/엔드게임.csv', sep='\t') 
-용의출현 = pd.read_csv('./review_data/영화 훈련 데이터/토르.csv', sep='\t') 
+닥터스트레인지 = pd.read_csv('./review_data/영화 훈련 데이터/닥터스트레인지.csv', sep='\t') 
+토르 = pd.read_csv('./review_data/영화 훈련 데이터/토르.csv', sep='\t') 
+# print(아이언맨.shape)         # (118, 7)
+# print(어벤져스.shape)         # (118, 7)
+# print(엔드게임.shape)         # (118, 7)
+# print(탑건.shape)             # (31, 7)
+# print(닥터스트레인지.shape)   # (31, 7)
+# print(토르.shape)             # (31, 7)
 
-# print(탑건.shape)       # (45, 7)
-# print(아이언맨.shape)   # (118, 7)
-# print(어벤져스.shape)   # (134, 7)
-# print(엔드게임.shape)   # (126, 7)
-# print(용의출현.shape)   # (31, 7)
-
-#1_2.[ 날짜 데이터 분리 ]###################################################################
+# 1_2.[ 날짜 데이터 분리 ]###################################################################
 
 탑건['일자'] = pd.to_datetime(탑건['날짜'])
 탑건['연도'] = 탑건['일자'].dt.year
@@ -47,10 +48,15 @@ import pandas as pd
 엔드게임['월'] = 엔드게임['일자'].dt.month
 엔드게임['일'] = 엔드게임['일자'].dt.day
 
-용의출현['일자'] = pd.to_datetime(용의출현['날짜'])
-용의출현['연도'] = 용의출현['일자'].dt.year
-용의출현['월'] = 용의출현['일자'].dt.month
-용의출현['일'] = 용의출현['일자'].dt.day
+닥터스트레인지['일자'] = pd.to_datetime(닥터스트레인지['날짜'])
+닥터스트레인지['연도'] = 닥터스트레인지['일자'].dt.year
+닥터스트레인지['월'] = 닥터스트레인지['일자'].dt.month
+닥터스트레인지['일'] = 닥터스트레인지['일자'].dt.day
+
+토르['일자'] = pd.to_datetime(토르['날짜'])
+토르['연도'] = 토르['일자'].dt.year
+토르['월'] = 토르['일자'].dt.month
+토르['일'] = 토르['일자'].dt.day
 
 
 #1_3.[ 데이터 안에 0인 값 확인 ]###################################################################
@@ -67,15 +73,22 @@ for col in 어벤져스.columns:
 for col in 엔드게임.columns:
     missing_rows = 엔드게임.loc[엔드게임[col]==0].shape[0]
     # print(col + ': ' + str(missing_rows))
-for col in 용의출현.columns:
-    missing_rows = 용의출현.loc[용의출현[col]==0].shape[0]
+for col in 닥터스트레인지.columns:
+    missing_rows = 닥터스트레인지.loc[닥터스트레인지[col]==0].shape[0]
+    # print(col + ': ' + str(missing_rows))
+for col in 토르.columns:
+    missing_rows = 토르.loc[토르[col]==0].shape[0]
     # print(col + ': ' + str(missing_rows))
 # 0인 값은 없는 것으로 판명
 
 
 #1_4.[ nan 확인 및 제거 ]###################################################################
 # print(탑건.isnull().sum())  
-# print(용의출현.isnull().sum())  
+# print(아이언맨.isnull().sum())  
+# print(어벤져스.isnull().sum())  
+# print(엔드게임.isnull().sum())  
+# print(닥터스트레인지.isnull().sum())  
+# print(토르.isnull().sum())  
 
 # 없는 것으로 판명
 
@@ -87,21 +100,24 @@ for col in 용의출현.columns:
 아이언맨_매출액 = 아이언맨['매출액']
 어벤져스_매출액 = 어벤져스['매출액']
 엔드게임_매출액 = 엔드게임['매출액']
-용의출현_매출액 = 용의출현['매출액']
+닥터스트레인지_매출액 = 닥터스트레인지['매출액']
+토르_매출액 = 토르['매출액']
 
-#1_6.[ x데이터 컬럼 정리 및 shape 확인 ]###################################################################
+# #1_6.[ x데이터 컬럼 정리 및 shape 확인 ]###################################################################
 
 탑건 = 탑건.drop(['일자', '매출액', '날짜'], axis=1)
 아이언맨 = 아이언맨.drop(['일자', '매출액', '날짜'], axis=1)
 어벤져스 = 어벤져스.drop(['일자', '매출액', '날짜'], axis=1)
 엔드게임 = 엔드게임.drop(['일자', '매출액', '날짜'], axis=1)
-용의출현 = 용의출현.drop(['일자', '매출액', '날짜'], axis=1)
+닥터스트레인지 = 닥터스트레인지.drop(['일자', '매출액', '날짜'], axis=1)
+토르 = 토르.drop(['일자', '매출액', '날짜'], axis=1)
 
-# print(탑건.shape)       # (45, 8)
-# print(아이언맨.shape)   # (31, 8)
-# print(어벤져스.shape)   # (31, 8)
-# print(엔드게임.shape)   # (45, 8)
-# print(용의출현.shape)   # (31, 8)
+# print(탑건.shape)             # (31, 8)
+# print(아이언맨.shape)         # (118, 8)
+# print(어벤져스.shape)         # (118, 8)
+# print(엔드게임.shape)         # (118, 8)
+# print(닥터스트레인지.shape)   # (31, 8)
+# print(토르.shape)             # (31, 8)
 
 
 #1_7.[ 데이터 정규화 ]###################################################################
@@ -109,7 +125,7 @@ for col in 용의출현.columns:
 from sklearn.preprocessing import MinMaxScaler, StandardScaler 
 from sklearn.preprocessing import MaxAbsScaler, RobustScaler
 
-scaler = MinMaxScaler()
+scaler = MaxAbsScaler()
 
 # 정규화 대상 column 정의
 scale_cols = ['상영횟수', '좌석수', '관객수', '누적매출액', '누적관객수', '연도', '월', '일']
@@ -118,10 +134,15 @@ scale_cols = ['상영횟수', '좌석수', '관객수', '누적매출액', '누�
 아이언맨_scaler = scaler.fit_transform(아이언맨[scale_cols])
 어벤져스_scaler = scaler.fit_transform(어벤져스[scale_cols])
 엔드게임_scaler = scaler.fit_transform(엔드게임[scale_cols])
-용의출현_scaler = scaler.fit_transform(용의출현[scale_cols])
+닥터스트레인지_scaler = scaler.fit_transform(닥터스트레인지[scale_cols])
+토르_scaler = scaler.fit_transform(토르[scale_cols])
 
 # print(탑건_scaler)
-# print(용의출현_scaler)
+# print(아이언맨_scaler)
+# print(어벤져스_scaler)
+# print(엔드게임_scaler)
+# print(닥터스트레인지_scaler)
+# print(토르_scaler)
 
 
 #1_8[DataFrame을 numpy로 변환 작업 ]#############################################################
@@ -142,18 +163,17 @@ scale_cols = ['상영횟수', '좌석수', '관객수', '누적매출액', '누�
 엔드게임_scaler = 엔드게임_scaler.to_numpy()
 엔드게임_매출액 = 엔드게임_매출액.to_numpy()
 
-용의출현_scaler = pd.DataFrame(용의출현_scaler, columns=scale_cols)
-용의출현_scaler = 용의출현_scaler.to_numpy()
-용의출현_매출액 = 용의출현_매출액.to_numpy()
+닥터스트레인지_scaler = pd.DataFrame(닥터스트레인지_scaler, columns=scale_cols)
+닥터스트레인지_scaler = 닥터스트레인지_scaler.to_numpy()
+닥터스트레인지_매출액 =닥터스트레인지_매출액.to_numpy()
 
+토르_scaler = pd.DataFrame(토르_scaler, columns=scale_cols)
+토르_scaler = 토르_scaler.to_numpy()
+토르_매출액 = 토르_매출액.to_numpy()
 
-#1_9[ train, test 분리 ]#############################################################################
+# #1_9[ 훈련 데이터 train, test 분리 ]#############################################################################
 from sklearn.model_selection import train_test_split
 
-탑건_x_train, 탑건_x_test, 탑건_y_train, 탑건_y_test = train_test_split(탑건_scaler, 탑건_매출액,
-                                                                            train_size=0.8,
-                                                                            shuffle=False
-                                                                            )
 아이언맨_x_train, 아이언맨_x_test, 아이언맨_y_train, 아이언맨_y_test = train_test_split(아이언맨_scaler, 아이언맨_매출액,
                                                                             train_size=0.8,
                                                                             shuffle=False
@@ -166,23 +186,10 @@ from sklearn.model_selection import train_test_split
                                                                             train_size=0.8,
                                                                             shuffle=False
                                                                             )
-용의출현_x_train, 용의출현_x_test, 용의출현_y_train, 용의출현_y_test = train_test_split(용의출현_scaler, 용의출현_매출액,
-                                                                            train_size=0.8,
-                                                                            shuffle=False
-                                                                            )
 
 
 
 #1_10[ 3차원으로 변환 ]####################################################################################################################3
-
-탑건_x_train = 탑건_x_train.reshape(36, 8, 1)  
-탑건_x_test = 탑건_x_test.reshape(9, 8, 1)
-탑건_y_train = 탑건_y_train.reshape(36, 1)
-탑건_y_test = 탑건_y_test.reshape(9, 1)
-# print(탑건_x_train.shape)
-# print(탑건_x_test.shape)
-# print(탑건_y_train.shape)
-# print(탑건_y_test.shape)
 
 
 아이언맨_x_train = 아이언맨_x_train.reshape(94, 8, 1)  
@@ -195,92 +202,90 @@ from sklearn.model_selection import train_test_split
 # print(아이언맨_y_test.shape)
 
 
-어벤져스_x_train = 어벤져스_x_train.reshape(107, 8, 1)  
-어벤져스_x_test = 어벤져스_x_test.reshape(27, 8, 1)
-어벤져스_y_train = 어벤져스_y_train.reshape(107, 1)
-어벤져스_y_test = 어벤져스_y_test.reshape(27, 1)
+어벤져스_x_train = 어벤져스_x_train.reshape(94, 8, 1)  
+어벤져스_x_test = 어벤져스_x_test.reshape(24, 8, 1)
+어벤져스_y_train = 어벤져스_y_train.reshape(94, 1)
+어벤져스_y_test = 어벤져스_y_test.reshape(24, 1)
 # print(어벤져스_x_train.shape)
 # print(어벤져스_x_test.shape)
 # print(어벤져스_y_train.shape)
 # print(어벤져스_y_test.shape)
 
 
-엔드게임_x_train = 엔드게임_x_train.reshape(100, 8, 1)  
-엔드게임_x_test = 엔드게임_x_test.reshape(26, 8, 1)
-엔드게임_y_train = 엔드게임_y_train.reshape(100, 1)
-엔드게임_y_test = 엔드게임_y_test.reshape(26, 1)
+엔드게임_x_train = 엔드게임_x_train.reshape(94, 8, 1)  
+엔드게임_x_test = 엔드게임_x_test.reshape(24, 8, 1)
+엔드게임_y_train = 엔드게임_y_train.reshape(94, 1)
+엔드게임_y_test = 엔드게임_y_test.reshape(24, 1)
 # print(엔드게임_x_train.shape)
 # print(엔드게임_x_test.shape)
 # print(엔드게임_y_train.shape)
 # print(엔드게임_y_test.shape)
 
 
-용의출현_x_train = 용의출현_x_train.reshape(24, 8, 1)  
-용의출현_x_test = 용의출현_x_test.reshape(7, 8, 1)
-용의출현_y_train = 용의출현_y_train.reshape(24, 1)
-용의출현_y_test = 용의출현_y_test.reshape(7, 1)
-# print(용의출현_x_train.shape)
-# print(용의출현_x_test.shape)
-# print(용의출현_y_train.shape)
-# print(용의출현_y_test.shape)
+탑건_x_test = 탑건_scaler.reshape(31, 8, 1)  
+탑건_y_test = 탑건_매출액.reshape(31, 1)
+# print(토르_scaler.shape)
+# print(토르_매출액.shape)
+
+
+닥터스트레인지_x_test = 닥터스트레인지_scaler.reshape(31, 8, 1)  
+닥터스트레인지_y_test = 닥터스트레인지_매출액.reshape(31, 1)
+# print(닥터스트레인지_scaler.shape)
+# print(닥터스트레인지_매출액.shape)
+
+
+토르_x_test = 토르_scaler.reshape(31, 8, 1)  
+토르_y_test = 토르_매출액.reshape(31, 1)
+# print(토르_scaler.shape)
+# print(토르_매출액.shape)
 
 
 #2.[ 모델구성 ]###########################################################################################
-from tensorflow.python.keras.layers import Dense, LSTM  
+from tensorflow.python.keras.layers import Dense, Dropout, LSTM, GRU, RNN
 from tensorflow.python.keras.models import Input, Model
 
-# 2-1. 모델 : 탑건
-탑건_input = Input(shape=(8, 1))    # print(x1_train.shape, x1_test.shape)   
-dense1 = LSTM(128, activation='relu', name='jun1')(탑건_input)
-dense2 = Dense(128, activation='relu', name='jun2')(dense1)
-dense3= Dense(64, activation='relu', name='jun3')(dense2)
-dense4= Dense(128, activation='relu', name='jun4')(dense3)
-탑건_mid = Dense(64, activation='relu', name='out_jun1')(dense4)
+#2-1 모델 아이언맨
+아이언맨_input = Input(shape=(8, 1))     
+dense12 = GRU(128, activation='relu')(아이언맨_input)
+dense22 = Dense(128, activation='relu')(dense12)
+dense22 = Dropout(0.2)(dense22)
+dense32= Dense(64, activation='relu')(dense22)
+dense22 = Dropout(0.2)(dense32)
+dense42= Dense(128, activation='relu')(dense22)
+아이언맨_mid = Dense(64, activation='relu')(dense42)
 
-#2-2 모델 아이언맨
-아이언맨_input = Input(shape=(8, 1))     # print(x2_train.shape, x2_test.shape)  
-dense12 = LSTM(128, activation='relu', name='jun11')(아이언맨_input)
-dense22 = Dense(128, activation='relu', name='jun12')(dense12)
-dense32= Dense(64, activation='relu', name='jun13')(dense22)
-dense42= Dense(128, activation='relu', name='jun14')(dense32)
-아이언맨_mid = Dense(64, activation='relu', name='out_jun2')(dense42)
+#2-2 모델 어벤져스
+어벤져스_input = Input(shape=(8, 1))    
+dense13 = GRU(128, activation='relu')(어벤져스_input)
+dense23 = Dense(128, activation='relu')(dense13)
+dense23 = Dropout(0.2)(dense23)
+dense33= Dense(64, activation='relu')(dense23)
+dense33 = Dropout(0.2)(dense33)
+dense43= Dense(128, activation='relu')(dense33)
+어벤져스_mid = Dense(64, activation='relu')(dense43)
 
-#2-3 모델 어벤져스
-어벤져스_input = Input(shape=(8, 1))     # print(x2_train.shape, x2_test.shape)  
-dense13 = LSTM(128, activation='relu', name='jun111')(어벤져스_input)
-dense23 = Dense(128, activation='relu', name='jun112')(dense13)
-dense33= Dense(64, activation='relu', name='jun113')(dense23)
-dense43= Dense(128, activation='relu', name='jun114')(dense33)
-어벤져스_mid = Dense(64, activation='relu', name='out_jun3')(dense43)
-
-#2-4 모델 엔드게임
-엔드게임_input = Input(shape=(8, 1))     # print(x2_train.shape, x2_test.shape)  
-dense14 = LSTM(128, activation='relu', name='jun1111')(엔드게임_input)
-dense24 = Dense(128, activation='relu', name='jun1112')(dense14)
-dense34= Dense(64, activation='relu', name='jun1113')(dense24)
-dense44= Dense(128, activation='relu', name='jun1114')(dense34)
-엔드게임_mid = Dense(64, activation='relu', name='out_jun4')(dense44)
-
-#2-5 모델 용의출현
-용의출현_input = Input(shape=(8, 1))     # print(x2_train.shape, x2_test.shape)  
-dense15 = LSTM(128, activation='relu', name='jun11111')(용의출현_input)
-dense25 = Dense(128, activation='relu', name='jun11112')(dense15)
-dense35= Dense(64, activation='relu', name='jun11113')(dense25)
-dense45= Dense(128, activation='relu', name='jun11114')(dense35)
-용의출현_mid = Dense(64, activation='relu', name='out_jun5')(dense45)
+#2-3 모델 엔드게임
+엔드게임_input = Input(shape=(8, 1))    
+dense14 = GRU(128, activation='relu')(엔드게임_input)
+dense24 = Dense(128, activation='relu')(dense14)
+dense24 = Dropout(0.2)(dense24)
+dense34= Dense(64, activation='relu')(dense24)
+dense24 = Dropout(0.2)(dense24)
+dense44= Dense(128, activation='relu')(dense34)
+엔드게임_mid = Dense(64, activation='relu')(dense44)
 
 
-from tensorflow.python.keras.layers import concatenate, Concatenate 
+#2_4 모델 엮기
+from tensorflow.python.keras.layers import concatenate
+merge1 = concatenate([아이언맨_mid, 어벤져스_mid, 엔드게임_mid], name='mg1')
+merge2 = Dense(128, activation='relu', name='mg2_15')(merge1)
+merge2 = Dense(128, activation='relu', name='mg2_16')(merge1)
+merge2 = Dense(356, activation='relu', name='mg2_17')(merge1)
+merge2 = Dense(128, activation='relu', name='mg2_18')(merge1)
+merge3 = Dense(64, name='mg3_12')(merge2)
+concatenate_output = Dense(32, name='last')(merge3)
 
-merge1 = concatenate([탑건_mid, 아이언맨_mid, 어벤져스_mid, 엔드게임_mid, 용의출현_mid], name='mg1')
-merge2 = Dense(200, activation='relu', name='mg2_15')(merge1)
-merge3 = Dense(300, name='mg3_12')(merge2)
-concatenate_output = Dense(10, name='last')(merge3)
-
-output1 = Dense(100)(concatenate_output)
-output2 = Dense(100)(output1)
-탑건_output = Dense(1, name='last1')(output2)
-
+#2_5 모델 분리
 output12 =  Dense(100)(concatenate_output)
 output22 = Dense(100)(output12)
 아이언맨_output = Dense(1, name='last2')(output22)
@@ -293,13 +298,10 @@ output14 =  Dense(100)(concatenate_output)
 output24 = Dense(100)(output14)
 엔드게임_output = Dense(1, name='last4')(output24)
 
-output15 =  Dense(100)(concatenate_output)
-output25 = Dense(100)(output15)
-용의출현_output = Dense(1, name='last5')(output25)
-
+#2_6 모델 아웃풋 빼기
 from tensorflow.python.keras.models import Model
-model = Model(inputs=[탑건_input, 아이언맨_input, 어벤져스_input, 엔드게임_input, 용의출현_input],
-              outputs=[탑건_output, 아이언맨_output, 어벤져스_output, 엔드게임_output, 용의출현_output])
+model = Model(inputs=[아이언맨_input, 어벤져스_input, 엔드게임_input],
+              outputs=[아이언맨_output, 어벤져스_output, 엔드게임_output])
 # model.summary()
 
 
@@ -316,33 +318,40 @@ print(date)
 filepath = './_ModelCheckPoint/'
 filename = '{epoch:04d}-{val_loss:.4f}.hdf5'
 
-earlyStopping = EarlyStopping(monitor='val_loss', patience=200, mode='auto', verbose=1, 
+earlyStopping = EarlyStopping(monitor='val_loss', patience=50, mode='auto', verbose=1, 
                               restore_best_weights=True)        
 
 mcp = ModelCheckpoint(monitor='val_loss', mode='auto', verbose=1, save_best_only=True, 
                       filepath= "".join([filepath, 'k24_', date, '_', filename])
                       )
 
-hist = model.fit([탑건_x_train, 아이언맨_x_train, 어벤져스_x_train, 엔드게임_x_train, 용의출현_x_train],
-                 [탑건_y_train, 아이언맨_y_train, 어벤져스_y_train, 엔드게임_y_train, 용의출현_y_train],
-                 epochs=1,
+hist = model.fit([아이언맨_x_train, 어벤져스_x_train, 엔드게임_x_train],
+                 [아이언맨_y_train, 어벤져스_y_train, 엔드게임_y_train],
+                 epochs=10000,
                  batch_size=5,
                  validation_split=0.2,
                  callbacks=[earlyStopping, mcp],
                  verbose=1)
 model.save('./_ModelCheckPoint/keras24_ModelCheckPoint.hdf5')
 
+from tensorflow.python.keras.models import load_model
+model = load_model("./_ModelCheckPoint/keras24_ModelCheckPoint.hdf5")
 
 
-#4.[ 평가 및 예측 ]##################################################################################################################
-# y1_loss = model.evaluate([탑건_x_test , 삼성_x_test], [아모레_y_test, 삼성_y_test])  
-# print("아모레, 삼성의 로스값 :  ",y1_loss)
+# 4.[ 평가 및 예측 ]##################################################################################################################
+loss = model.evaluate([아이언맨_x_test , 어벤져스_x_test, 엔드게임_x_test, ], [아이언맨_y_test , 어벤져스_y_test, 엔드게임_y_test ])  
+print("loss :  ",loss)
 
-# y_predict1, y_predict2 = model.predict([아모레_x_test, 삼성_x_test])
-# from sklearn.metrics import r2_score
-# y1_r2 = r2_score(아모레_y_test, y_predict1)   
-# y2_r2 = r2_score(삼성_y_test, y_predict2)   
-
+y_predict1, y_predict2, y_predict3 = model.predict([토르_x_test , 탑건_x_test , 닥터스트레인지_x_test])
+# y_predict1, y_predict2, y_predict3 = model.predict([아이언맨_x_test , 어벤져스_x_test , 엔드게임_x_test])
+from sklearn.metrics import r2_score
+y1_r2 = r2_score(토르_y_test , y_predict1)   
+y2_r2 = r2_score(탑건_y_test , y_predict2)   
+y3_r2 = r2_score(닥터스트레인지_y_test, y_predict3)   
+print("r2_score",y1_r2)
+print("r2_score",y2_r2)
+print("r2_score",y3_r2)
+print("토르 08.05 매출가 : ",y_predict1[-1])
 
 
 

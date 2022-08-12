@@ -1,3 +1,9 @@
+"""
+AND
+ - 리스트 안에 값들을 각각 곱한 값을 사용한다.
+
+"""
+
 import numpy as np
 from sklearn.metrics import accuracy_score
 from sklearn.svm import LinearSVC
@@ -22,7 +28,13 @@ results = model.score(x_data, y_data)
 print("model.score : ", results)
 
 acc = accuracy_score(y_data, y_predict)
+print('acc : ', acc)
 
+
+
+# [[0, 0], [0, 1], [1, 0], [1, 1]] 의 예측결과:  [0 0 0 1]
+# model.score :  1.0
+# acc :  1.0
 
 
 
