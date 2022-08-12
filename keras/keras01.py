@@ -5,11 +5,11 @@ from sklearn.metrics import log_loss
 x = np.array([1, 2, 3])  # 배열 리스트 1, 2, 3   # 리스트 한 덩어리가 노드에 들어간다.   
 y = np.array([1, 2, 3])  
            
-            
-#2. 모델구성                    
-       
+             
+#2. 모델구성                     
+        
 from tensorflow.keras.models import Sequential # hiden이 위에서 아래로 내려가는 
-# "tensorflow.keras.models" 안에 있는 Seqential를 불러와서 사용하겠다라고 선언.
+# "tensorflow.keras.models" 안에 있는 Seqential를 불러와서 사용하겠다라고 선언. 
 #  Sequence 자료형에 속하는 객체는 (문자열, 리스트, 튜플) 
  
 from tensorflow.keras.layers import Dense # Dense: 밀도
@@ -28,12 +28,12 @@ model.add(Dense(2))
 model.add(Dense(1))  # 최종 y의 값 
 
 #3. 컴파일, 훈련
-model.compile(loss='mse', optimizer='adam')  
-# lose: 오차값을 계산    optimizer: MSE에 최적화를 adam으로 하겠다인거 같음 ;; 
-model.fit(x, y, epochs=1000)  # ( ) 괄호 안에는 각각 다 파라미터라고 부름
-# fit: 훈련을 시킬 것 이다 (x, y를 100번)
-# 훈련시킬 x y ㄱ밧을 달라  
-# 이 과정을 통해 w 값이 생겼다 이 과정이 lo w 
+model.compile(loss='mse', optimizer='adam')    
+# lose: 오차값을 계산    optimizer: MSE에 최적화를 adam으로 하겠다인거 같음 ;;   
+model.fit(x, y, epochs=1000)  # ( ) 괄호 안에는 각각 다 파라미터라고 부름  
+# fit: 훈련을 시킬 것 이다 (x, y를 100번)        
+# 훈련시킬 x y ㄱ밧을 달라                     
+# 이 과정을 통해 w 값이 생겼다 이 과정이 lo w  
 
 # model에 가중된 w값이 들어있다.
 
@@ -76,4 +76,4 @@ print('4의 예측값 : ', result)
 
 # zkfmakekd@naver.com  반장 이메일
 # 이메일로 본인 깃허브 주소 보내기
-       
+        
