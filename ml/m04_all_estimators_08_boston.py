@@ -29,114 +29,83 @@ warnings.filterwarnings('ignore')
  - except를 사용해서 예외로 처리할 땐 무조건 warning을 불러와야한다. 아니면 에러발생함
 
 """
-import numpy as np
-import time
-import sklearn
-from sklearn.model_selection import train_test_split
 from sklearn.datasets import load_boston
-from sklearn.utils import all_estimators
+from tensorflow.python.keras.models import Sequential
+from tensorflow.python.keras.layers import Dense
+from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score
-import warnings
-warnings.filterwarnings('ignore')    
-                           
-#1. 데이터
-datasets = load_boston()   
-x = datasets.data    # 데이터가
-y = datasets.target  # y에 들어간다.
+import time
 
-print(x.shape, y.shape) # (506, 13) (506,)  열 13    (506, ) 506개 스칼라, 1개의 백터
-                        # intput (506, 13), output 1
-print(datasets.feature_names)
- # ['CRIM' 'ZN' 'INDUS' 'CHAS' 'NOX' 'RM' 'AGE' 'DIS' 'RAD' 'TAX' 'PTRATIO'
- # 'B' 'LSTAT']
-
-print(datasets.DESCR)
-
-x_train, x_test, y_train, y_test = train_test_split(x, y,
-                                                    train_size=0.8,
-                                                    shuffle=True,
-                                                    random_state=100
-                                                    )
-
-from sklearn.preprocessing import MaxAbsScaler
-scaler = MaxAbsScaler()
-scaler.fit(x_train)
-x_train = scaler.transform(x_train)
-x_test = scaler.transform(x_test)
+# 1. 데이터
+datasets = load_boston()
+x = datasets.data
+y = datasets.target
+x_train, x_test, y_train, y_test =  train_test_split(x, y, train_size=0.8, shuffle=True, random_state=66)
 
 
 #2. 모델구성
+from sklearn.svm import LinearSVR, SVR
+from sklearn.linear_model import Perceptron
+from sklearn.linear_model import LogisticRegression, LinearRegression
+from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
+from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 
+model = LinearSVR()
+model.fit(x_train, y_train)
+result = model.score(x_test, y_test)
+print('LinearSVR r2 결과: ', result)
+# y_predict = model.predict(x_test)
+# print('ypred: ', y_predict, '\n')
 
-Allalgorithm = all_estimators(type_filter='regressor')
-# print("algorithm : ", Allalgorithm)
-# print("모델의 갯수 : ", len(Allalgorithm))   # 모델의 갯수 :  41
+model = SVR()
+model.fit(x_train, y_train)
+result = model.score(x_test, y_test)
+print('SVR r2 결과: ', result)
+# y_predict = model.predict(x_test)
+# print('ypred: ', y_predict, '\n')
 
-for (name, algorithm) in Allalgorithm:
-    try:   # 예외처리
-        model  = algorithm()
-        model.fit(x_train, y_train)      # 훈련 및 컴파일
-        
-        y_predict = model.predict(x_test)
-        acc = r2_score(y_test, y_predict)
-        print(name, '의 정답률 : ', acc)  # 성능확인
-    except:
-        # continue    # continue : 계속 진행해
-        print(name, '은 안나온 놈!!!')    # 안돌아가는 모델
-        
-        
-        
-# ARDRegression 의 정답률 :  0.7538021118752509
-# AdaBoostRegressor 의 정답률 :  0.8551489609620271
-# BaggingRegressor 의 정답률 :  0.8743203340295383
-# BayesianRidge 의 정답률 :  0.7519553718541365
-# CCA 의 정답률 :  0.7671481620320935
-# DecisionTreeRegressor 의 정답률 :  0.6882657120194575
-# DummyRegressor 의 정답률 :  -0.001983416409809813
-# ElasticNet 의 정답률 :  0.10066848307211107
-# ElasticNetCV 의 정답률 :  0.738830220441546
-# ExtraTreeRegressor 의 정답률 :  0.7447410359307075
-# ExtraTreesRegressor 의 정답률 :  0.8878613487476177
-# GammaRegressor 의 정답률 :  0.13498106749480976
-# GaussianProcessRegressor 의 정답률 :  -2.1699240819671215
-# GradientBoostingRegressor 의 정답률 :  0.8968749656454579
-# HistGradientBoostingRegressor 의 정답률 :  0.8596776043198935
-# HuberRegressor 의 정답률 :  0.7284451206085558
-# IsotonicRegression 은 안나온 놈!!!
-# KNeighborsRegressor 의 정답률 :  0.7248521163487281
-# KernelRidge 의 정답률 :  0.6986778129359407
-# Lars 의 정답률 :  0.7412138114627917
-# LarsCV 의 정답률 :  0.7420473049045087
-# Lasso 의 정답률 :  0.17750664918670922
-# LassoCV 의 정답률 :  0.7511199821186207
-# LassoLars 의 정답률 :  -0.001983416409809813
-# LassoLarsCV 의 정답률 :  0.753398553101863
-# LassoLarsIC 의 정답률 :  0.7555033086871306
-# LinearRegression 의 정답률 :  0.7555033086871308
-# LinearSVR 의 정답률 :  0.49330883499851497
-# MLPRegressor 의 정답률 :  0.3144995655372228
-# MultiOutputRegressor 은 안나온 놈!!!
-# MultiTaskElasticNet 은 안나온 놈!!!
-# MultiTaskElasticNetCV 은 안나온 놈!!!
-# MultiTaskLasso 은 안나온 놈!!!
-# MultiTaskLassoCV 은 안나온 놈!!!
-# NuSVR 의 정답률 :  0.49142827229303754
-# OrthogonalMatchingPursuit 의 정답률 :  0.5453164888101074
-# OrthogonalMatchingPursuitCV 의 정답률 :  0.6978725032619453
-# PLSCanonical 의 정답률 :  -1.8853216066612473
-# PLSRegression 의 정답률 :  0.7210301120307101
-# PassiveAggressiveRegressor 의 정답률 :  0.7208560090338274
-# PoissonRegressor 의 정답률 :  0.4968289232825771
-# RANSACRegressor 의 정답률 :  0.3525972518784318
-# RadiusNeighborsRegressor 의 정답률 :  0.3175134599719306
-# RandomForestRegressor 의 정답률 :  0.8807339564275026
-# RegressorChain 은 안나온 놈!!!
-# Ridge 의 정답률 :  0.72456494791284
-# RidgeCV 의 정답률 :  0.7526706692256646
-# SGDRegressor 의 정답률 :  0.6948221254790665
-# SVR 의 정답률 :  0.48466515414059697
-# StackingRegressor 은 안나온 놈!!!
-# TheilSenRegressor 의 정답률 :  0.7221775544035689
-# TransformedTargetRegressor 의 정답률 :  0.7555033086871308
-# TweedieRegressor 의 정답률 :  0.13335700700988817
-# VotingRegressor 은 안나온 놈!!!        
+# model = Perceptron()
+# model.fit(x_train, y_train)
+# result = model.score(x_test, y_test)
+# print('Perceptron r2 결과: ', result)
+# # y_predict = model.predict(x_test)
+# # print('ypred: ', y_predict, '\n')
+
+model = LinearRegression()
+model.fit(x_train, y_train)
+result = model.score(x_test, y_test)
+print('LinearRegression r2 결과: ', result)
+# y_predict = model.predict(x_test)
+# print('ypred: ', y_predict, '\n')
+
+model = KNeighborsRegressor()
+model.fit(x_train, y_train)
+result = model.score(x_test, y_test)
+print('KNeighborsRegressor r2 결과: ', result)
+# y_predict = model.predict(x_test)
+# print('ypred: ', y_predict, '\n')
+
+model = DecisionTreeRegressor()
+model.fit(x_train, y_train)
+result = model.score(x_test, y_test)
+print('DecisionTreeRegressor r2 결과: ', result)
+# y_predict = model.predict(x_test)
+# print('ypred: ', y_predict, '\n')
+
+model = RandomForestRegressor()
+model.fit(x_train, y_train)
+result = model.score(x_test, y_test)
+print('RandomForestRegressor r2 결과: ', result)
+# y_predict = model.predict(x_test)
+# print('ypred: ', y_predict, '\n')
+
+# LinearSVR r2 결과:  0.7434063515479603
+# SVR r2 결과:  0.23474677555722312
+# SVR r2 결과:  0.23474677555722312
+# LinearRegression r2 결과:  0.8111288663608656
+# KNeighborsRegressor r2 결과:  0.5900872726222293
+# DecisionTreeRegressor r2 결과:  0.7780553674479604
+# RandomForestRegressor r2 결과:  0.9204893478849648
+
+# perceptron 오류남 

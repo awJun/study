@@ -1,42 +1,38 @@
 import numpy as np
-from sklearn.datasets import load_wine 
+from sklearn.datasets import load_wine
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
-#1. 데이터
+# 1. 데이터
 datasets = load_wine()
 x = datasets.data
 y = datasets.target
 
 from sklearn.model_selection import train_test_split, KFold
-x_train, x_test, y_train, y_test = train_test_split(x, y,
-                                                    train_size=0.8,
-                                                    shuffle=True,
-                                                    random_state=1234
-                                                    )
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, shuffle=True, random_state=1234)
 
-# scaler = MinMaxScaler()         # 파이프 라인에서 선언할것이므로 주석처리
-# x_train = scaler.fit_transform(x_train)
-# x_test = scaler.fit_transform(x_test)
-
-#2. 모델구성
+# 2. 모델
 from sklearn.svm import LinearSVC, SVC
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.pipeline import make_pipeline  # 스케일링을 파이프 라인으로 넘겨주기 위해 import함
 
-# model = SVC()   #파이프 라인을 쓸 것이므로 주석처리
-model = make_pipeline(MinMaxScaler(), SVC())  # 스케일은 minmax 모델은 SVC를 사용하겟다
+from sklearn.pipeline import make_pipeline
 
-#3. 훈련
-model.fit(x_train, y_train)   # 위에서 모델에서 make_pipeline를 했으므로 여기서 scaler.fit_transform과 함께 같이 수행한다       .
+model = make_pipeline(MinMaxScaler(), RandomForestClassifier()) # 굳이 변수명으로 정의하지 않아도 바로 갖다 쓸 수 있음
 
-#4. 평가, 예측
-result = model.score(x_test, y_test)
+# 3. 훈련
+model.fit(x_train, y_train) # pipeline의 fit에는 알아서 fit_transform이 들어가 있음
 
-print("model.score : ", result)
-# model.score :  0.9722222222222222
+# 4. 평가, 예측
+result = model.score(x_test, y_test) # pipeline의 score에는 알아서 transform이 들어가 있음
 
+print('model.score: ', result)
 
+# model.score:  0.9444444444444444
 
-
-
-
+# 스케일링 안했을 때
+# LinearSVC acc 결과:  0.9444444444444444
+# SVC acc 결과:  0.6666666666666666
+# Perceptron acc 결과:  0.5555555555555556
+# LogisticRegression acc 결과:  1.0
+# KNeighborsClassifier acc 결과:  0.7222222222222222
+# DecisionTreeClassifier acc 결과:  0.9444444444444444
+# RandomForestClassifier acc 결과:  1.0

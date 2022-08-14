@@ -49,16 +49,14 @@ kfold = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=123)
 #           eval_metric='error'   
 #           )
 
-
+#===========불러우기 // 2. 모델, 3. 훈련==================
 import pickle
 path = 'd:/study_data/_save/_xg/'
 model = pickle.load(open(path + 'm39_pickle1_save.dat', 'rb'))    # dump로 저장함
 
+# 4. 평가, 예측
+print('테스트 스코어: ', model.score(x_test, y_test))
 
-results = model.score(x_test, y_test)
-print('최종점수 :', results)  # 0.9736842105263158
-
-y_predict = model.predict(x_test)
-acc = accuracy_score(y_test, y_predict)
-print('진짜 최종점수 test 점수 :', acc)
+acc = accuracy_score(y_test, model.predict(x_test))
+print('acc_score 결과: ', acc)
 

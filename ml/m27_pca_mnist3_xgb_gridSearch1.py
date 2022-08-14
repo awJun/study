@@ -1,35 +1,4 @@
-# n_component > 0.95 이상
-# xgboost, gridSearch 또는 RandomSearch를 쓸 것
-
-# m27_2의 결과를 뛰어넘어랏!!
-
-
-# Parameter = [
-#     {"n_estimators":[100, 200, 300], "learning_rate":[0.1, 0.3, 0.001, 0.01],
-#      "max_depth":[4, 5, 6]},
-#     {"n_estimators":[90, 100, 110], "learning_rate":[0.1, 0.001, 0.01],
-#      "max_depth":[4, 5, 6], "colsample_bytree":[0.6, 0.9, 1]},
-#     {"n_estimators":[90, 110], "learning_rate":[0.1, 0.001, 0.01],
-#      "max_depth":[4, 5, 6], "colsample_bytree":[0.6, 0.9, 1],
-#     "colsample_bylevel":[0.6, 0.7, 0.9]}
-# ]
-# n_jobs = -1
-# tree_method = "gpu_hist", predictor="gpu_predictor", gpu_id=0,
-
-# [실습시작]
-
-
-# n_component > 0.95
-# xgboost, gridSearch 또는 RandomSearch를 쓸 것
-
-# n_jobs = -1
-# tree_method='gpu_hist', predictor='gpu_predictor', gpu_id=1
-
-"""
-
-
-"""
-
+from tabnanny import verbose
 import numpy as np
 from sklearn.decomposition import PCA
 from keras.datasets import mnist
@@ -46,8 +15,6 @@ x_train = x_train.reshape(x_train.shape[0], x_train.shape[1]*x_train.shape[2])
 x_test = x_test.reshape(x_test.shape[0], x_test.shape[1]*x_test.shape[2])
 x = np.append(x_train, x_test, axis=0)
 
-print(x.shape)    # (60000, 28, 28)  -->  (70000, 784)
-
 parameters = [
 {'n_estimators':[100,200,300], 'learning_rate':[0.1, 0.3, 0.001, 0.01], 'max_depth':[4,5,6]},
 {'n_estimators':[90,100,110], 'learning_rate':[0.1, 0.001, 0.01], 'max_depth':[4,5,6], 'colsample_bytree':[0.6,0.9,1]},
@@ -59,27 +26,24 @@ model = RandomizedSearchCV(XGBClassifier(tree_method='gpu_hist', predictor='gpu_
 
 pca = PCA(n_components=x_train.shape[1])
 x = pca.fit_transform(x)
-# print(x)
-pca_EVR = pca.explained_variance_ratio_    # 안에 값들이 얼마나 중요한지 중요도의 수치를 사용자에게 알려준다.
-# print(pca_EVR)
-cumsum = np.cumsum(pca_EVR)                # 컬럼들의 누적합을 알려준다.
-# print(cumsum)
+pca_EVR = pca.explained_variance_ratio_
+cumsum = np.cumsum(pca_EVR)
 
-# pca = PCA(n_components=np.argmax(cumsum >= 0.999)+1)
-# x2_train = pca.fit_transform(x_train)
-# x2_test = pca.transform(x_test)
-# start = time.time()
-# model.fit(x2_train, y_train, verbose=1)
-# end = time.time()
+pca = PCA(n_components=np.argmax(cumsum >= 0.999)+1)
+x2_train = pca.fit_transform(x_train)
+x2_test = pca.transform(x_test)
+start = time.time()
+model.fit(x2_train, y_train, verbose=1)
+end = time.time()
 
-# results = model.score(x2_test, y_test)
-# print('결과: ', results)
-# print('시간: ', end-start)
+results = model.score(x2_test, y_test)
+print('결과: ', results)
+print('시간: ', end-start)
 
-# # PCA 0.95 이상
-# # 결과:  0.9649
-# # 시간:  510.00438714027405
+# PCA 0.95 이상
+# 결과:  0.9649
+# 시간:  510.00438714027405
 
-# # PCA 0.99 이상
-# # 결과:  0.9307
-# # 시간:  527.3115980625153
+# PCA 0.99 이상
+# 결과:  0.9307
+# 시간:  527.3115980625153

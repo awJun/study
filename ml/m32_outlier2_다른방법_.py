@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import numpy as np
 aaa = np.array([[-10,2,3,4,5,6,7,8,9,10,11,12,50],
                 [100,200,-30,400,500,600,-70000,800,900,1000,210,420,350]])
@@ -17,18 +18,17 @@ def outliers(data_out):
     print(upper_bound)
     return np.where((data_out>upper_bound) | (data_out<lower_bound))
    
+def outliers_printer(dataset):
+    for i in range(dataset.shape[1]):
+        col = dataset[:, i]
+        outliers_loc = outliers(col)
+        print(i, '열의 이상치의 위치: ', outliers_loc, '\n')
+        plt.subplot(dataset.shape[1],1,i+1)
+        plt.boxplot(col)
+        
+    plt.show()
 
-for i in range(aaa.shape[1]):
-    w = aaa[:, i]
-    outliers_loc = outliers(w)
-    print(i, '열의 이상치의 위치: ', outliers_loc, '\n')
-
-# import matplotlib.pyplot as plt
-# plt.boxplot(aaa)
-# # plt.boxplot(aaa[1])
-# plt.show()
-
-
+outliers_printer(aaa)
 
 # 1사분위:  4.0
 # q2:  7.0

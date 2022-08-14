@@ -5,109 +5,78 @@ feature_importances_를 사용해서 성능이 안좋은 컬럼을 확인하고 
 
 """
 
+
 import numpy as np
 from sklearn.datasets import load_iris
 
-#1. 데이터
+# 1. 데이터
 datasets = load_iris()
 x = datasets.data
 y = datasets.target
 
-
 from sklearn.model_selection import train_test_split
-x_train, x_test, y_train, y_test = train_test_split(x, y,
-                                                     train_size=0.8,
-                                                     shuffle=True,
-                                                     random_state=123
-                                                     )
+x_train, x_test, y_train, y_test = train_test_split(x, y, shuffle=True, train_size=0.8, random_state=1234)
 
-
-#2. 모델구성
-from sklearn.tree import DecisionTreeRegressor # 나무 ~
-from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor     # Regressor : 회기 / Classifier 분류
-from xgboost import XGBClassifier, XGBRegressor  # xgboost 깔아야 사용 가능하다.
-
-
-model11 = DecisionTreeRegressor() 
-model12 = RandomForestRegressor()
-model13 = GradientBoostingRegressor()
-model14 = XGBRegressor()  # 3대장중 하나!
-#3. 훈련
-model11.fit(x_train, y_train)
-model12.fit(x_train, y_train)
-model13.fit(x_train, y_train)
-model14.fit(x_train, y_train)
-
-
-## 여기서는 그림그릴 것이므로 주석~ ##############################################################################################  
-
-# #4. 평가, 예측
-# result = model.score(x_test, y_test)
-# print("model.score : ", result)
-
-# from sklearn.metrics import accuracy_score, r2_score
-# y_predict = model.predict(x_test)
-# acc = r2_score(y_test, y_predict)
-# print("r2_score : ", acc)
-
-# print("==========================")
-# # print(model," : ", model.feature_importances_)  # feature_importances_는 트리에만 있는거임
-#                                    # 전체 픽쳐중 성능이 안좋은 것은 빼도 되는지 확인하는 용도임 acc와 같이  0 ~ 1의 값을 보여줌
-#####################################################################################################################################
-
+# 2. 모델구성
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from xgboost import XGBClassifier # pip install xgboost
 import matplotlib.pyplot as plt
 
-def plot_feature_importances(model):
-    n_features = datasets.data.shape[1]  # data.shape[1] 열을 사용하겠다
+def plot_feature_importances(model): # 그림 함수 정의
+    n_features = datasets.data.shape[1]
     plt.barh(np.arange(n_features), model.feature_importances_, align='center')
-    plt.yticks(np.arange(n_features), datasets.feature_names)
-    plt.xlabel("Feature Importances")
-    plt.ylabel("features")
-    plt.ylim(-1, n_features)
+                # x                     y
+    plt.yticks(np.arange(n_features), datasets.feature_names) # 눈금 설정
+    plt.xlabel('Feature Importances')
+    plt.ylabel('Features')
+    plt.ylim(-1, n_features) # ylimit : 축의 한계치 설정
 
-    
-# # plot_feature_importances(model)
-##########################################################################
+models = [DecisionTreeClassifier(), RandomForestClassifier(), GradientBoostingClassifier(), XGBClassifier()]
+print(str(models[3]))
 
-# subplot를 이용해서 모델 4개를 동시에 그래프로 출력하는 것이 핵심임
+# 3. 훈련
+plt.figure(figsize=(10,5))
+for i in range(len(models)):
+    models[i].fit(x_train, y_train)
+    plt.subplot(2,2, i+1)
+    plot_feature_importances(models[i])
+    if str(models[i]).startswith('XGBClassifier'):
+        plt.title('XGB()')
+    else:
+        plt.title(models[i])
 
-##########################################################################
-# # plt.subplot("맹그러봐")
-plt.subplot(2, 2, 1)
-plot_feature_importances(model11)
+# plt.subplot(2,2,1)
+# plot_feature_importances(model1)
 
-plt.subplot(2, 2, 2)
-plot_feature_importances(model12)
+# plt.subplot(2,2,2)
+# plot_feature_importances(model2)
 
-plt.subplot(2, 2, 3)
-plot_feature_importances(model13)
+# plt.subplot(2,2,3)
+# plot_feature_importances(model3)
 
-plt.subplot(2, 2, 4)
-plot_feature_importances(model14)
+# plt.subplot(2,2,4)
+# plot_feature_importances(model3)
 
 plt.show()
 
-# DecisionTreeRegressor()  :  [0.10190659 0.02310902 0.23213198 0.05170539 0.04256703 0.04765942
-#  0.03820782 0.0250506  0.36488463 0.07277753]
 
-# RandomForestRegressor()  :  [0.05612309 0.01273293 0.29057427 0.10423922 0.0405132  0.05143917
-#  0.05585144 0.02677097 0.27763685 0.08411887]
+# model.score:  -0.06803668834514842
+# r2_score:  -0.06803668834514842
+# DecisionTreeClassifier() :  [0.08175505 0.01452838 0.34378855 0.08707457 0.02062155 0.10143098
+#  0.06139199 0.01179111 0.15634859 0.12126924]
 
-# GradientBoostingRegressor()  :  [0.04965624 0.01086936 0.30371012 0.11159881 0.02890053 0.05450568
-#  0.03974847 0.01840977 0.33881486 0.04378616]
+# model.score:  0.4076785129628565
+# r2_score:  0.4076785129628565
+# RandomForestClassifier() :  [0.05768957 0.01261572 0.33354815 0.09110822 0.04410219 0.06195914
+#  0.06235012 0.02609681 0.22340702 0.08712305]
 
-# r2_score :  0.4590400803596264
-# XGBRegressor()  :   [0.03234756 0.0447546  0.21775807 0.08212128 0.04737141 0.04843819
-#  0.06012432 0.09595273 0.30483875 0.06629313]
+# model.score:  0.4124988763421431
+# r2_score:  0.4124988763421431
+# GradientBoostingClassifier() :  [0.04612784 0.01648727 0.33594916 0.0955424  0.03161077 0.06604381
+#  0.03821368 0.01413885 0.27693126 0.07895497]
 
-
-
-
-
-
-
-
-
-
-
+# model.score:  0.26078151031491137
+# r2_score:  0.26078151031491137
+# XGBClassifier :  [0.02666356 0.06500483 0.28107476 0.05493598 0.04213588 0.0620191 0.06551369 0.17944618 0.13779876 0.08540721]
 

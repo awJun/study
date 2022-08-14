@@ -1,72 +1,58 @@
-from sklearn.datasets import load_digits
-from sklearn.metrics import accuracy_score
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import train_test_split, StratifiedKFold, cross_val_score,\
-    GridSearchCV # 격자 탐색, CV: cross validation
+from sklearn.datasets import load_iris, load_wine, load_digits
+from sklearn.datasets import load_breast_cancer, fetch_covtype
+from sklearn.decomposition import PCA
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.model_selection import KFold, StratifiedKFold, train_test_split
+from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
+from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
+from xgboost import XGBClassifier, XGBRegressor
+
 
 # 1. 데이터
 datasets = load_digits()
+x = datasets.data
+y = datasets.target
+print(x.shape)
+le = LabelEncoder()
+y = le.fit_transform(y)
 
-x = datasets['data']
-y = datasets['target']
+x_train, x_test, y_train, y_test = train_test_split(x, y, shuffle=True, random_state=1234, train_size=0.8)
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, shuffle=True, random_state=9)
+scaler = MinMaxScaler()
+x_train = scaler.fit_transform(x_train)
+x_test = scaler.transform(x_test)
 
-
-# parameters = [
-#     {'n_estimators':[100,200], 'max_depth':[6,8,10,12], 'n_jobs':[-1,2,4]},
-#     {'max_depth':[6,8,10,12], 'min_samples_leaf':[3,5,7,10], 'n_jobs':[-1,2,4]},
-#     {'min_samples_leaf':[3,5,7,10], 'min_samples_split':[2,3,5,10], 'n_jobs':[-1,2,4]},
-#     {'n_estimators':[100,200], 'max_depth':[6,8,10,12], 'min_samples_split':[2,3,5,10]},
-#     ]                                                                                       
-        
-
-parameters = {'n_estimators' : [100],
-              'learning_rate' : [0.1],
-              'max_depth' : [3],        # 디폴트 6  가지치기를 한다 ? 검색해보자 ..ㅠ   max가 깊어지면 과접합  /  낮게 잡을수록 좋다?
-              'gamma' : [1],                     #  감마 알아서 찾아 ~
-              'min_child_weight' : [1],
-              'subsample' : [1],
-              'colsample_bytree' : [1],
-              'colsample_bylevel' : [1],
-              'colsample_bynode' : [1],
-              'reg_alpha' : [0],
-              'reg_lamdba' : [0, 0.1, 0.01, 0.001, 1, 2, 10]
-              }
-
-                
-#2. 모델구성
-from sklearn.ensemble import RandomForestClassifier
-from xgboost import XGBClassifier, XGBRegressor
 n_splits = 5
-kfold = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=9)
+kfold = KFold(n_splits=n_splits, shuffle=True, random_state=1234)
 
-xgb = XGBClassifier(random_state = 123)
+parameters = {
+            'n_estimators':[100],
+            'learning_rate':[1],
+            'max_depth':[None,2,3,4,5,6,7,8,9,10],
+            'gamma':[0],
+            'min_child_weight':[1],
+            'subsample':[1],
+            'colsample_bytree':[0,0.1,0.2,0.3,0.5,0.7,1] ,
+            'colsample_bylevel':[1],
+            'colsample_bynode':[0,0.1,0.2,0.3,0.5,0.7,1],
+            'alpha':[0,0.1,0.01,0.001,1,2,10],
+            'lambda':[0,0.1,0.01,0.001,1,2,10]
+              }  
 
-model = GridSearchCV(xgb, parameters, cv=kfold, verbose=1, refit=True, n_jobs=-1)
+# 2. 모델
+xgb = XGBRegressor(tree_method='gpu_hist', predictor='gpu_predictor', gpu_id=0, random_state=1234)
+model = RandomizedSearchCV(xgb, parameters, cv=kfold, n_jobs=-1)
 
-
-# 3. 컴파일, 훈련
-import time
-start = time.time()
 model.fit(x_train, y_train)
-end = time.time()
 
-print('최적의 매개변수: ', model.best_estimator_)
-print('최적의 파라미터: ', model.best_params_)
-print('best_score_: ', model.best_score_)
-print('model.score: ', model.score(x_test, y_test))
-ypred = model.predict(x_test)
-print('acc score: ', accuracy_score(y_test, ypred))
-ypred_best = model.best_estimator_.predict(x_test)
-print('best tuned acc: ', accuracy_score(y_test, ypred_best))
+print('최상의 매개변수: ', model.best_params_)
+print('최상의 점수: ', model.best_score_)
+print('테스트 스코어: ', model.score(x_test, y_test))
 
-print('걸린시간: ', round(end-start,2), '초')
-
-
-# best_score_:  0.9491942508710801
-# model.score:  0.9583333333333334
-# acc score:  0.9583333333333334
-# best tuned acc:  0.9583333333333334
-# 걸린시간:  9.93 초
+# 최상의 매개변수:  {'subsample': 1, 'n_estimators': 100, 'min_child_weight': 1, 'max_depth': 3, 'learning_rate': 1, 'lambda': 0.1, 'gamma': 0, 'colsample_bytree': 
+# 1, 'colsample_bynode': 0.2, 'colsample_bylevel': 1, 'alpha': 0}
+# 최상의 점수:  0.6033893505951398
+# 테스트 스코어:  0.6694700811878285

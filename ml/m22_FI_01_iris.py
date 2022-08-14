@@ -19,15 +19,11 @@ datasets = load_iris()
 x = datasets.data
 y = datasets.target
 
-allfeature = round(x.shape[1]*0.2, 0)  # [0]은 행 / [1]은 열 0.2에 4를 곱하면 0.8 이걸 반올림함 그래서 1
+allfeature = round(x.shape[1]*0.2, 0)
 print('자를 갯수: ', int(allfeature))
 
-# print(x.shape)
 
-x_train, x_test, y_train, y_test = train_test_split(x, y,
-                                                    shuffle=True,
-                                                    train_size=0.8,
-                                                    random_state=1234)
+x_train, x_test, y_train, y_test = train_test_split(x, y, shuffle=True, train_size=0.8, random_state=1234)
 
 # 2. 모델구성
 from sklearn.tree import DecisionTreeClassifier
@@ -67,8 +63,3 @@ for model in models:
 # GradientBoostingClassifier 의 드랍후 스코어:  1.0
 # XGB 의 스코어:         1.0
 # XGB 의 드랍후 스코어:  1.0
-
-
-
-
-

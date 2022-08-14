@@ -1,13 +1,17 @@
 import pandas as pd 
-from sklearn.model_selection import train_test_split, KFold, GridSearchCV
+import numpy as np
+from sklearn.experimental import enable_halving_search_cv
+from sklearn.model_selection import train_test_split, KFold,\
+    HalvingRandomSearchCV, RandomizedSearchCV
 from sklearn.metrics import r2_score
 import time
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
+from xgboost import XGBRegressor
 import warnings
 warnings.filterwarnings('ignore') # warnig 출력 안함
 
 # 1. 데이터
-path = './_data/kaggle_bike/' 
+path = 'D:\study_data\_data\kaggle_bike/'
 train_set = pd.read_csv(path+'train.csv')
 # print(train_set)
 # print(train_set.shape) # (10886, 11)
@@ -39,67 +43,47 @@ train_set.drop('registered',axis=1,inplace=True) # registered 드랍 이유 모�
 
 x = train_set.drop(['count'], axis=1)
 y = train_set['count']
+x = np.array(x)
 
 print(x.shape, y.shape) # (10886, 14) (10886,)
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8)
+allfeature = round(x.shape[1]*0.2, 0)
+print('자를 갯수: ', int(allfeature))
+
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, shuffle=True, train_size=0.8, random_state=1234)
+
 scaler = MinMaxScaler()
-# scaler = StandardScaler()
-# scaler = MaxAbsScaler() 
-# scaler = RobustScaler()
-scaler.fit(x_train)
-scaler.fit(test_set)
-test_set = scaler.transform(test_set)
-x_train = scaler.transform(x_train)
+x_train = scaler.fit_transform(x_train)
 x_test = scaler.transform(x_test)
 
-
-parameters = {'n_estimators' : [100],
-              'learning_rate' : [0.1],
-              'max_depth' : [3],        # 디폴트 6  가지치기를 한다 ? 검색해보자 ..ㅠ   max가 깊어지면 과접합  /  낮게 잡을수록 좋다?
-              'gamma' : [1],                     #  감마 알아서 찾아 ~
-              'min_child_weight' : [1],
-              'subsample' : [1],
-              'colsample_bytree' : [1],
-              'colsample_bylevel' : [1],
-              'colsample_bynode' : [1],
-              'reg_alpha' : [0],
-              'reg_lamdba' : [0, 0.1, 0.01, 0.001, 1, 2, 10]
-              }
-
-#2. 모델구성
-from sklearn.ensemble import RandomForestRegressor
-from xgboost import XGBClassifier, XGBRegressor
-from sklearn.model_selection import KFold
 n_splits = 5
-kfold = KFold(n_splits=n_splits, shuffle=True, random_state=9)
+kfold = KFold(n_splits=n_splits, shuffle=True, random_state=1234)
 
-xgb = XGBRegressor(random_state = 123)
+parameters = {
+            'n_estimators':[100],
+            'learning_rate':[1],
+            'max_depth':[None,2,3,4,5,6,7,8,9,10],
+            'gamma':[0],
+            'min_child_weight':[1],
+            'subsample':[1],
+            'colsample_bytree':[0,0.1,0.2,0.3,0.5,0.7,1] ,
+            'colsample_bylevel':[1],
+            'colsample_bynode':[0,0.1,0.2,0.3,0.5,0.7,1],
+            'alpha':[0,0.1,0.01,0.001,1,2,10],
+            'lambda':[0,0.1,0.01,0.001,1,2,10]
+              }  
 
-model = GridSearchCV(xgb, parameters, cv=kfold, verbose=1, refit=True, n_jobs=-1)
+# 2. 모델
+xgb = XGBRegressor(tree_method='gpu_hist', predictor='gpu_predictor', gpu_id=0, random_state=1234)
+model = RandomizedSearchCV(xgb, parameters, cv=kfold, n_jobs=-1, verbose=2)
 
-# 3. 컴파일, 훈련
-import time
-start = time.time()
 model.fit(x_train, y_train)
-end = time.time()
 
-print('최적의 매개변수: ', model.best_estimator_)
-print('최적의 파라미터: ', model.best_params_)
-print('best_score_: ', model.best_score_)
-print('model.score: ', model.score(x_test, y_test))
-ypred = model.predict(x_test)
-print('acc score: ', r2_score(y_test, ypred))
-ypred_best = model.best_estimator_.predict(x_test)
-print('best tuned acc: ', r2_score(y_test, ypred_best))
+# 4. 평가, 예측
+print('최상의 매개변수: ', model.best_params_)
+print('최상의 점수: ', model.best_score_)
+print('테스트 스코어: ', model.score(x_test, y_test))
 
-print('걸린시간: ', round(end-start,2), '초')
-
-
-# best_score_:  0.8660289066021004
-# model.score:  0.8590539896070467
-# acc score:  0.8590539896070467
-# best tuned acc:  0.8590539896070467
-# 걸린시간:  3.93 초
-
-
+# 최상의 점수:  0.8229476360937567
+# 테스트 스코어:  0.8326899164478541

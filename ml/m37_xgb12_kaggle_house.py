@@ -1,8 +1,11 @@
 import numpy as np
 import pandas as pd
 from collections import Counter
-from sklearn.model_selection import train_test_split, KFold, GridSearchCV
-from sklearn.metrics import r2_score
+from sklearn.experimental import enable_halving_search_cv
+from sklearn.model_selection import train_test_split, KFold,\
+    HalvingRandomSearchCV, RandomizedSearchCV
+from xgboost import XGBRegressor
+from sklearn.preprocessing import MinMaxScaler
 import warnings
 warnings.filterwarnings('ignore') # warnig 출력 안함
 
@@ -25,7 +28,7 @@ non_encording_columns = ['MSSubClass','LotFrontage','LotArea','OverallQual','Ove
 
 
 #1. 데이터
-path = './_data/kaggle_house/'
+path = 'D:\study_data\_data\kaggle_house/'
 train_set = pd.read_csv(path + 'train.csv') # + 명령어는 문자를 앞문자와 더해줌  index_col=n n번째 컬럼을 인덱스로 인식
             
 test_set = pd.read_csv(path + 'test.csv') # 예측에서 쓸거임  3
@@ -191,50 +194,49 @@ y = train_set['SalePrice']
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.75, random_state=99)
 
-parameters = {'n_estimators' : [100],
-              'learning_rate' : [0.1],
-              'max_depth' : [3],        # 디폴트 6  가지치기를 한다 ? 검색해보자 ..ㅠ   max가 깊어지면 과접합  /  낮게 잡을수록 좋다?
-              'gamma' : [1],                     #  감마 알아서 찾아 ~
-              'min_child_weight' : [1],
-              'subsample' : [1],
-              'colsample_bytree' : [1],
-              'colsample_bylevel' : [1],
-              'colsample_bynode' : [1],
-              'reg_alpha' : [0],
-              'reg_lamdba' : [0, 0.1, 0.01, 0.001, 1, 2, 10]
-              }
+scaler = MinMaxScaler()
+x_train = scaler.fit_transform(x_train)
+x_test = scaler.transform(x_test)
 
-#2. 모델구성
-from sklearn.ensemble import RandomForestRegressor
-from xgboost import XGBClassifier, XGBRegressor
-from sklearn.model_selection import KFold
 n_splits = 5
-kfold = KFold(n_splits=n_splits, shuffle=True, random_state=9)
+kfold = KFold(n_splits=n_splits, shuffle=True, random_state=1234)
 
-xgb = XGBRegressor(random_state = 123)
+parameters = {
+            'n_estimators':[100],
+            'learning_rate':[1],
+            'max_depth':[None,2,3,4,5,6,7,8,9,10],
+            'gamma':[0],
+            'min_child_weight':[1],
+            'subsample':[1],
+            'colsample_bytree':[0,0.1,0.2,0.3,0.5,0.7,1] ,
+            'colsample_bylevel':[1],
+            'colsample_bynode':[0,0.1,0.2,0.3,0.5,0.7,1],
+            'alpha':[0,0.1,0.01,0.001,1,2,10],
+            'lambda':[0,0.1,0.01,0.001,1,2,10]
+              }  
 
-model = GridSearchCV(xgb, parameters, cv=kfold, verbose=1, refit=True, n_jobs=-1)
+# 2. 모델
+xgb = XGBRegressor(tree_method='gpu_hist', predictor='gpu_predictor', gpu_id=0, random_state=1234)
+model = RandomizedSearchCV(xgb, parameters, cv=kfold, n_jobs=-1, verbose=2)
 
-# 3. 컴파일, 훈련
-import time
-start = time.time()
 model.fit(x_train, y_train)
-end = time.time()
 
-print('최적의 매개변수: ', model.best_estimator_)
-print('최적의 파라미터: ', model.best_params_)
-print('best_score_: ', model.best_score_)
-print('model.score: ', model.score(x_test, y_test))
-ypred = model.predict(x_test)
-print('acc score: ', r2_score(y_test, ypred))
-ypred_best = model.best_estimator_.predict(x_test)
-print('best tuned acc: ', r2_score(y_test, ypred_best))
-
-print('걸린시간: ', round(end-start,2), '초')
+# 4. 평가, 예측
+print('최상의 매개변수: ', model.best_params_)
+print('최상의 점수: ', model.best_score_)
+print('테스트 스코어: ', model.score(x_test, y_test))
 
 
-# best_score_:  0.882130447904434
-# model.score:  0.8737219666552254
-# acc score:  0.8737219666552254
-# best tuned acc:  0.8737219666552254
-# 걸린시간:  3.03 초
+# model.score:  0.8658751409367458
+
+# 스케일링 안했을 때
+# LinearSVR 결과:  0.7187348947405945
+# SVR 결과:  -0.07586421857983505
+# Perceptron 결과:  0.0
+# LinearRegression 결과:  0.8648299743838634
+# KNeighborsRegressor 결과:  0.7636827308027394
+# DecisionTreeRegressor 결과:  0.7544631851132991
+# RandomForestRegressor 결과:  0.8658854609346692
+
+# 최상의 점수:  0.8610732885351424
+# 테스트 스코어:  0.8483958517588139

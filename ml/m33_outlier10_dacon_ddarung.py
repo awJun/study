@@ -20,7 +20,7 @@ test_set = pd.read_csv(path+'test.csv', index_col=0)
 # print(test_set)
 # print(test_set.shape) # (715, 9)
 
-### 결측치 처리(일단 제거로 처리) ###
+### 결측치 중간값으로 ###
 print(train_set.info())
 print(train_set.isnull().sum()) # 결측치 전부 더함
 median = train_set.median()
@@ -54,5 +54,3 @@ print(results)
 
 # 중간값으로 nan값 채움
 # 0.7890992155294401
-
-

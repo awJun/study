@@ -6,48 +6,30 @@ LDA = from sklearn.discriminant_analysis import LinearDiscriminantAnalysis 로 �
 n_components 사용할 때 y의 라벨보다 큰수를 넣으면 안된다
 라벨 갯수보다 많으면 ValueError: n_components cannot be larger than min(n_features, n_classes - 1). 발생
 """
-
 import numpy as np
 import pandas as pd
-from sklearn.datasets import load_iris, load_breast_cancer
-from sklearn.datasets import load_wine, fetch_covtype
-from sklearn.datasets  import load_digits
+from sklearn.datasets import load_iris, load_wine, load_digits
+from sklearn.datasets import load_breast_cancer, fetch_covtype
 from sklearn.decomposition import PCA
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 import time
 
-import xgboost as xg
-# print('xg버전 : ', xg.__version__)  xg버전 :  1.6.1
-
-
 # 1. 데이터
 datasets = load_breast_cancer()
 x = datasets.data
 y = datasets.target
-
-# print(np.unique(y))  [0 1]  해당 데이터는 2진 분류여서 유니크 값이 2개이므로  n_components를 무조건 1로 해야한다. 2로하면 하나 마나이기 때문이다.
-
-print(x.shape) # (581012, 54)
-le = LabelEncoder()
-y = le.fit_transform(y)
-
-# pca = PCA(n_components=20)
-# x = pca.fit_transform(x)
-# pca_EVR = pca.explained_variance_ratio_
-# cumsum = np.cumsum(pca_EVR)
-# print(cumsum)
+print(x.shape)
+# le = LabelEncoder()
+# y = le.fit_transform(y)
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random_state=123, shuffle=True, stratify=y)
 print(np.unique(y_train, return_counts=True))
-# (array([0, 1, 2, 3, 4, 5, 6], dtype=int64), array([169472, 226640,  28603,   2198,   7594,  13894,  16408],
-#       dtype=int64))
-lda = LinearDiscriminantAnalysis(n_components=1) # y라벨 개수보다 작아야만 한다   / 라벨 갯수보다 많으면 ValueError: n_components cannot be larger than min(n_features, n_classes - 1). 발생
+lda = LinearDiscriminantAnalysis(n_components=1) # y라벨 개수보다 작아야만 한다
 lda.fit(x_train, y_train) 
 x_train = lda.transform(x_train)
 x_test = lda.transform(x_test)
-
 
 # 2. 모델
 from xgboost import XGBClassifier
@@ -63,25 +45,15 @@ results = model.score(x_test, y_test)
 print('결과: ', results)
 print('걸린 시간: ', end-start)
 
-# xgboost - gpu
-# 결과:  0.8695988915948814
-# 걸린 시간:  5.994714736938477
+# 모든 칼럼
+# 결과:  0.7573250241545894
 
-# xgboost - gpu / PCA n_component - 10
-# 결과:  0.8406065247885166
-# 걸린 시간:  4.38213324546814
+# pca 14
+# 결과:  0.8847468760441028
 
-# xgboost - gpu / PCA n_component - 20
-# 결과:  0.8857946868841596
-# 걸린 시간:  4.646213531494141
+# pca 4
+# 결과:  0.9011631807550952
 
-# LinearDiscriminantAnalysis - 1   # 2진분류이므로 1로 축소  2로하면 기존과 똑같아서 하나마나이기 때문이다.
+# LDA n_components = 1
 # 결과:  0.956140350877193
-# 걸린 시간:  0.3451204299926758
-
-
-
-# PCA는 y값을 건들지 않고 x값만 축소하지만
-# LDA는 y값을 x값 축소할 때 같이 연산에 포함한다   
-
-# 즉! PCA x값 축소 LDA는 y값 축소를 하는 거 같음
+# 걸린 시간:  0.34171247482299805

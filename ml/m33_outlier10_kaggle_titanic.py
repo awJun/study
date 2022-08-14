@@ -41,7 +41,6 @@ for i in range(len(a3)):   # 위에 a3에 있는 리스트의 길이만큼 반�
  
 """
 
-
 import numpy as np
 import pandas as pd
 from sklearn.experimental import enable_halving_search_cv
@@ -55,14 +54,14 @@ import warnings
 warnings.filterwarnings('ignore') # warnig 출력 안함
 
 # 1. 데이터
-path = '.\_data\kaggle_titanic/'
+path = 'D:\study_data\_data\kaggle_titanic/'
 train_set = pd.read_csv(path+'train.csv')
 test_set = pd.read_csv(path+'test.csv')
 
 train_set = train_set.drop(columns='Cabin', axis=1)
 train_set['Age'].fillna(train_set['Age'].mean(), inplace=True)
 print(train_set['Embarked'].mode())
-train_set['Embarked'].fillna(train_set['Embarked'].mode()[0], inplace=True)   # 원본 객체 변경하려면 inplace=True 옵션 추가
+train_set['Embarked'].fillna(train_set['Embarked'].mode()[0], inplace=True)
 train_set.replace({'Sex':{'male':0,'female':1}, 'Embarked':{'S':0,'C':1,'Q':2}}, inplace=True)
 
 # train_set 불러올 때와 마찬가지로 전처리시켜야 model.predict에 넣어서 y값 구하기가 가능함-----------
@@ -153,11 +152,10 @@ a5 = [  1,  27,  31,  34,  52,  61,  62,  72,  88, 102, 118, 120, 124,
        689, 698, 700, 708, 716, 730, 737, 741, 742, 745, 759, 763, 765,
        779, 789, 792, 802, 820, 829, 835, 846, 849, 856, 863, 879]
 
-for i in range(len(a3)):   # 위에 a3에 있는 리스트의 길이만큼 반복하겠다.   
-    x[a3[i]][3] = 0        # x안에 4번째 열에 이상치가 있기에 앞에 x를 맨뒤 [4]를한다. 
-                           # 그 뒤에[a3]인덱스 번호에 해당하는 리스트를 i로 순회돌며 0인 값으로 채운다.
+for i in range(len(a3)):
+    x[a3[i]][3] = 0
 
-for i in range(len(a4)):  
+for i in range(len(a4)):
     x[a4[i]][4] = 0
 
 outliers_printer(x)
@@ -169,7 +167,7 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, shuffl
 # x_test = lda.transform(x_test)
 
 # 2. 모델
-from sklearn.pipeline import make_pipeline       
+from sklearn.pipeline import make_pipeline
 model = make_pipeline(MinMaxScaler(), XGBClassifier(tree_method='gpu_hist', predictor='gpu_predictor', gpu_id=0))
 
 # 3. 훈련
@@ -178,7 +176,6 @@ model.fit(x_train, y_train)
 # 4. 평가, 예측
 results = model.score(x_test, y_test)
 print(results)
-
 
 # 0.8324022346368715
 

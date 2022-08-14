@@ -35,29 +35,31 @@ import numpy as np
 import pandas as pd
 from sklearn.datasets import load_iris
 
-#1. 데이터
+# 1. 데이터
 datasets = load_iris()
-print(datasets.feature_names)
-
-x = datasets['data']
+x = datasets.data
 y = datasets['target']
 
-df = pd.DataFrame(x, columns=[['sepal length (cm)', 'sepal width (cm)', 'petal length (cm)', 'petal width (cm)']])
-# print(df)  [150 rows x 4 columns]
+df = pd.DataFrame(x, columns=datasets.feature_names)
+df['Target(Y)'] = y
+print(df)
 
-df['target(Y)'] = y  # df에 y를 넣는데 그 이름을 target(Y)로 하겠다
-# print(df)  [150 rows x 5 columns]
-
-# numpy는 데이터만 들어가잇고 컬럼과 row가 안들어가 있는 상태
-# df는 컬럼과 row가 다 들어가 있다
-
-print("================ 상관계수 히트 맵 ==========================================================")
-print(df.corr())   # .corr() 상관관계를 알려준다.
-
+print('====================== 상관계수 히트 맵 ======================')
+print(df.corr()) # 각 칼럼별로 서로 상관관계를 나타냄, 단순리니어모델로 쭉 돌려보고 나온 결과치니까 무조건 신뢰하기 힘듦, 신뢰도 7~80%
+# 양의 상관계수 = 비례, 음의 상관계수 = 반비례
+'''
+                   sepal length (cm)  sepal width (cm)  petal length (cm)  petal width (cm)  Target(Y)
+sepal length (cm)           1.000000         -0.117570           0.871754          0.817941   0.782561
+sepal width (cm)           -0.117570          1.000000          -0.428440         -0.366126  -0.426658
+petal length (cm)           0.871754         -0.428440           1.000000          0.962865   0.949035
+petal width (cm)            0.817941         -0.366126           0.962865          1.000000   0.956547
+Target(Y)                   0.782561         -0.426658           0.949035          0.956547   1.000000
+'''
 import matplotlib.pyplot as plt
-import seaborn as sns   # 그래프를 그릴때 추가 양식같은 느낌? 같음
+import seaborn as sns
 sns.set(font_scale=1.2)
 sns.heatmap(data=df.corr(), square=True, annot=True, cbar=True)
+
 plt.show()
 
 
