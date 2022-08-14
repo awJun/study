@@ -47,109 +47,96 @@ from sklearn.preprocessing import OneHotEncoder
 #                         # 텐서플로우의 데이터의 난수
                         
 ##[ 머닝머신 ]##########################################################################################                    
+from sklearn.datasets import load_iris
+# from tensorflow.python.keras.models import Sequential
+# from tensorflow.python.keras.layers import Dense
 from sklearn.model_selection import train_test_split
-from sklearn.svm import LinearSVC
-                     
-#1. 데이터
+from sklearn.metrics import accuracy_score
+import numpy as np
+import pandas as pd
+from tensorflow.python.keras.callbacks import EarlyStopping
+import tensorflow as tf
+
+from sklearn.svm import LinearSVC # 모델
+# 서포트 벡터 머신 / 리니어 서포트 벡터 클레시파이어
+# 원핫 x, 컴파일 x, argmax x
+
+tf.random.set_seed(99)
+# y = wx + b의 w값을 처음 랜덤으로 긋는 것을 어떻게 그을지 고정하고 시작
+
+# 1. 데이터
 datasets = load_iris()
-print(datasets.DESCR)  #행(Instances): 150   /   열(Attributes): 4
+print(datasets.DESCR)
+'''
+- class:
+                - Iris-Setosa
+                - Iris-Versicolour
+                - Iris-Virginica
+y값이 3개
+이 3개 꽃 중 하나가 나와야 함
+3중 분류
+'''
 print(datasets.feature_names)
+x = datasets['data']
+y = datasets['target']
+print(x, '\n', y)
+print(x.shape) # (150, 4)
+print(y.shape) # (150,)
+print('y의 라벨값: ', np.unique(y))
 
-x = datasets['data']  # .data와 동일 
-y = datasets['target']  
-print(x.shape)   # (150, 4)
-print(y.shape)   # (150,)
-print("y의 라벨값 : ", np.unique(y))  # 해당 데이터의 고유값을 출력해준다.
-
-# from tensorflow.keras.utils import to_categorical   # python까지 넣으면 오류남
-
-# # print(y.shape)  (150, 3)
-# y = to_categorical(y)
-# to_categorical를 사용하면 y의 라벨값의 갯수에 맞춰서 알아서 백터의 양을
-# 만들어준다.
-
+# sklearn에서는 인코딩 필요 없음
+# y = pd.get_dummies(y)
+# print(y.shape)
 # print(y)
 
-
-x_train, x_test, y_train, y_test = train_test_split(x, y,
-                                                    train_size=0.8,
-                                                    shuffle=True,
-                                                    random_state=100
-                                                    )
-print(y_train)
-print(y_test)
-
-
-
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8,shuffle=True, random_state=9)
+                      
 #2. 모델구성
 # model = Sequential()
-# model.add(Dense(100, activation='relu', input_dim=4))
-# model.add(Dense(100, activation='relu'))
-# model.add(Dense(100, activation='relu'))
-# model.add(Dense(100, activation='relu'))
-# model.add(Dense(3, activation='softmax'))  # 다중분류에선 마지막에 softmax를 사용
-# # softmax를 사용하면 3개가 출력된다. 3개중 큰쪽으로 찾는다.
-# # 다중분류 일 때는 최종 노드의 갯수는 y의 라벨의 갯 수 
+# model.add(Dense(80, input_dim=4, activation='relu'))
+# model.add(Dense(100))
+# model.add(Dense(90))
+# model.add(Dense(70, activation='relu'))
+# model.add(Dense(50, activation='relu'))
+# model.add(Dense(3, activation='softmax'))
 
-#2. 모델구성
-model = LinearSVC()  # DL과 다르게 단층 레이어  구성으로 연산에 걸리는 시간을 비교할 수 없다.
+model = LinearSVC()
 
 
-# #3. 컴파일. 훈련
-# model.compile(loss='categorical_crossentropy', optimizer='adam',
-#               metrics=['accuracy']) 
-# categorical_crossentropy를 사용하면 훈련을 할 때 값을 0 과 1로 구분해서 fit을 진행한다.
-# categorical_crossentropy는 다중분류에서 사용된다.
-# 에러는 멈춘다.   /  버그는 잘돌아가나 값이 이상히게 나온다.
-# https://cheris8.github.io/artificial%20intelligence/DL-Keras-Loss-Function/  [loss 관련 링크]
+#3. 컴파일, 훈련
+# model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+# sklearn에서는 컴파일 없음
+# Es = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=50, restore_best_weights=True)
+# log = model.fit(x_train, y_train, epochs=100, batch_size=100, callbacks=[Es], validation_split=0.2)
 
-# from tensorflow.python.keras.callbacks import EarlyStopping
-# earlyStopping = EarlyStopping(monitor='val_loss', patience=100, mode='min', verbose=1,
-#                               restore_best_weights=True) 
-  
-  
-# start_time = time.time()
-# hist = model.fit(x_train, y_train, epochs=10, batch_size=100,
-#                  verbose=1,
-#                  validation_split=0.2,
-#                  callbacks=[earlyStopping])  
-# end_time = time.time()
+model.fit(x_train, y_train) # 컴파일도 포함되어 있음
 
-model.fit(x_train, y_train)
-# DL 과 ML의 흐름은 똑같다 데이터 전처리->모델 구성 ->훈련(fit에 컴파일이 포함되어있다.) ->평가,예측  
-
-# #4. 평가, 예측
-
-# ################################################################################
-# loss, acc = model.evaluate(x_test, y_test)  # loss acc 각각 다른 리스트로 출력
-#                                             # loss = loss / acc = metrics에서 나온 accuracy 값
+#4. 평가, 예측
+# loss, acc = model.evaluate(x_test, y_test)
 # print('loss : ', loss)
-# print('acc : ', acc)
+# print('accuracy : ', acc)
 
-
-# result = model.evaluate(x_test, y_test)  # loss acc 각각 다른 리스트로 출력
-
-from sklearn.metrics import accuracy_score
-y_predict = model.predict(x_test)
-
-# y_predict = np.argmax(y_predict, axis=1)
+# print(y_test)
 # print(y_predict)
 
-# y_test = np.argmax(y_test, axis=1)
-# print(y_test)
+result = model.score(x_test, y_test) # evaluate 대신 score 사용
+print('acc 결과: ', result) # 분류모델에서는 acc score // 회귀모델에서는 R2 score 자동으로 나옴
 
-acc = accuracy_score(y_test, y_predict)
-print('accuracy : ', acc)
+y_predict = model.predict(x_test)
+# y_predict = tf.argmax(y_predict, axis=1)
+# y_test = tf.argmax(y_test, axis=1)
 
-results = model.score(x_test, y_test)  #분류 모델과 회귀 모델에서 score를 쓰면 알아서 값이 나온다 
-print("결과 acc : ", results)          # 회기는 r2 / 분류는 acc로 결과가 나온다.
+acc_sc = accuracy_score(y_test, y_predict)
+print('acc스코어 : ', acc_sc)
 
-# 딥러닝과 머신러닝 차이
-# 딥러닝은 레이어를 길게 뺀거
-# 머신러닝은 간결해서 속도가 빠르다.
+# loss :  0.005208590067923069
+# accuracy :  1.0
+# tf.Tensor([2 1 2 2 1 0 0 0 1 0 0 1 1 1 0 1 0 1 2 0 0 0 2 0 2 1 0 2 0 2], shape=(30,), dtype=int64)
+# tf.Tensor([2 1 2 2 1 0 0 0 1 0 0 1 1 1 0 1 0 1 2 0 0 0 2 0 2 1 0 2 0 2], shape=(30,), dtype=int64)
+# acc스코어 :  1.0
 
-
-# 원핫 할 필요없음 모델구성에서 알아서 받아짐
-# 컴파일 없음 훈련도 x y만 하면 된다. fit에 컴파일이 아랑서 포함되어 있다 그러므로 컴파일이 없음
-# 훈련에서 튜닝하고 평가랗때 이벨류에이트없고 스코어를 사용한다.
+# 머신러닝 LinearSVC
+# 결과:  1.0
+# acc스코어 :  1.0
+# 아주 빠름, 단층레이어임
 

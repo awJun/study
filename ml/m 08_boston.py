@@ -1,5 +1,11 @@
 """
 [핵심]
+
+컬럼의 이름을 알고싶을 때 사용
+print(datasets.feature_names)
+ # ['CRIM' 'ZN' 'INDUS' 'CHAS' 'NOX' 'RM' 'AGE' 'DIS' 'RAD' 'TAX' 'PTRATIO'
+ # 'B' 'LSTAT']
+
 # 통상적으로 컴퓨터가 좋으면 딥러닝 / 안좋으면 머신러닝을 활용한다.
 
 머신러닝만 사용 할 것이므로 sklearn을 사용한다. 그러므로 tensorflow는 사용안할예정
@@ -34,63 +40,36 @@ model.score
 SVC, SCR이 만들어졌다. 이 모델은 레이어가 여러개이므로 m02의 Perceptron에서 해결못한 문제점을 해결했다.
 """
 
-from unittest import result
-from sklearn.svm import LinearSVC, LinearSVR                   
-import numpy as np
+from sklearn.datasets import load_boston
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import r2_score
+import time
 
-from sklearn.datasets import load_boston   # sklearn은 학습 예제가 많음
-
-#1. 데이터
-datasets = load_boston()   
-x = datasets.data    # 데이터가
-y = datasets.target  # y에 들어간다.
-
-print(x)
-print(y)
-
-print(x.shape, y.shape) # (506, 13) (506,)  열 13    (506, ) 506개 스칼라, 1개의 백터
-                        # intput (506, 13), output 1
-print(datasets.feature_names)
- # ['CRIM' 'ZN' 'INDUS' 'CHAS' 'NOX' 'RM' 'AGE' 'DIS' 'RAD' 'TAX' 'PTRATIO'
- # 'B' 'LSTAT']
-
-print(datasets.DESCR)
- 
-
-x_train, x_test, y_train, y_test = train_test_split(x, y,
-                                                    train_size=0.7,
-                                                    shuffle=True,
-                                                    random_state=68
-)
+from sklearn.svm import LinearSVR # 리니어 서포트 벡터 regrassor(회귀)
 
 
+# 1. 데이터
+datasets = load_boston()
+x = datasets.data
+y = datasets.target
+x_train, x_test, y_train, y_test =  train_test_split(x, y, train_size=0.8, shuffle=True, random_state=66)
 
-#2. 모델구성
-model = LinearSVR()   # LinearSVC 이건 수치  /  LinearSVR 이건 분류
 
-#3. 컴파일, 훈련
+# 2. 모델구성
+model = LinearSVR()
+
+# 3. 컴파일, 훈련
 model.fit(x_train, y_train)
 
-#4. 평가, 예측
+# 4. 평가, 예측
+y_pred = model.predict(x_test)
+score = model.score(x_test, y_test)
 
-result = model.score(x_test, y_test)
-print("결과 : ", round(result))
+print('y_pred: ', y_pred)
+print('R2 score: ', score)
 
-from sklearn.metrics import accuracy_score, r2_score
-y_predict = model.predict(x_test)
+# with 6 relu
+# loss:  10.714729309082031      
+# r2: 0.8718072307433771
 
-# acc = accuracy_score(y_test, y_predict)
-# print('accuracy : ', acc)
-
-# results = model.score(x_test, y_test)
-# print("결과 acc : ", results)   # 회기는 r2 / 분류는 acc로 결과가 나온다.
-
-
-from sklearn.metrics import r2_score
-r2 = r2_score(y_test, y_predict)   
-
-# print('loss : ', loss)
-print('r2스코어 : ', r2)
-
-
+# R2 score:  0.7830612964136615

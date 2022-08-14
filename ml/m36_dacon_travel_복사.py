@@ -120,7 +120,7 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random
 
 # 2. 모델
 xgb = XGBClassifier(tree_method='gpu_hist', predictor='gpu_predictor', gpu_id=0)
-model = make_pipeline(MinMaxScaler(), HalvingRandomSearchCV(xgb, parameters, cv=5, n_jobs=-1, verbose=2))
+model = make_pipeline(HalvingRandomSearchCV(xgb, parameters, cv=5, n_jobs=-1, verbose=2))
 
 # 3. 훈련
 start = time.time()

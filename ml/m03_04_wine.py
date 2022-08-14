@@ -18,121 +18,94 @@ Classifier가 들어가면 분류 모델로 생각하면 된다.
 
 """
 
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
-from sklearn.preprocessing import MaxAbsScaler, RobustScaler
-import numpy as np
-import pandas as pd
-from sklearn.datasets import load_iris
-from sqlalchemy import false
-from sklearn.model_selection import train_test_split
-from tensorflow.python.keras.callbacks import EarlyStopping
-from sklearn.metrics import r2_score, accuracy_score
-import matplotlib.pyplot as plt
-from matplotlib import font_manager, rc
-font_path = "C:/Windows/Fonts/gulim.TTc"
-font = font_manager.FontProperties(fname=font_path).get_name()
-rc('font', family=font)
-from sklearn.preprocessing import OneHotEncoder  # https://psystat.tistory.com/136 싸이킷런 원핫인코딩
 from sklearn.datasets import load_wine
-import tensorflow as tf
-from sklearn.svm import LinearSVC, LinearSVR
+from tensorflow.python.keras.models import Sequential
+from tensorflow.python.keras.layers import Dense
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import r2_score
 
 
-#1. 데이터
-
+# 1. 데이터
 datasets = load_wine()
 x = datasets.data
 y = datasets.target
-print(x.shape, y.shape) # (178, 13), (178,)
-print(np.unique(y, return_counts=True)) # (array([0, 1, 2]), array([59, 71, 48], dtype=int64))
+x_train, x_test, y_train, y_test =  train_test_split(x, y, train_size=0.9, shuffle=True, random_state=86)
 
-x_train, x_test, y_train, y_test = train_test_split(x,y,
-                                                    train_size=0.7,
-                                                    random_state=66
-                                                    )
 
-# # scaler = MinMaxScaler()
-# # scaler = StandardScaler()
-# # scaler = MaxAbsScaler()
-# scaler = RobustScaler()
-# scaler.fit(x_train)
-# x_train = scaler.transform(x_train)
-# x_test = scaler.transform(x_test)
-# print(np.min(x_train))  # 0.0
-# print(np.max(x_train))  # 1.0
-
-# print(np.min(x_test))  # 1.0
-# print(np.max(x_test))  # 1.0
-
-#2. 모델구성
+# 2. 모델구성
 from sklearn.svm import LinearSVC, SVC
-from sklearn.linear_model import Perceptron, LogisticRegression # LogisticRegression는 분류임
-from sklearn.neighbors import KNeighborsClassifier
+from sklearn.linear_model import Perceptron, LogisticRegression # !논리회귀(분류임)!
+from sklearn.neighbors import KNeighborsClassifier # 최근접 이웃
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier # 결정트리를 여러개 랜덤으로 뽑아서 앙상블해서 봄
 
-model_1 = LinearSVC()
-model_2 = Perceptron()
-model_3 = LogisticRegression()
-model_4 = KNeighborsClassifier()
-model_5 = DecisionTreeClassifier()
-model_6 = RandomForestClassifier()
+model = LinearSVC()
+model.fit(x_train, y_train)
+result = model.score(x_test, y_test)
+print('LinearSVC acc 결과: ', result)
+y_predict = model.predict(x_test)
+print('ypred: ', y_predict, '\n')
+
+model = SVC()
+model.fit(x_train, y_train)
+result = model.score(x_test, y_test)
+print('SVC acc 결과: ', result)
+y_predict = model.predict(x_test)
+print('ypred: ', y_predict, '\n')
+
+model = Perceptron()
+model.fit(x_train, y_train)
+result = model.score(x_test, y_test)
+print('Perceptron acc 결과: ', result)
+y_predict = model.predict(x_test)
+print('ypred: ', y_predict, '\n')
+
+model = LogisticRegression()
+model.fit(x_train, y_train)
+result = model.score(x_test, y_test)
+print('LogisticRegression acc 결과: ', result)
+y_predict = model.predict(x_test)
+print('ypred: ', y_predict, '\n')
+
+model = KNeighborsClassifier()
+model.fit(x_train, y_train)
+result = model.score(x_test, y_test)
+print('KNeighborsClassifier acc 결과: ', result)
+y_predict = model.predict(x_test)
+print('ypred: ', y_predict, '\n')
+
+model = DecisionTreeClassifier()
+model.fit(x_train, y_train)
+result = model.score(x_test, y_test)
+print('DecisionTreeClassifier acc 결과: ', result)
+y_predict = model.predict(x_test)
+print('ypred: ', y_predict, '\n')
+
+model = RandomForestClassifier()
+model.fit(x_train, y_train)
+result = model.score(x_test, y_test)
+print('RandomForestClassifier acc 결과: ', result)
+y_predict = model.predict(x_test)
+print('ypred: ', y_predict, '\n')
 
 
-#2. 컴파일, 훈련
-model_1.fit(x_train, y_train)
-model_2.fit(x_train, y_train)
-model_3.fit(x_train, y_train)
-model_4.fit(x_train, y_train)
-model_5.fit(x_train, y_train)
-model_6.fit(x_train, y_train)
+# LinearSVC acc 결과:  0.9444444444444444
+# ypred:  [1 0 0 2 0 1 1 2 1 1 1 2 0 1 2 1 2 1]
 
+# SVC acc 결과:  0.6666666666666666
+# ypred:  [1 0 0 2 0 1 2 2 1 1 1 1 0 2 1 2 0 1]
 
-#4. 평가, 예측
-from sklearn.metrics import accuracy_score
-y_predict_1 = model_1.predict(x_test)
-y_predict_2 = model_2.predict(x_test)
-y_predict_3 = model_2.predict(x_test)
-y_predict_4 = model_2.predict(x_test)
-y_predict_5 = model_2.predict(x_test)
-y_predict_6 = model_2.predict(x_test)
+# Perceptron acc 결과:  0.5555555555555556
+# ypred:  [1 0 0 0 0 1 0 1 1 1 1 1 0 0 1 1 0 1]
 
-acc_1 = accuracy_score(y_test, y_predict_1)
-acc_2 = accuracy_score(y_test, y_predict_2)
-acc_3 = accuracy_score(y_test, y_predict_3)
-acc_4 = accuracy_score(y_test, y_predict_4)
-acc_5 = accuracy_score(y_test, y_predict_5)
-acc_6 = accuracy_score(y_test, y_predict_6)
-print('LinearSVC_accuracy : ', acc_1)
-print('Perceptron_accuracy : ', acc_2)
-print('LogisticRegression_accuracy : ', acc_3)
-print('KNeighborsClassifier_accuracy : ', acc_4)
-print('DecisionTreeClassifier_accuracy : ', acc_5)
-print('RandomForestClassifier_accuracy : ', acc_6)
+# LogisticRegression acc 결과:  1.0
+# ypred:  [1 0 0 2 0 1 1 2 1 1 1 2 0 1 2 0 2 1]
 
-results_1 = model_1.score(x_test, y_test)
-results_2 = model_2.score(x_test, y_test)
-results_3 = model_2.score(x_test, y_test)
-results_4 = model_2.score(x_test, y_test)
-results_5 = model_2.score(x_test, y_test)
-results_6 = model_2.score(x_test, y_test)
-print("LinearSVC_결과 acc : ", results_1)   # 회기는 r2 / 분류는 acc로 결과가 나온다.
-print("Perceptron_결과 acc : ", results_2)  
-print("LogisticRegression_결과 acc : ", results_3)  
-print("KNeighborsClassifier_결과 acc : ", results_4)  
-print("DecisionTreeClassifier_결과 acc : ", results_5)  
-print("RandomForestClassifier_결과 acc : ", results_6)  
+# KNeighborsClassifier acc 결과:  0.7222222222222222
+# ypred:  [1 0 0 1 0 1 2 1 1 1 1 2 0 2 2 0 2 2]
 
-# LinearSVC_accuracy :  0.9074074074074074
-# Perceptron_accuracy :  0.7407407407407407
-# LogisticRegression_accuracy :  0.7407407407407407
-# KNeighborsClassifier_accuracy :  0.7407407407407407
-# DecisionTreeClassifier_accuracy :  0.7407407407407407
-# RandomForestClassifier_accuracy :  0.7407407407407407
+# DecisionTreeClassifier acc 결과:  0.9444444444444444
+# ypred:  [1 0 0 2 0 1 1 2 1 1 1 0 0 1 2 0 2 1]
 
-# LinearSVC_결과 acc :  0.9074074074074074
-# Perceptron_결과 acc :  0.7407407407407407
-# LogisticRegression_결과 acc :  0.7407407407407407
-# KNeighborsClassifier_결과 acc :  0.7407407407407407
-# DecisionTreeClassifier_결과 acc :  0.7407407407407407
-# RandomForestClassifier_결과 acc :  0.7407407407407407
+# RandomForestClassifier acc 결과:  1.0
+# ypred:  [1 0 0 2 0 1 1 2 1 1 1 2 0 1 2 0 2 1]

@@ -35,65 +35,34 @@ SVC, SCR이 만들어졌다. 이 모델은 레이어가 여러개이므로 m02�
 """
 
 ####### diabets는 회기 모델이다~~ 속지마 !!  ##########################################################
-
-#### 과제 2 
-# activation : sigmoid, relu, linear 넣고 돌리기
-# metrics 추가
-# EarlyStopping 넣고
-# 성능 비교
-# 감상문, 느낀점 2줄이상!!!
-
-from sklearn.model_selection import train_test_split
-from sklearn.svm import LinearSVC, LinearSVR
-import matplotlib.pyplot as plt
-from matplotlib import font_manager, rc
-font_path = "C:/Windows/Fonts/gulim.TTc"
-font = font_manager.FontProperties(fname=font_path).get_name()
-rc('font', family=font)
 from sklearn.datasets import load_diabetes
-import time
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import r2_score
+from sklearn.svm import LinearSVR
 
-#1. 데이터
+
+# 1. 데이터
 datasets = load_diabetes()
 x = datasets.data
 y = datasets.target
+x_train, x_test, y_train, y_test =  train_test_split(x, y, train_size=0.9, shuffle=True, random_state=86)
 
-x_train, x_test, y_train, y_test = train_test_split(x,y,
-                                                    train_size=0.8,
-                                                    random_state=72
-                                                    )
-'''
-print(x)
-print(y)
-print(x.shape, y.shape) # (506, 13) (506,)
-print(datasets.feature_names) #싸이킷런에만 있는 명령어
-print(datasets.DESCR)
-'''
 
-#2. 모델구성
+# 2. 모델구성
 model = LinearSVR()
 
-#3. 컴파일, 훈련
 
-hist = model.fit(x_train, y_train)
+# 3. 컴파일, 훈련
+model.fit(x_train, y_train )
 
+# 4. 평가, 예측
+score = model.score(x_test, y_test)
+ypred = model.predict(x_test)
 
+print('acc score: ', score)
+print('y_pred: ', ypred)
 
-end_time = time.time()
+# loss :  1672.607177734375  
+# acc :  0.5149952410421789
 
-#4. 평가, 예측
-results = model.score(x_test, y_test)
-y_predict = model.predict(x_test)
-print('acc : ' , results)
-
-# loss :  2452.336669921875
-# r2스코어 :  0.6286149246878252
-##################val전후#################
-# loss :  2211.544189453125
-# r2스코어 :  0.6650808519754101
-##################EarlyStopping전후#################
-# loss :  2170.21484375
-# r2스코어 :  0.6713398311092679
-##################activation전후#################
-# loss :  2162.0830078125
-# r2스코어 :  0.6725713563302215
+# acc score:  0.2668794571758186

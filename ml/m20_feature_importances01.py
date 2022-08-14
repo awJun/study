@@ -48,7 +48,7 @@ acc = accuracy_score(y_test, y_predict)
 print("accuracy_score : ", acc)
 
 print("==========================")
-print(model," : ", model.feature_importances_)  # feature_importances_는 트리에만 있는거임
+print(model," : ", model.feature_importances_)  
                                    # 전체 픽쳐중 성능이 안좋은 것은 빼도 되는지 확인하는 용도임 acc와 같이  0 ~ 1의 값을 보여줌
 
 
