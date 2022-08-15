@@ -116,4 +116,4 @@ print('걸린시간: ', round(end-start,2), '초')
 # model.score:  1.0
 # acc score:  1.0
 # best tuned acc:  1.0
-# 걸린시간:  24.79 초
+# 걸린시간:  24.79 초 
