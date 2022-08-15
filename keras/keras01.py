@@ -31,7 +31,7 @@ model.add(Dense(1))  # 최종 y의 값
 model.compile(loss='mse', optimizer='adam')    
 # lose: 오차값을 계산    optimizer: MSE에 최적화를 adam으로 하겠다인거 같음 ;;   
 model.fit(x, y, epochs=1000)  # ( ) 괄호 안에는 각각 다 파라미터라고 부름   
-# fit: 훈련을 시킬 것 이다 (x, y를 100번)  
+# fit: 훈련을 시킬 것 이다 (x, y를 100번)   
 # 훈련시킬 x y ㄱ밧을 달라              
 # 이 과정을 통해 w 값이 생겼다 이 과정이 lo w  
 
