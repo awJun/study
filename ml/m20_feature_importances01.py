@@ -1,6 +1,10 @@
 """
 [핵심]
+<<<<<<< HEAD
 feature_importances_를 사용해서 각각의 컬럼의 훈련 결과를 확인한다.
+=======
+feature_importances_를 사용해서 각각의 컬럼의 훈련 결과를 알려준다.
+>>>>>>> ddaee9e4f1258d5dea9588ed5486a257fe6bbfd5
 
 그 이후 x = np.delete(x, 1, axis=1)를 사용해서 원하는 컬럼을 삭제
  - x 데이터 안에 1이라는 인덱스에 위치에 있는 열을 삭제하겠다. 라는 의미
