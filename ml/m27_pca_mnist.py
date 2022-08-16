@@ -31,4 +31,3 @@ a.append(np.argmax(cumsum >= 1.0)+1) # arg시리즈에서는 리스트 내 값�
 
 print(a)
 
-# [154, 331, 486, 713]

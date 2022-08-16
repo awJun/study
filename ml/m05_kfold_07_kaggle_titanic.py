@@ -8,7 +8,7 @@ cross_val_score()을 사용하기 위에서 괄호 안의 옵션인 KFold를
 
 n_splits = 5  
 kfold = KFold(n_splits=n_splits, shuffle=True, random_state=66)
-
+ 
 이런 형태로 작성을 한 후에
 
 scores = cross_val_score(model, x, y, cv=kfold)

@@ -16,7 +16,7 @@ train_set = pd.read_csv(path+'train.csv')
 test_set = pd.read_csv(path+'test.csv')
 # print(test_set)
 # print(test_set.shape) # (6493, 8)
-
+ 
 # datetime 열 내용을 각각 년월일시간날짜로 분리시켜 새 열들로 생성 후 원래 있던 datetime 열을 통째로 drop
 train_set["hour"] = [t.hour for t in pd.DatetimeIndex(train_set.datetime)]
 train_set["day"] = [t.dayofweek for t in pd.DatetimeIndex(train_set.datetime)]

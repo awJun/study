@@ -1,5 +1,10 @@
 '''
 [핵심]
+xgb = XGBRegressor(random_state=1234)
+model = GridSearchCV(xgb, parameters, cv=kfold, n_jobs=-1)
+
+
+ - 파라미터 종류
 # 'n_estimators' : [100, 200, 300, 400, 500, 1000]                # 디폴트 100  /  0 ~ inf  /  정수
 # learning_rate' : [0.1, 0.2, 0.3, 0.5, 1, 0.01, 0.001]           # 디폴트 0.3 / 0 ~1
 # 'max_depth' : [None, 2, 3, 4, 5, 6, 7, 8, 9, 10]                # 디폴트 6  / 0 ~ inf  /  정수
@@ -11,6 +16,7 @@
 # 'colsample_bynode' : [0, 0.1, 0.2, 0.3, 0.5, 0.7, 1]            # 디폴트 1 / 0 ~1 
 # 'reg_alpha' : [0, 0.1, 0.01, 0.001, 1, 2, 10]                   # 디폻트 0 / 0~inf / L1 절대값 가중치 규제 / reg_alpha가 아닌 alpha만 써도 사용가능
 # 'reg_lamdba' : [0, 0.1, 0.01, 0.001, 1, 2, 10]                  # 디폴트 1 / 0~inf / L1 제곱 가중치 규제 / reg_lamdba가 아닌 amdba만 써도 사용가능  
+
 
 '''
 

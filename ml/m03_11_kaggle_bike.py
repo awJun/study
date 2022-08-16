@@ -12,7 +12,7 @@ neighbors, tree, ensemble 모델 정리
 from sklearn.neighbors   # 이웃하는 ..? 검색하자
 from sklearn.tree        # 더 좋은 것을 아래로 뿌리를 내린다(가지치기) 결정나무
 from sklearn.ensemble    # 같이 넣었을 때 더 좋은 것을 캐치
-
+ 
 [중요]
 LogisticRegression
 - 이것은 Regression들어가지만 분류 모델이다.

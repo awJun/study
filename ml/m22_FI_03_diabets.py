@@ -1,3 +1,23 @@
+# 실습
+# 피처임포턴스가 전체 중요도에서 하위 20~25% 칼럼들을 제거하여
+# 데이터셋 재구성 후
+# 각 모델별로 돌려서 결과 도출
+
+# 기존 모델결과와 비교
+
+# 결과비교
+# 1. DecisionTree
+# 기존 acc: 
+# 칼럼삭제 후 acc:
+"""
+[핵심]
+if str(model).startswith('XGB'):     # startswith('XGB') : XGB로 이름이 시작하면 ! 이라는 조건을 걸게해줌
+
+featurelist.append(np.argsort(model.feature_importances_)[a])   # argsort : 리스트 정렬
+
+print(str(model).strip('()'), '의 드랍후 스코어: ', score)   # strip('()') 공백과 ()를 제거
+"""
+
 import numpy as np
 from sklearn.datasets import load_diabetes
 from sklearn.model_selection import train_test_split

@@ -9,6 +9,14 @@
 # 1. DecisionTree
 # 기존 acc: 
 # 칼럼삭제 후 acc:
+"""
+[핵심]
+if str(model).startswith('XGB'):     # startswith('XGB') : XGB로 이름이 시작하면 ! 이라는 조건을 걸게해줌
+
+featurelist.append(np.argsort(model.feature_importances_)[a])   # argsort : 리스트 정렬
+
+print(str(model).strip('()'), '의 드랍후 스코어: ', score)   # strip('()') 공백과 ()를 제거
+"""
 
 import numpy as np
 from sklearn.datasets import load_iris
@@ -36,14 +44,14 @@ models = [DecisionTreeClassifier(), RandomForestClassifier(), GradientBoostingCl
 for model in models:
     model.fit(x_train, y_train)
     score = model.score(x_test, y_test)
-    if str(model).startswith('XGB'):
+    if str(model).startswith('XGB'):     # startswith('XGB') : XGB로 이름이 시작하면 ! 이라는 조건을 걸게해줌
         print('XGB 의 스코어:        ', score)
     else:
         print(str(model).strip('()'), '의 스코어:        ', score)
         
     featurelist = []
     for a in range(int(allfeature)):
-        featurelist.append(np.argsort(model.feature_importances_)[a])
+        featurelist.append(np.argsort(model.feature_importances_)[a])   # argsort : 리스트 정렬
         
     x_bf = np.delete(x, featurelist, axis=1)
     x_train2, x_test2, y_train2, y_test2 = train_test_split(x_bf, y, shuffle=True, train_size=0.8, random_state=1234)
@@ -52,7 +60,7 @@ for model in models:
     if str(model).startswith('XGB'):
         print('XGB 의 드랍후 스코어: ', score)
     else:
-        print(str(model).strip('()'), '의 드랍후 스코어: ', score)
+        print(str(model).strip('()'), '의 드랍후 스코어: ', score)   # strip('()') 공백과 ()를 제거
 
 # 자를 갯수:  1
 # DecisionTreeClassifier 의 스코어:         1.0

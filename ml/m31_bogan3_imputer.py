@@ -1,3 +1,14 @@
+"""
+[핵심]
+imputer = IterativeImputer()   # 결측치 처리를 해준다.  디폴트 mean
+# imputer = SimpleImputer(strategy='mean')            # 평균값으로 채우겠다.  
+# imputer = SimpleImputer(strategy='median')          # 중위값으로 채우겠다.
+# imputer = SimpleImputer(strategy='most_frequent')   # 가장 빈번하게 쓰는 놈을 채우겠다.
+# imputer = SimpleImputer(strategy='constant', fill_value=77777)   # 상속하겠다. fill_value의 값으로 / 디폴트는 0으로 들어간다.
+
+
+"""
+
 import numpy as np
 import pandas as pd
 

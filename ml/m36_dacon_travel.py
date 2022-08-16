@@ -115,7 +115,7 @@ parameters = {
             'reg_lambda':[0,0.1,0.01,0.001,1,2,10],
               } 
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random_state=1234, shuffle=True)
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random_state=90, shuffle=True)
 # print(np.unique(y_train, return_counts=True))
 
 # 2. 모델

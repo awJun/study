@@ -17,7 +17,7 @@ warnings.filterwarnings('ignore') # warnig 출력 안함
 path = 'D:\study_data\_data\kaggle_titanic/'
 train_set = pd.read_csv(path+'train.csv')
 test_set = pd.read_csv(path+'test.csv')
-
+ 
 print(train_set.describe())
 print(train_set.info())
 print(train_set.isnull())

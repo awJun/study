@@ -14,7 +14,7 @@ x = datasets['data']
 y = datasets['target']
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8,shuffle=True, random_state=9)
-         
+          
 from sklearn.preprocessing import MinMaxScaler
 scaler= MinMaxScaler()
 scaler.fit(x_train)

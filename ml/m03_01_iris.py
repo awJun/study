@@ -21,7 +21,7 @@ LogisticRegression
 
 Classifier가 들어가면 분류 모델로 생각하면 된다.
 
-"""
+""" 
 
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split

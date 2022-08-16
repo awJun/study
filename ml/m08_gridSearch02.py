@@ -22,7 +22,7 @@ print("최적의 파라미터 : ", model.best_params_)
 print("best_score_ : ", model.best_score_)
 # best_score_ :  0.975
 ###################################################################
-
+ 
 
 [ GridSearchCV의 문제점 ]
  - 시간이 오래걸린다.

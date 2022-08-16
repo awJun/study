@@ -16,7 +16,7 @@ LogisticRegression
 
 Classifier가 들어가면 분류 모델로 생각하면 된다.
 
-"""
+""" 
 
 import numpy as np
 from sklearn import metrics

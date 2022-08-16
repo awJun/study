@@ -24,7 +24,7 @@ from tensorflow.python.keras.layers import Dense
 x_data = [[0,0],[0,1],[1,0],[1,1]]
 y_data = [0,1,1,0] # xor: 같으면 0 다르면 1
 
-# 2. 모델
+# 2. 모델 
 # model = LinearSVC()
 # model = Perceptron()
 # model = SVC()

@@ -23,7 +23,7 @@ from sklearn.metrics import accuracy_score
 from tensorflow.python.keras.models import Sequential
 from tensorflow.python.keras.layers import Dense
 
-# 1. 데이터
+# 1. 데이터 
 x_data = [[0,0],[0,1],[1,0],[1,1]]
 y_data = [0,1,1,0] # xor: 같으면 0 다르면 1
 

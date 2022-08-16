@@ -17,7 +17,7 @@ train_set = pd.read_csv(path+'train.csv',index_col=0) # index_col = n : n번째 
 test_set = pd.read_csv(path+'test.csv', index_col=0)
 # print(test_set)
 # print(test_set.shape) # (715, 9)
-
+ 
 ### 결측치 처리(일단 제거로 처리) ###
 print(train_set.info())
 print(train_set.isnull().sum()) # 결측치 전부 더함

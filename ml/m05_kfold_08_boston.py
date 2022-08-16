@@ -8,7 +8,7 @@ n_splits = 5
 kfold = KFold(n_splits=n_splits, shuffle=True, random_state=66)
 
 이런 형태로 작성을 한 후에
-
+ 
 scores = cross_val_score(model, x, y, cv=kfold)
 print("ACC : ", scores, '\n cross_val_score : ', round(np.mean(scores), 4)) 
                                                 # round를 사용해서 소수 4번째까지 출력해라 라고함

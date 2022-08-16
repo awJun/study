@@ -10,7 +10,7 @@ print("모델의 갯수 : ", len(Allalgorithm))   # 모델의 갯수 :  41
 
  # 모델의 갯수 = 해당 데이터셋에서 사용할 수 있는 모델의 갯수를 뜻한다.
 
-
+ 
 버전이 달라서 안돌아가는 모델들의 경우를 생각해서 예외처리 및 출력작업
 for (name, algorithm) in Allalgorithm:    # Allalgorithm는 딕셔너리이므로 키와 벨류로 받아서 반복시킴
     try:   # 예외처리

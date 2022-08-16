@@ -5,8 +5,8 @@ from sklearn.utils import all_estimators
 from sklearn.metrics import accuracy_score
 import warnings
 warnings.filterwarnings("ignore")
-
-#1. 데이터
+ 
+#1. 데이터 
 datasets = load_iris()
 
 x = datasets['data']

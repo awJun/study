@@ -3,11 +3,11 @@
 차원축소 = 열 압축!
 PCA는 차원을 압축시키는데 이때 열을 압축시킨다.
 
-pca = PCA(n_components=13)  # 2개로 압축하겠다. 
+pca = PCA(n_components=13)  # 13개로 압축하겠다. 
 x = pca.fit_transform(x)
 print(x.shape)  
 
-PCA는 대표적인 비지도 학습중 하나임 (비지도학습 y가 없다?)
+PCA는 대표적인 비지도 학습중 하나임 (비지도학습 y가 없다) 즉! 정답없이 모델 스스로 훈련을 하는 것!
 
 [ PCA 사용하면? ]
 성능이 더 좋아지거나 비슷하거나 살짝 더 안좋아진다.
@@ -27,6 +27,7 @@ cumsum = np.cumsum(pca_EVR)   # 누적 합    # 그래프를 보면 오름차순
 print(cumsum)                 # 주어진 축을 따라 요소의 누적 합계를 반환합니다
                               # 누적이란 여러 개의 데이터를 합산하여 하나로 만든 것을 말한다
 
+pca.explained_variance_ratio_ 로 pca에서 압축한 컬럼의 손실안된 데이터 정도가 어느정도인지 체크한 것임
 
 """
 
@@ -43,10 +44,10 @@ x = datasets.data
 y = datasets.target
 print(x.shape, y.shape) # (569, 30) (569,)
 
-pca = PCA(n_components=5)
+pca = PCA(n_components=5)   # components : 구성요소
 x = pca.fit_transform(x)
 
-pca_EVR = pca.explained_variance_ratio_
+pca_EVR = pca.explained_variance_ratio_   # 설명된 분산 비율
 print(pca_EVR) # 새로 생성된 칼럼들의 importances
 print(sum(pca_EVR)) # 0.9999999203185791
 

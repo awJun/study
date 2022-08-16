@@ -22,7 +22,7 @@ non_encording_columns = ['MSSubClass','LotFrontage','LotArea','OverallQual','Ove
                          'WoodDeckSF','OpenPorchSF','EnclosedPorch','3SsnPorch','ScreenPorch','PoolArea',
                          'MiscVal','MoSold','YrSold']
 
-
+ 
 
 #1. 데이터
 path = 'D:\study_data\_data\kaggle_house/'

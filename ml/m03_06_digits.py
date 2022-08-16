@@ -7,7 +7,7 @@ model_3 = LogisticRegression()
 model_4 = KNeighborsClassifier()
 model_5 = DecisionTreeClassifier()
 model_6 = RandomForestClassifier()
-
+ 
 [중요]
 LogisticRegression
 - 이것은 Regression들어가지만 분류 모델이다.

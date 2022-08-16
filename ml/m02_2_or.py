@@ -18,7 +18,7 @@ y_data = [0, 1, 1, 1]
 model = Perceptron()
 
 #3. 훈련
-model.fit(x_data, y_data)
+model.fit(x_data, y_data) 
 
 #4. 평가
 y_predict = model.predict(x_data)

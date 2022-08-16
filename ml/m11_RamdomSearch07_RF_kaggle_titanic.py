@@ -23,7 +23,7 @@ print("best_score_ : ", model.best_score_)
 # best_score_ :  0.975
 ###################################################################
 
-
+ 
 [ GridSearchCV의 문제점 ]
  - 시간이 오래걸린다.
    이것으로 인해서 m09에서 사용할 RamdomSearch가 나오게 됐다.

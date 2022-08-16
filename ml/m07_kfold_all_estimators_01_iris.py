@@ -13,7 +13,7 @@ from sklearn.utils import all_estimators
 import warnings
 warnings.filterwarnings('ignore') # warnig 출력 안함
 from sklearn.model_selection import train_test_split, KFold, cross_val_score, cross_val_predict
-
+ 
 # 1. 데이터
 datasets = load_iris()
 print(datasets.DESCR)

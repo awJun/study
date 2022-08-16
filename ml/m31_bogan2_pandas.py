@@ -1,3 +1,9 @@
+"""
+[핵심]
+아래 결측치 처리 방법들 확인
+
+"""
+
 import numpy as np
 import pandas as pd
 

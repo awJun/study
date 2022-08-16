@@ -17,7 +17,7 @@ LogisticRegression
 Classifier가 들어가면 분류 모델로 생각하면 된다.
 
 """
-
+ 
 from sklearn.datasets import load_wine
 from tensorflow.python.keras.models import Sequential
 from tensorflow.python.keras.layers import Dense

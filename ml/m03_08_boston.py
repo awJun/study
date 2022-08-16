@@ -7,7 +7,7 @@ model_3 = LinearRegression()
 model_4 = KNeighborsRegressor()
 model_5 = DecisionTreeRegressor()
 model_6 = RandomForestRegressor()
-
+ 
 neighbors, tree, ensemble 모델 정리
 from sklearn.neighbors   # 이웃하는 ..? 검색하자
 from sklearn.tree        # 더 좋은 것을 아래로 뿌리를 내린다(가지치기) 결정나무

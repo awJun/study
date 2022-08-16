@@ -3,11 +3,11 @@
 차원축소 = 열 압축!
 PCA는 차원을 압축시키는데 이때 열을 압축시킨다.
 
-pca = PCA(n_components=13)  # 2개로 압축하겠다. 
+pca = PCA(n_components=13)  # 13개로 압축하겠다. 
 x = pca.fit_transform(x)
 print(x.shape)  
 
-PCA는 대표적인 비지도 학습중 하나임 (비지도학습 y가 없다?)
+PCA는 대표적인 비지도 학습중 하나임 (비지도학습 y가 없다) 즉! 정답없이 모델 스스로 훈련을 하는 것!
 
 [ PCA 사용하면? ]
 성능이 더 좋아지거나 비슷하거나 살짝 더 안좋아진다.
@@ -29,6 +29,8 @@ import warnings
 warnings.filterwarnings(action='ignore')
 from sklearn.ensemble import RandomForestRegressor
 from xgboost import XGBRegressor
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import MinMaxScaler
 
 # 1. 데이터
 datasets = load_breast_cancer()
@@ -40,7 +42,7 @@ for i in range(x.shape[1]):
     pca = PCA(n_components=i+1)
     x2 = pca.fit_transform(x)
     x_train, x_test, y_train, y_test = train_test_split(x2, y, train_size=0.8, random_state=123, shuffle=True)
-    model = RandomForestRegressor()
+    model = make_pipeline(MinMaxScaler(), RandomForestRegressor())
     model.fit(x_train, y_train)
     results = model.score(x_test, y_test)
     print(i+1, '의 결과: ', results)

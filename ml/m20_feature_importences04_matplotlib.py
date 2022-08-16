@@ -1,10 +1,30 @@
 """
 [핵심]
-feature_importances_를 사용해서 성능이 안좋은 컬럼을 확인하고 그 컬럼을 제거했을 때 성능이 어떻게
-변하는지 확인하는 것이 목표이다.
+feature_importances_를 사용해서 각각의 컬럼의 훈련 결과를 확인한다.
+
+그 이후 x = np.delete(x, 1, axis=1)를 사용해서 원하는 컬럼을 삭제
+ - x 데이터 안에 1이라는 인덱스에 위치에 있는 열을 삭제하겠다. 라는 의미
+
+
+
+[ 데이터 안에 컬럼 확인 ]
+datasets.feature_names 또는 datasets['feature_names']를 사용해서 컬럼을 확인한다.
+
+# print(datasets.feature_names) 
+# ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+# print(datasets['feature_names'])
+# ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+
+
+[ 데이터 안에 컬럼 삭제 ]
+x = np.delete(x, 1, axis=1)    # x 데이터안에 인덱스 1번의 위치한 열을 삭제하겠다 라는 뜻 
+print(x.shape)      # 컬럼 삭제 후 shape를 찍어서 삭제가 되었는지 확인하는 과정
+
+
+[ 성능이 안좋은 컬럼을 삭제하는 이유 ]
+성능이 좋아질수도 있고 안좋아 질수도 있어서 튜닝 항목중 하나임
 
 """
-
 import numpy as np
 from sklearn.datasets import load_diabetes
 

@@ -8,7 +8,7 @@ model_4 = KNeighborsClassifier()
 model_5 = DecisionTreeClassifier()
 model_6 = RandomForestClassifier()
 
-[중요]
+[중요] 
 LogisticRegression
 - 이것은 Regression들어가지만 분류 모델이다.
 - LinearRegression 이친구가 회기 모델이다.
@@ -16,7 +16,7 @@ LogisticRegression
 
 Classifier가 들어가면 분류 모델로 생각하면 된다.
 
-"""
+""" 
 
 from tensorflow.python.keras.models import Sequential
 from tensorflow.python.keras.layers import Dense
