@@ -5,6 +5,12 @@ GridSearchCV는 파라미터를 추적하기 때문이다.
 데이터마다 사용할 수 있는 파라미터가 다르므로 해당 모델에서 사용가능한 파라미터의 정보는
 구글링해서 따로 알아내서 사용해야한다.
 
+[GridSearchCV 모듈]
+GridSearchCV는 머신러닝에서 모델의 성능향상을 위해 쓰이는 기법중 하나
+사용자가 직접 모델의 하이퍼 파라미터의 값을 리스트로 입력하면 값에 대한 경우의 수마다
+예측 성능을 측정 평가하여 비교하면서 최적의 하이퍼 파라미터 값을 찾는 과정을 진행합니다.
+
+
 [ GridSearchCV 사용법 ]
 model = GridSearchCV(SVC(), parameters, cv=kfold, verbose=1,                # 42(parameters) * 5(kfold) = 210
                      refit=True, n_jobs=1)  

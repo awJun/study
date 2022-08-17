@@ -1,6 +1,11 @@
 """
 [핵심]
 컬럼 여러개의 대상으로 이상치 값 위치 확인
+
+
+outliers_loc_1 = outliers(aaa[:,0])    # 전체 컬럼중 0번째 위치[:,0
+# outliers 위에서 이상치가 빠지만 형태가 바뀌는데 그 형태를 유지하고자
+  난값으로 채운다 그걸 채워주는 역할           
 """
 
 import numpy as np
@@ -26,8 +31,8 @@ def outliers(data_out):
     return np.where((data_out > upper_bound)|   # np.where :  np 조건문 같음
                     (data_out < lower_bound))
     
-outliers_loc_1 = outliers(aaa[:,0])   # 전체 컬럼중 0번째 위치[:,0]
-outliers_loc_2 = outliers(aaa[:,1])
+outliers_loc_1 = outliers(aaa[:,0])   #  outliers 위에서 이상치가 빠지만 형태가 바뀌는데 그 형태를 유지하고자 난값으로 채운다 그걸 채워주는 역할           전체 컬럼중 0번째 위치[:,0]
+outliers_loc_2 = outliers(aaa[:,1])   
 print("이상치의 위치 : ", outliers_loc_1)   # 이상치 : 이상한 값의 위치
 print("이상치의 위치 : ", outliers_loc_2)   # 이상치 : 이상한 값의 위치
 

@@ -1,6 +1,9 @@
 """
 [핵심]
 컬럼 하나의 대상으로 이상치 값 위치 확인
+
+
+
 """
 
 # 그림 참고 https://ai-youngjun.tistory.com/65

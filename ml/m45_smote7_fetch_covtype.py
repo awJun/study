@@ -62,29 +62,14 @@ print(pd.Series(y_train).value_counts())    # 증폭하면 훈련할 때 시간�
 # 6    226613
 # 5    226613
 # 4    226613
+# print("fit_resample 걸린시간 : "end)  29.285269498825073
 
-print(end)
-
-# import pickle
-# path = 'd:/study_data/_save/_xg/m45_smote7/'
-# pickle.dump(x_train, open(path + 'x_train_save.dat', 'wb'))      # dump로 저장함
-# pickle.dump(y_train, open(path + 'y_train_save.dat', 'wb'))      # dump로 저장함
-# pickle.dump(x_test, open(path + 'x_test_save.dat', 'wb'))      # dump로 저장함
-# pickle.dump(y_test, open(path + 'y_test_save.dat', 'wb'))      # dump로 저장함
-
+import pickle
+path = 'd:/study_data/_save/_xg/m45_smote7/'
+pickle.dump(x_train, open(path + 'x_train_save.dat', 'wb'))      # dump로 저장함
+pickle.dump(y_train, open(path + 'y_train_save.dat', 'wb'))      # dump로 저장함
+pickle.dump(x_test, open(path + 'x_test_save.dat', 'wb'))      # dump로 저장함
+pickle.dump(y_test, open(path + 'y_test_save.dat', 'wb'))      # dump로 저장함
 
 
-# #2. 모델  /  #3. 훈련
-# model = RandomForestClassifier()
-# model.fit(x_train, y_train)
 
-# #4. 평가, 예측
-# y_predict = model.predict(x_test)
-
-# score = model.score(x_test, y_test)
-# print("model.score : ", score)
-
-# from sklearn.metrics import accuracy_score, f1_score
-# print('acc_score : ', accuracy_score(y_test, y_predict))
-# print("f1_score(macro) : ", f1_score(y_test, y_predict, average='macro'))
-# # print("f1_score(micro) : ", f1_score(y_test, y_predict, average='micro'))

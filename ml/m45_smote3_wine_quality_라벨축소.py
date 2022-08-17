@@ -46,107 +46,109 @@ datasets2 = datasets.values
 #---------------------------------
 # x = datasets.drop(['quality'], axis=1)
 # y = datasets['quality']
-x = datasets2[:, :11]   # 11째 까지
-y = datasets2[:, 11]    # 11 위치에 잇는 거
+x = datasets2[:, :11]   # 컬럼 0부터 11째 까지
+y = datasets2[:, 11]    # 컬럼 11 위치에 잇는 거
 
-x_new = x[:-25]
-y_new = y[:-25]
-# print(pd.Series(y_new).value_counts())
-# 6.0    2184
-# 5.0    1451
-# 7.0     876
-# 8.0     175
-# 4.0     162
-# 3.0      20
-# 9.0       5
+print(pd.Series(y).value_counts())
 
-
-# print(x.shape, y.shape)  # (4898, 11) (4898,)
-
-# print(np.unique(y, return_counts=True))
-# (array([3., 4., 5., 6., 7., 8., 9.]), array([  20,  163, 1457, 2198,  880,  175,    5], dtype=int64))
-# 분류에서는 다중이든 이진이든 확인할것
+# x_new = x[:-25]    # 25
+# y_new = y[:-25]
+# # print(pd.Series(y_new).value_counts())
+# # 6.0    2184
+# # 5.0    1451
+# # 7.0     876
+# # 8.0     175
+# # 4.0     162
+# # 3.0      20
+# # 9.0       5
 
 
-newlist = []
-for i in y:  # y를 다 넣음   y 범위 3 ~ 9
-    if i <=5:
-        newlist += [0]    # 
-    elif i==6:
-        newlist += [1]    # 
-    else:
-        newlist += [2]    # 
+# # print(x.shape, y.shape)  # (4898, 11) (4898,)
+
+# # print(np.unique(y, return_counts=True))
+# # (array([3., 4., 5., 6., 7., 8., 9.]), array([  20,  163, 1457, 2198,  880,  175,    5], dtype=int64))
+# # 분류에서는 다중이든 이진이든 확인할것
+
+
+# newlist = []
+# for i in y:  # y를 다 넣음   y 범위 3 ~ 9
+#     if i <=5:
+#         newlist += [0]    # 
+#     elif i==6:
+#         newlist += [1]    # 
+#     else:
+#         newlist += [2]    # 
         
-print(np.unique(newlist, return_counts=True))    # (array([0, 1, 2]), array([1640, 2198, 1060], dtype=int64))
+# print(np.unique(newlist, return_counts=True))    # (array([0, 1, 2]), array([1640, 2198, 1060], dtype=int64))
 
 
 
 
 
-print(datasets["quality"].value_counts())
+# print(datasets["quality"].value_counts())
 
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
+# from sklearn.model_selection import train_test_split
+# from sklearn.preprocessing import StandardScaler
 
-x_train, x_test, y_train, y_test = train_test_split(x, y,
-                                                    train_size=0.8,
-                                                    shuffle=True,
-                                                    random_state=123,
-                                                    stratify=y
-                                                    )
+# x_train, x_test, y_train, y_test = train_test_split(x, y,
+#                                                     train_size=0.8,
+#                                                     shuffle=True,
+#                                                     random_state=123,
+#                                                     stratify=y
+#                                                     )
 
-# print(pd.Series(y_train).value_counts())
-# 6.0    1758
-# 5.0    1166
-# 7.0     704
-# 8.0     140
-# 4.0     130
-# 3.0      16
-# 9.0       4
+# # print(pd.Series(y_train).value_counts())
+# # 6.0    1758
+# # 5.0    1166
+# # 7.0     704
+# # 8.0     140
+# # 4.0     130
+# # 3.0      16
+# # 9.0       4
 
-from imblearn.over_sampling import SMOTE 
-smote = SMOTE(random_state=123, k_neighbors=3)     # SMOTE는 증폭!  /  훈련 데이터만 증폭할 수 있다.
-x_train, y_train = smote.fit_resample(x_train, y_train)
+# from imblearn.over_sampling import SMOTE 
+# smote = SMOTE(random_state=123, k_neighbors=3)     # SMOTE는 증폭!  /  훈련 데이터만 증폭할 수 있다.
+# x_train, y_train = smote.fit_resample(x_train, y_train)
 
-# print(pd.Series(y_train).value_counts()) 
-# 4.0    1758
-# 5.0    1758
-# 6.0    1758
-# 7.0    1758
-# 8.0    1758
-# 3.0    1758
-# 9.0    1758
+# # print(pd.Series(y_train).value_counts()) 
+# # 4.0    1758
+# # 5.0    1758
+# # 6.0    1758
+# # 7.0    1758
+# # 8.0    1758
+# # 3.0    1758
+# # 9.0    1758
 
-from sklearn.ensemble import RandomForestClassifier
-model = RandomForestClassifier()
+# from sklearn.ensemble import RandomForestClassifier
+# model = RandomForestClassifier()
 
-#3. 훈련
-model.fit(x_train, y_train)
-
-
-
-#4. 평가, 예측
-y_predict = model.predict(x_test)
-
-score = model.score(x_test, y_test)
-print("model.score : ", score)
-
-from sklearn.metrics import accuracy_score, f1_score
-print('acc_score : ', accuracy_score(y_test, y_predict))
-print("f1_score(macro) : ", f1_score(y_test, y_predict, average='macro'))
-# print("f1_score(micro) : ", f1_score(y_test, y_predict, average='micro'))
+# #3. 훈련
+# model.fit(x_train, y_train)
 
 
-##[ 축소전 ]##############################
-# model.score :  0.6928571428571428
-# acc_score :  0.6928571428571428
-# f1_score(macro) :  0.39742311190946145
+
+# #4. 평가, 예측
+# y_predict = model.predict(x_test)
+
+# score = model.score(x_test, y_test)
+# print("model.score : ", score)
+
+# from sklearn.metrics import accuracy_score, f1_score
+# print('acc_score : ', accuracy_score(y_test, y_predict))
+# print("f1_score(macro) : ", f1_score(y_test, y_predict, average='macro'))
+# # print("f1_score(micro) : ", f1_score(y_test, y_predict, average='micro'))
 
 
-##[ 축소후 ]##############################
-# model.score :  0.689795918367347
-# acc_score :  0.689795918367347
-# f1_score(macro) :  0.4352315078124421
+# ##[ 축소전 ]##############################
+# # model.score :  0.6928571428571428
+# # acc_score :  0.6928571428571428
+# # f1_score(macro) :  0.39742311190946145
+
+
+# ##[ 축소후 ]##############################
+# # model.score :  0.689795918367347
+# # acc_score :  0.689795918367347
+# # f1_score(macro) :  0.4352315078124421
 
 
 

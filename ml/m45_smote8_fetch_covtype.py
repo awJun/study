@@ -34,3 +34,5 @@ print("f1_score(macro) : ", f1_score(y_test, y_predict, average='macro'))
 # model.score :  0.960319440978288
 # acc_score :  0.960319440978288
 # f1_score(macro) :  0.9400253213139662
+
+# print("fit_resample 걸린시간 : "end)  29.285269498825073
