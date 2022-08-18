@@ -33,7 +33,7 @@ model.compile(loss='mse', optimizer='adam')
 model.fit(x, y, epochs=1000)  # ( ) 괄호 안에는 각각 다 파라미터라고 부름   
 # fit: 훈련을 시킬 것 이다 (x, y를 100번)             
 # 훈련시킬 x y ㄱ밧을 달라                             
-# 이 과정을 통해 w 값이 생겼다 이 과정이 lo w  
+# 이 과정을 통해 w 값이 생겼다 이 과정이 lo w   
 
 # model에 가중된 w값이 들어있다.
 
