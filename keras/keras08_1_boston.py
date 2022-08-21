@@ -99,46 +99,46 @@ print(datasets.feature_names)
 print(datasets.DESCR)
  
  
-# [실습] 아래를 완성할 것
-# 1. train 0.7
-# 2. R2 0.8 dltkd
+# # [실습] 아래를 완성할 것
+# # 1. train 0.7
+# # 2. R2 0.8 dltkd
 
 
-x_train, x_test, y_train, y_test = train_test_split(x, y,
-                                                    train_size=0.7,
-                                                    shuffle=True,
-                                                    random_state=12345678
-                                                    )
+# x_train, x_test, y_train, y_test = train_test_split(x, y,
+#                                                     train_size=0.7,
+#                                                     shuffle=True,
+#                                                     random_state=12345678
+#                                                     )
 
 
 
-#2. 모델구성
-model = Sequential()
-model.add(Dense(300, input_dim=13))
-model.add(Dense(240))
-model.add(Dense(100))
-model.add(Dense(100))
-model.add(Dense(220))
-model.add(Dense(220))
-model.add(Dense(1))
+# #2. 모델구성
+# model = Sequential()
+# model.add(Dense(300, input_dim=13))
+# model.add(Dense(240))
+# model.add(Dense(100))
+# model.add(Dense(100))
+# model.add(Dense(220))
+# model.add(Dense(220))
+# model.add(Dense(1))
 
-#3. 컴파일. 훈련
-model.compile(loss='mae', optimizer='adam')
-model.fit(x_train, y_train, epochs=3000, batch_size=1)
+# #3. 컴파일. 훈련
+# model.compile(loss='mae', optimizer='adam')
+# model.fit(x_train, y_train, epochs=3000, batch_size=1)
 
-#4. 평가, 예측
-loss = model.evaluate(x_test, y_test)
+# #4. 평가, 예측
+# loss = model.evaluate(x_test, y_test)
 
-y_predict = model.predict(x_test)
+# y_predict = model.predict(x_test)
 
-from sklearn.metrics import r2_score
-r2 = r2_score(y_test, y_predict)   
+# from sklearn.metrics import r2_score
+# r2 = r2_score(y_test, y_predict)   
 
-print('loss : ', loss)
-print('r2스코어 : ', r2)
+# print('loss : ', loss)
+# print('r2스코어 : ', r2)
 
-# loss :  3.3255813121795654
-# r2스코어 :  0.711256904523248
+# # loss :  3.3255813121795654
+# # r2스코어 :  0.711256904523248
 
 
 
