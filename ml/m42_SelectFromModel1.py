@@ -51,7 +51,7 @@ print(model.feature_importances_)
 thresholds = model.feature_importances_
 print('-----------------------------------------------')
 for thresh in thresholds:
-    selection = SelectFromModel(model, threshold=thresh, prefit=True)
+    selection = SelectFromModel(model, threshold=thresh, prefit=True)   # prefit=True 
     select_x_train = selection.transform(x_train)
     select_x_test = selection.transform(x_test)
     print(select_x_train.shape, select_x_train.shape)

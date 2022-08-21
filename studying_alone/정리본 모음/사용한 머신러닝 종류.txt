@@ -1,0 +1,37 @@
+from sklearn.linear_model import Perceptron
+
+분류
+from sklearn.svm import LinearSVC, SVC
+from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+
+from sklearn.ensemble import BaggingClassifier
+from sklearn.ensemble import VotingClassifier
+==삼대장=====================================================
+from xgboost import XGBClassifier         # pip install xgboost
+from lightgbm import LGBMClassifier       # pip install lightgbm
+from catboost import CatBoostClassifier   # pip install catboost
+==============================================================
+
+회귀
+from sklearn.svm import LinearSVR, SVR
+from sklearn.linear_model import LinearRegression
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import RandomForestRegressor
+
+from sklearn.ensemble import BaggingRegressor
+from sklearn.ensemble import VotingRegressor
+==삼대장=====================================================
+from xgboost import XGBRegressor         # pip install xgboost
+from lightgbm import LGBMRegressor       # pip install lightgbm
+from catboost import CatBoostRegressor   # pip install catboost
+==============================================================
+
+
+모든 모델은 여기 부분에서 괄호안에 verbose=0을 넣으면 verbose 출력이 안된다. 종종 쓸 일 있음
+xg = XGBClassifier(verbose=0)
+lg = LGBMClassifier()
+cat = CatBoostClassifier()   

@@ -37,7 +37,7 @@ x_train, x_test, y_train, y_test =  train_test_split(x, y, train_size=0.9, shuff
 
 
 # 2. 모델구성
-from sklearn.svm import LinearSVR, SVR
+from sklearn.svm import LinearSVR, SVR, LinearSVC, SVC
 from sklearn.linear_model import Perceptron
 from sklearn.linear_model import LogisticRegression, LinearRegression
 from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor

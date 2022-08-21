@@ -1,0 +1,29 @@
+import pandas as pd
+import glob
+
+def merge_excel_files(file_path, file_format, save_path, save_format, columns=None):
+    merge_df = pd.DataFrame()
+    file_list = file_list = [f"{file_path}/{file}" for file in os.listdir(file_path) if file_format in file]
+    
+    for file in file_list:
+        if file_format == ".csv":
+            file_df = pd.read_csv(file)
+     
+        if columns is None:
+            columns = file_df.columns
+            
+        temp_df = pd.DataFrame(file_df, columns=columns)
+        
+        merge_df = merge_df.append(temp_df)
+        
+    if save_format == ".csv":
+        merge_df.to_csv(save_path, index=False)
+        
+
+if __name__ == "__main__":
+    merge_excel_files(file_path="D:/study_data/_data/dacon_Bok choy/test_input", 
+                      save_path="D:/study_data/_data/dacon_Bok choy/test_input/20211201~20211229_청경채.csv",
+                      file_format=".csv",
+                      save_format=".csv"
+                      )
+

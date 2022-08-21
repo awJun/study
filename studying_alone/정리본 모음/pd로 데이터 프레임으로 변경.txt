@@ -1,0 +1,8 @@
+import pandas as pd
+df = pd.DataFrame(datasets.data, columns=datasets.feature_names)  
+
+
+
+
+
+

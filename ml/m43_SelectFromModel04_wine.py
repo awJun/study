@@ -86,7 +86,7 @@ print(model.feature_importances_)
 thresholds = model.feature_importances_
 print('___________________________')
 for thresh in thresholds:
-    selection = SelectFromModel(model, threshold=thresh, prefit=True) # prefit 크거나 같은 컬럼을 빼준다
+    selection = SelectFromModel(model, threshold=thresh, prefit=True) # prefit 크거나 같은 컬럼을 빼준다   / thresh : 타작[탈곡]하다
   
     select_x_train = selection.transform(x_train)
     select_x_test = selection.transform(x_test)
@@ -107,4 +107,6 @@ for thresh in thresholds:
     print("Thresh = %.3f, n=%d, R2: %.2f%% "
           %(thresh, select_x_train.shape[1], score*100))
     
+
+
 

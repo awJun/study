@@ -58,6 +58,8 @@ print(train_x)
 
 model = MultiOutputRegressor(XGBRegressor(n_estimators=200, learning_rate=0.08, gamma = 1, subsample=0.65, colsample_bytree = 1, max_depth=7) ).fit(train_x, train_y)
 # model = XGBRFRegressor().fit(train_x, train_y)
+
+
 print('Done.')
 
 

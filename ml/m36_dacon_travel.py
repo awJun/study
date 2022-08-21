@@ -19,7 +19,7 @@ submission = pd.read_csv(filepath+'sample_submission.csv', index_col=0)
 
 # print(train.head())
 # print(train.info())
-# print(train.isnull().sum())
+print(train.isnull().sum())
 
 # 결측치 컨텍빼고 중간값으로 대체함
 train['Age'].fillna(train['Age'].median(), inplace=True)
@@ -39,7 +39,7 @@ test['PreferredPropertyStar'].fillna(test['PreferredPropertyStar'].median(), inp
 test['NumberOfTrips'].fillna(test['NumberOfTrips'].median(), inplace=True)
 test['NumberOfChildrenVisiting'].fillna(test['NumberOfChildrenVisiting'].median(), inplace=True)
 test['MonthlyIncome'].fillna(test['MonthlyIncome'].median(), inplace=True)
-# print(train.isnull().sum())
+print(train.isnull().sum())
 
 # object타입 라벨인코딩
 le = LabelEncoder()
@@ -94,14 +94,35 @@ def outliers_printer(dataset):
 outliers_printer(x)
 
 # PCA 반복문
-# for i in range(x.shape[1]):
-#     pca = PCA(n_components=i+1)
-#     x2 = pca.fit_transform(x)
-#     x_train, x_test, y_train, y_test = train_test_split(x2, y, train_size=0.8, random_state=123, shuffle=True)
-#     model = XGBClassifier(tree_method='gpu_hist', predictor='gpu_predictor', gpu_id=0)
-#     model.fit(x_train, y_train)
-#     results = model.score(x_test, y_test)
-#     print(i+1, '의 결과: ', results)
+for i in range(x.shape[1]):
+    pca = PCA(n_components=i+1)
+    x2 = pca.fit_transform(x)
+    x_train, x_test, y_train, y_test = train_test_split(x2, y, train_size=0.8, random_state=123, shuffle=True)
+    model = XGBClassifier(tree_method='gpu_hist', predictor='gpu_predictor', gpu_id=0)
+    model.fit(x_train, y_train)
+    results = model.score(x_test, y_test)
+    print(i+1, '의 결과: ', results)
+
+
+
+# 1 의 결과:  0.7519181585677749
+# 2 의 결과:  0.7595907928388747
+# 3 의 결과:  0.7672634271099744
+# 4 의 결과:  0.80306905370844
+# 5 의 결과:  0.782608695652174
+# 6 의 결과:  0.7928388746803069
+# 7 의 결과:  0.7953964194373402
+# 8 의 결과:  0.8107416879795396
+# 9 의 결과:  0.8056265984654731
+# 10 의 결과:  0.8005115089514067
+# 11 의 결과:  0.8184143222506394
+# 12 의 결과:  0.8056265984654731
+# 13 의 결과:  0.8005115089514067
+# 14 의 결과:  0.8209718670076727
+# 15 의 결과:  0.8235294117647058
+# 16 의 결과:  0.8132992327365729
+# 17 의 결과:  0.8235294117647058
+# 18 의 결과:  0.8158567774936062
 
 
 parameters = {
@@ -137,3 +158,6 @@ y_submit = model.predict(test)
 submission['ProdTaken'] = y_submit
 
 submission.to_csv(filepath + 'submission.csv', index = True)
+
+# 결과:  0.8184143222506394
+# 걸린 시간:  155.78866147994995
