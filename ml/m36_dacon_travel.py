@@ -1,3 +1,9 @@
+"""
+test도 결측치 처리하자 결측치 많다고함!
+
+"""
+
+
 import pandas as pd
 import numpy as np
 from xgboost import XGBClassifier
