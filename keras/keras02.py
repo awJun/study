@@ -32,4 +32,4 @@ print('loss : ', loss)
 result = model.predict([6])
 print('6의 예측값 : ', result)
 
-     
+      
