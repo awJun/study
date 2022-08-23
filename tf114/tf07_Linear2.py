@@ -17,7 +17,7 @@ b = tf.Variable(10, dtype=tf.float32)    # 1은 임의의 값이고 아래에서
 hypothesis = x * W + b
 
 #3-1. 컴파일
-loss = tf.reduce_mean(tf.square(hypothesis - y))
+loss = tf.reduce_mean(tf.square(hypothesis - y))   # square: 제곱
 
 optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.01)
 

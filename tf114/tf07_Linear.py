@@ -1,6 +1,5 @@
 # y = wx + b   이게 모델이여 ~ 
 
-from pickletools import optimize
 import tensorflow as tf
 tf.set_random_seed(123)
 
@@ -9,8 +8,8 @@ x = [1, 2, 3]
 y = [1, 2, 3]
 
 W = tf.Variable(1, dtype=tf.float32)  # 연산되는 값  / 연산되는 것은 변수로
-b = tf.Variable(1, dtype=tf.float32)    # 1은 임의의 값이고 아래에서 연산이 되면서 갱신이 된다.
-
+b = tf.Variable(1, dtype=tf.float32)    # 1은 임의의 값이고 아래에서 연산이 되면서 갱신이 된다. 즉, 훈련시킬 때 처음 들어가는 값이다.
+                                            
 #2. 모델구성
 hypothesis = x * W + b    # y를 통상적으로 이렇게 많이 부른다고 한다.   hypothesis : 가설 즉,! 가설을 세우다 이 모델을 우리가 만들어볼거야 ~~ 
                          # y = xw + b 사실 이거야 ~ 미안! 차이점은 뭘까 ? 두 개의 연산이 아예 달라서 행렬이 연산이기 때문에
@@ -30,12 +29,12 @@ train = optimizer.minimize(loss)  # loss의 최하단 부분의 값을 찾는다
 
 #3-2 훈련
 sess = tf.compat.v1.Session()
-sess.run(tf.global_variables_initializer())
+sess.run(tf.global_variables_initializer())   # global_variables_initializer 변수 초기화 
 
 epochs = 2001
 for step in range(epochs):   # 2000번 훈련시킬거야 
     sess.run(train)
-    if step %20 == 0:  # 20번에 한 번만 출력할거야
+    if step %20 == 0:  # 20번에 한 번만 출력할거야   # 즉,! 이게 verbose임
         print(step, sess.run(loss), sess.run(W), sess.run(b))
         
 sess.close()   # 닫아줘야함

@@ -1,10 +1,9 @@
 import tensorflow as tf
-print(tf.__version__)           # 1.14.0
 print(tf.executing_eagerly())   # False
 
 # 즉시 실행모드!!   / 2점 버전 / 안키면 1점 버전  텐서2에서 쓸거면 이걸 쓰면 에러 안남 1에서 써도 에러 안남 1이면 위에꺼ㅗ 써도 에러 안남
 tf.compat.v1.disable_eager_execution()
-print(tf.executing_eagerly())   # False
+print(tf.executing_eagerly())   # False    텐서2에서 사용이 가능하지만 시스템이 충돌해서 에러가 발생할 수 있으므로 가급적으로 1을 사용할 것.
 
 hello = tf.constant("Hello World")
 
