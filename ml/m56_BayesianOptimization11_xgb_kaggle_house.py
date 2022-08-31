@@ -1,10 +1,21 @@
+from sklearn.linear_model import LinearRegression, LogisticRegression
+from xgboost import XGBRegressor
+from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
+from bayes_opt import BayesianOptimization
+from collections import Counter
+
+from sklearn.datasets import fetch_california_housing
+from sklearn.model_selection import train_test_split, KFold
+from sklearn.metrics import r2_score, accuracy_score
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.preprocessing import MinMaxScaler, MaxAbsScaler, RobustScaler, StandardScaler,\
+    QuantileTransformer, PowerTransformer # = 이상치에 자유로운 편
+
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, r2_score, mean_absolute_error
-import tensorflow as tf
-from collections import Counter
-from sklearn.preprocessing import MinMaxScaler
+import warnings
+warnings.filterwarnings('ignore')
+
 
 encording_columns = ['MSZoning','Street','Alley','LotShape','LandContour','Utilities','LotConfig',
                     'LandSlope','Neighborhood','Condition1','Condition2','BldgType','HouseStyle',
@@ -25,7 +36,7 @@ non_encording_columns = ['MSSubClass','LotFrontage','LotArea','OverallQual','Ove
 
 
 #1. 데이터
-path = './_data/kaggle_house/'
+path = 'D:\study_data\_data\kaggle_house/'
 train_set = pd.read_csv(path + 'train.csv') # + 명령어는 문자를 앞문자와 더해줌  index_col=n n번째 컬럼을 인덱스로 인식
             
 test_set = pd.read_csv(path + 'test.csv') # 예측에서 쓸거임  3
@@ -188,51 +199,73 @@ test_set.drop(['MSZoning', 'Neighborhood' , 'Condition2', 'MasVnrType', 'ExterQu
 
 x = train_set.drop(['SalePrice'], axis=1)
 y = train_set['SalePrice']
-print(x.shape, y.shape) # (1338, 12) (1338,)
 
-y = np.array(y)
-y = y.reshape(-1, 1)
+x_train, x_test, y_train, y_test = train_test_split(x, y, random_state=134, train_size=0.8)
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random_state=1234)
-scaler = MinMaxScaler()
-scaler.fit(x_train)
-x_train = scaler.transform(x_train)
-x_test = scaler.transform(x_test)
+scl = StandardScaler()
+x_train = scl.fit_transform(x_train)
+x_test = scl.transform(x_test)
 
 # 2. 모델
-x = tf.compat.v1.placeholder(tf.float32, shape=[None, 12])
-y = tf.compat.v1.placeholder(tf.float32, shape=[None, 1])
+# bayseian_params = {
+#     'colsample_bytree' : (0.5, 1),
+#     'max_depth' : (6,16),
+#     'min_child_weight' : (1, 50),
+#     'reg_alpha' : (0.01, 50),
+#     'reg_lambda' : (0.001, 1),
+#     'subsample' : (0.5, 1)
+# }
 
-w = tf.compat.v1.Variable(tf.compat.v1.zeros([12,1]), name='weight')
-b = tf.compat.v1.Variable(tf.compat.v1.zeros([1]), name='bias')
-hypothesis = tf.compat.v1.matmul(x, w) + b
+bayseian_params = {
+    'colsample_bytree' : (0.3, 0.9),
+    'max_depth' : (1,10),
+    'min_child_weight' : (10, 20),
+    'reg_alpha' : (5, 15),
+    'reg_lambda' : (0.5, 1.5),
+    'subsample' : (0.5, 1.5)
+}
 
 
-# 3-1. 컴파일
-loss = tf.reduce_mean(tf.square(hypothesis-y))
+def lgb_function(max_depth, min_child_weight,subsample, colsample_bytree, reg_lambda,reg_alpha):
+    params ={
+        'n_estimators' : 500, 'learning_rate' : 0.02,
+        'max_depth' : int(round(max_depth)),                    # 정수만
+        'min_child_weight' : int(round(min_child_weight)),
+        'subsample' : max(min(subsample,1),0),                  # 0~1 사이값만
+        'colsample_bytree' : max(min(colsample_bytree,1),0),
+        'reg_lambda' : max(reg_lambda,0),                       # 양수만
+        'reg_alpha' : max(reg_alpha,0),
+    }
+    
+    # *여러개의인자를받겠다
+    # **키워드받겠다(딕셔너리형태)
+    model = XGBRegressor(**params)
+    model.fit(x_train, y_train)
+    y_pred = model.predict(x_test)
+    score = r2_score(y_test, y_pred)
+    
+    return score
 
-optimizer = tf.train.GradientDescentOptimizer(learning_rate=1e-8)
-train = optimizer.minimize(loss)
+lgb_bo = BayesianOptimization(f=lgb_function, pbounds=bayseian_params, random_state=123)
 
-# 3-2. 훈련
-sess = tf.compat.v1.Session()
-sess.run(tf.global_variables_initializer())
+lgb_bo.maximize(init_points=3, n_iter=50)
+print(lgb_bo.max)
 
-epochs = 2001
-for step in range(epochs):
-    _, hy_val, cost_val, b_val = sess.run([train,hypothesis,loss,b], feed_dict={x:x_train, y:y_train})
-    if step%20 == 0:
-        print(step, cost_val, hy_val)
-        
-print('최종: ', cost_val, hy_val)
+# {'target': 0.9162733671087294, 'params': {'colsample_bytree': 0.5, 'max_depth': 6.0, 
+#                                           'min_child_weight': 14.01379189891488, 'reg_alpha': 10.788463428736321, 
+#                                           'reg_lambda': 1.0, 'subsample': 1.0}}
 
-y_pred = sess.run(hypothesis, feed_dict={x:x_test, y:y_test})
+# {'target': 0.9174947056969482, 'params': {'colsample_bytree': 0.6634538798649483, 'max_depth': 3.0765958108419555, 
+#                                           'min_child_weight': 14.717812703555158, 'reg_alpha': 12.025029699427202, 
+#                                           'reg_lambda': 1.2096514296630752, 'subsample': 1.3060267210170915}}
 
-r2 = r2_score(y_test, y_pred)
-print('r2: ', r2)
+model = XGBRegressor(n_estimators = 500, learning_rate= 0.02, colsample_bytree =max(min(0.6634538798649483,1),0) ,
+                     max_depth=int(round(3.0765958108419555)), min_child_weight =int(round(14.717812703555158)),
+                      reg_alpha= max(12.025029699427202,0), reg_lambda=max(1.2096514296630752,0), subsample=max(min(1.3060267210170915,1),0))
 
-mae = mean_absolute_error(y_test, y_pred)
-print('mae: ', mae)
+model.fit(x_train, y_train)
+y_pred = model.predict(x_test)
+score = r2_score(y_test, y_pred)
+print(score)
 
-# r2:  -6.261655805480579
-# mae:  176308.00206264452
+# 0.9174947056969482

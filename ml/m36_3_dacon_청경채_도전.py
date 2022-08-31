@@ -50,13 +50,13 @@ x_test, y_test = aaa(val_input_list, val_target_list) #, False)
 
 # print(x_train.shape)  # (1607, 1440, 37)
 # print(y_train.shape)  # (1607,)
-# print(x_test.shape)   # (2019, 1440, 37)
-# print(y_test.shape)   # (2019,)
+# print(x_test.shape)   # (206, 1440, 37)
+# print(y_test.shape)   # (206,)
 
 x_train = x_train.reshape(1607, 1440 * 37)   
-x_test = x_test.reshape(2019, 1440 * 37)
-# print(x_train.shape)  # (1607, 53280)
-# print(x_test.shape)   # (2019, 53280)
+x_test = x_test.reshape(206, 1440 * 37)
+print(x_train.shape)  # (1607, 53280)
+print(x_test.shape)   # (206, 53280)
 
 # print(x_train[0])
 # print(len(x_train), len(y_train)) # 1607 1607

@@ -22,9 +22,29 @@ x_test = scaler.transform(x_test)
 x = tf.compat.v1.placeholder(tf.float32, shape=[None, 8])
 y = tf.compat.v1.placeholder(tf.float32, shape=[None, 1])
 
-w = tf.compat.v1.Variable(tf.compat.v1.zeros([8,1]), name='weight')
+w = tf.compat.v1.Variable(tf.compat.v1.zeros([8,20]), name='weight')
+b = tf.compat.v1.Variable(tf.compat.v1.zeros([20]), name='bias')
+hidden = tf.compat.v1.matmul(x, w) + b
+
+w = tf.compat.v1.Variable(tf.compat.v1.zeros([20,10]), name='weight')
+b = tf.compat.v1.Variable(tf.compat.v1.zeros([10]), name='bias')
+hidden = tf.compat.v1.matmul(hidden, w) + b
+
+w = tf.compat.v1.Variable(tf.compat.v1.zeros([10,70]), name='weight')
+b = tf.compat.v1.Variable(tf.compat.v1.zeros([70]), name='bias')
+hidden = tf.compat.v1.matmul(hidden, w) + b
+
+w = tf.compat.v1.Variable(tf.compat.v1.zeros([70,50]), name='weight')
+b = tf.compat.v1.Variable(tf.compat.v1.zeros([50]), name='bias')
+hidden = tf.compat.v1.matmul(hidden, w) + b
+
+w = tf.compat.v1.Variable(tf.compat.v1.zeros([50,10]), name='weight')
+b = tf.compat.v1.Variable(tf.compat.v1.zeros([10]), name='bias')
+hidden = tf.compat.v1.matmul(hidden, w) + b
+
+w = tf.compat.v1.Variable(tf.compat.v1.zeros([10,1]), name='weight')
 b = tf.compat.v1.Variable(tf.compat.v1.zeros([1]), name='bias')
-hypothesis = tf.compat.v1.matmul(x, w) + b
+hypothesis = tf.compat.v1.matmul(hidden, w) + b
 
 # 3-1. 컴파일
 loss = tf.reduce_mean(tf.square(hypothesis-y))
@@ -52,5 +72,5 @@ print('r2: ', r2)
 mae = mean_absolute_error(y_test, y_pred)
 print('mae: ', mae)
 
-# r2:  -3.1892733487033444
-# mae:  2.0772694355299923
+# r2:  -3.187749156450473
+# mae:  2.076638602300476

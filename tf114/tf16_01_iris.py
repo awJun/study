@@ -15,6 +15,8 @@ ohe = OneHotEncoder()
 ohe.fit(y_data)
 y_data = ohe.transform(y_data).toarray()
 
+print(y_data)
+
 # print(x_data.shape)   # (150, 4)
 # print(y_data.shape)   # (150, 3)
 
@@ -53,7 +55,6 @@ with  tf.compat.v1.Session() as sess:   # 나는 tf.compat.v1.Session()를 sess�
 
     epoch = 1001
     for epochs in range(epoch):
-        # sess.run(train)
         cost_val, hy_val, _ = sess.run([loss, hypothesis, train],    # _의 뜻은 반환하지 않지만 실행은 시키겠다. 라는 뜻
                                    feed_dict={x : x_train, y : y_train})
         # cost_val : loss와 같음   /  hy_val : hypothesis의 값
@@ -66,7 +67,6 @@ with  tf.compat.v1.Session() as sess:   # 나는 tf.compat.v1.Session()를 sess�
     
     y_acc_test = sess.run(tf.math.argmax(y_test, axis=1))   # axis=1하면 행의 최대값을 선별후 선별한 행의 열의 인덱스를 반환
     predict = sess.run(tf.argmax(sess.run(hypothesis, feed_dict={x:x_test}), axis=1))
-    # predict = sess.run(tf.math.argmax(hy_val, axis=1))
     acc = accuracy_score(y_acc_test, predict)
     print("\nacc : ", acc)
 

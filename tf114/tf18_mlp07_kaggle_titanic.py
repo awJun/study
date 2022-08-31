@@ -46,10 +46,30 @@ print(x_train.shape, x_test.shape) # (712, 7) (179, 7)
 # 2. 모델 / sigmoid
 x = tf.compat.v1.placeholder(tf.float32, shape=[None, 7])
 y = tf.compat.v1.placeholder(tf.float32, shape=[None, 1])
-w = tf.compat.v1.Variable(tf.compat.v1.zeros([7,1]), name='weight')
-b = tf.compat.v1.Variable(tf.compat.v1.zeros([1]), name='bias')
 
-hypothesis = tf.compat.v1.sigmoid(tf.compat.v1.matmul(x, w) + b)
+w = tf.compat.v1.Variable(tf.compat.v1.zeros([7,80]), name='weight')
+b = tf.compat.v1.Variable(tf.compat.v1.zeros([80]), name='bias')
+hidden = tf.compat.v1.nn.relu(tf.compat.v1.matmul(x, w) + b)
+
+w = tf.compat.v1.Variable(tf.compat.v1.zeros([80,100]), name='weight')
+b = tf.compat.v1.Variable(tf.compat.v1.zeros([100]), name='bias')
+hidden = tf.compat.v1.matmul(hidden, w) + b
+
+w = tf.compat.v1.Variable(tf.compat.v1.zeros([100,90]), name='weight')
+b = tf.compat.v1.Variable(tf.compat.v1.zeros([90]), name='bias')
+hidden = tf.compat.v1.nn.relu(tf.compat.v1.matmul(hidden, w) + b)
+
+w = tf.compat.v1.Variable(tf.compat.v1.zeros([90,70]), name='weight')
+b = tf.compat.v1.Variable(tf.compat.v1.zeros([70]), name='bias')
+hidden = tf.compat.v1.nn.relu(tf.compat.v1.matmul(hidden, w) + b)
+
+w = tf.compat.v1.Variable(tf.compat.v1.zeros([70,50]), name='weight')
+b = tf.compat.v1.Variable(tf.compat.v1.zeros([50]), name='bias')
+hidden = tf.compat.v1.nn.relu(tf.compat.v1.matmul(hidden, w) + b)
+
+w = tf.compat.v1.Variable(tf.compat.v1.zeros([50,1]), name='weight')
+b = tf.compat.v1.Variable(tf.compat.v1.zeros([1]), name='bias')
+hypothesis = tf.compat.v1.sigmoid(tf.compat.v1.matmul(hidden, w) + b)
 
 # 3-1. 컴파일
 loss = -tf.reduce_mean(y*tf.log(hypothesis)+(1-y)*tf.log(1-hypothesis)) # binary_crossentropy
@@ -80,5 +100,5 @@ print('mae: ', mae)
 
 sess.close()
 
-# acc:  0.7050561797752809
-# mae:  0.24622465507886268
+# acc:  0.6306179775280899
+# mae:  0.24992371032655764
