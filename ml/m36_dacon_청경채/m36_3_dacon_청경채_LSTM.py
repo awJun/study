@@ -61,12 +61,13 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler # 클래스 가�
 from sklearn.preprocessing import MaxAbsScaler, RobustScaler
 
 x_train = x_train.reshape(1607, 1440 * 37)              
-x_test = x_test.reshape(2019, 1440 * 37)
+x_test = x_test.reshape(206, 1440 * 37) 
+
 
 scaler =  MinMaxScaler()
 # scaler = StandardScaler()
-# scaler = MaxAbsScaler()
-# scaler = RobustScaler()
+# # scaler = MaxAbsScaler()
+# # scaler = RobustScaler()
                                 
 scaler.fit(x_train)
 x_train = scaler.transform(x_train) # x_train을 수치로 변환해준다.
@@ -74,7 +75,7 @@ x_test = scaler.transform(x_test)
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #--[차원 변형 작업]- - - - - - - - - - - - - - - - - - - - - - - 
 x_train = x_train.reshape(1607, 1440, 37)              
-x_test = x_test.reshape(2019, 1440, 37)
+x_test = x_test.reshape(206, 1440, 37)
 
 print(x_train.shape)  # (10, 3, 1)  <-- "2, 2 ,1"는 input_shape값
 print(x_test.shape)   # (3, 3, 1)
@@ -87,24 +88,25 @@ from tensorflow.python.keras.layers import Dense, LSTM
 model = Sequential()                            # input_shape=(3, 1) == input_length=3, input_dim=1)
 # model.add(SimpleRNN(units=100,activation='relu' ,input_shape=(3, 1)))   # [batch, timesteps, feature]
 
-model.add(LSTM(units=128 ,input_length=1440, input_dim=37))   #SimpleRNN를 거치면 3차원이 2차원으로 간다.
+model.add(LSTM(units=10 ,input_length=1440, input_dim=37))   #SimpleRNN를 거치면 3차원이 2차원으로 간다.
 # model.add(SimpleRNN(10))       # <-- 3차원이 아니라 2차원을 넣어서 에러가 발생함.[참고]
-model.add(Dense(128, activation='relu'))
-model.add(Dense(356, activation='relu'))
-model.add(Dense(128, activation='relu'))
-model.add(Dense(64, activation='relu'))
-model.add(Dense(64, activation='relu'))
+model.add(Dense(10, activation='relu'))
+model.add(Dense(10, activation='relu'))
+model.add(Dense(10, activation='relu'))
 model.add(Dense(1))
 model.summary()
 
 #3. 컴파일, 훈련
 from tensorflow.python.keras.callbacks import EarlyStopping
+import time
 earlyStopping = EarlyStopping(monitor='val_loss', patience=50, mode='min', verbose=1,
                               restore_best_weights=True) 
 
 model.compile(loss='mse', optimizer='adam')
-model.fit(x_train, y_train, epochs=1000)
 
+start_time = time.time()
+model.fit(x_train, y_train, epochs=1, batch_size=100000)
+end_time = time.time() -start_time
 
 #4. 평가, 예측
 loss = model.evaluate(x_test, y_test)
@@ -118,23 +120,53 @@ print("r2 스코어 : ", r2)
 # y_pred = np.array([8, 9, 10]).reshape(1, 3, 1)      #8, 9, 10을 넣어서 11일을 예측       # [중요]rnn 모델에서 사용할 것이므로 3차원으로 변환작업
 #                                                     # .reshape 앞에 array([8, 9, 10])를 (1, 3, 1)로 바꾸겟다. [[[8], [9], [10]]]
 
-# y_pred안에 np.array([8, 9, 10]) 배열이 3개의 값이 들어 있으므로 
+# # y_pred안에 np.array([8, 9, 10]) 배열이 3개의 값이 들어 있으므로 
 
-# .reshape(1, 3, 1) 안에 1, 3, 1인 이유는 x.reshape(7, 3, 1)에서 3, 1 부분을  input_shape=(3, 1)에 넣어서 사용해서 3, 1 부분을
-  # 넣고 뒤에 1을 곱하는 형식으로 3차춴으로 만들어 줬다
-# result = model.predict(y_pred) 
-# print("loss : ", loss)
-# print("[8,9,10의 결과", result)
+# # .reshape(1, 3, 1) 안에 1, 3, 1인 이유는 x.reshape(7, 3, 1)에서 3, 1 부분을  input_shape=(3, 1)에 넣어서 사용해서 3, 1 부분을
+# #   넣고 뒤에 1을 곱하는 형식으로 3차춴으로 만들어 줬다
+
+#4. 평가,예측
+loss = model.evaluate(x_test, y_test)
+print('loss :', loss)
 
 
-# import os
-# import zipfile
-# filelist = ['TEST_01.csv','TEST_02.csv','TEST_03.csv','TEST_04.csv','TEST_05.csv', 'TEST_06.csv']
-# os.chdir("D:/study_data/_data\dacon_Bok/sample_submission")
-# with zipfile.ZipFile("submission.zip", 'w') as my_zip:
-#     for i in filelist:
-#         my_zip.write(i)
-#     my_zip.close()
+y_summit = model.predict(x_test)
+# print(y_test.shape) #(152,)
+# print(y_summit.shape) #(152, 13, 1)
+print("걸린시간 : ", end_time)
+
+path2 = 'D:\study_data\_data\dacon_Bok/test_target/' # ".은 현재 폴더"
+targetlist = ['TEST_01.csv','TEST_02.csv','TEST_03.csv','TEST_04.csv','TEST_05.csv','TEST_06.csv']
+# [29, 35, 26, 32, 37, 36]
+empty_list = []
+for i in targetlist:
+    test_target2 = pd.read_csv(path2+i)
+    empty_list.append(test_target2)
+    
+empty_list[0]['rate'] = y_summit[:29]
+empty_list[0].to_csv(path2+'TEST_01.csv')
+empty_list[1]['rate'] = y_summit[29:29+35]
+empty_list[1].to_csv(path2+'TEST_02.csv')
+empty_list[2]['rate'] = y_summit[29+35:29+35+26]
+empty_list[2].to_csv(path2+'TEST_03.csv')
+empty_list[3]['rate'] = y_summit[29+35+26:29+35+26+32]
+empty_list[3].to_csv(path2+'TEST_04.csv')
+empty_list[4]['rate'] = y_summit[29+35+26+32:29+35+26+32+37]
+empty_list[4].to_csv(path2+'TEST_05.csv')
+empty_list[5]['rate'] = y_summit[29+35+26+32+37:29+35+26+32+37+36]
+empty_list[5].to_csv(path2+'TEST_06.csv')
+# submission = submission.fillna(submission.mean())
+# submission = submission.astype(int)
+
+
+import os
+import zipfile
+filelist = ['TEST_01.csv','TEST_02.csv','TEST_03.csv','TEST_04.csv','TEST_05.csv', 'TEST_06.csv']
+os.chdir("D:/study_data/_data\dacon_Bok/test_target")
+with zipfile.ZipFile("submission.zip", 'w') as my_zip:
+    for i in filelist:
+        my_zip.write(i)
+    my_zip.close()
 
 
 
