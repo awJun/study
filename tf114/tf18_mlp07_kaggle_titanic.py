@@ -1,3 +1,8 @@
+"""
+mlp : 멀티 레이어 퍼셉트론
+
+
+"""
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, mean_squared_error

@@ -1,10 +1,18 @@
+"""
+mlp : 멀티 레이어 퍼셉트론
+
+
+"""
+
 import tensorflow as tf
 
-tf.compat.v1.set_random_seed(502)
+# tf.compat.v1.set_random_seed(502)
 
 #1. 데이터
 x_data = [[0, 0], [0, 1], [1, 0], [1, 1]]  # (4, 2)
 y_data = [[0], [1], [1], [0]]              # (4, 1)
+
+
 
 
 #2. 모델구성
@@ -22,6 +30,7 @@ b2 = tf.compat.v1.Variable(tf.compat.v1.random_normal([1]), name="bias")
 
 
 hidden_layer1 = tf.compat.v1.matmul(x, w1) + b1
+
 
 # [실습 시작!!!] 완성해 보아요!!!
 #2. 모델

@@ -1,3 +1,9 @@
+"""
+mlp : 멀티 레이어 퍼셉트론
+
+
+"""
+
 import tensorflow as tf
 from sklearn.metrics import accuracy_score, r2_score, mean_squared_error
 import numpy as np

@@ -1,50 +1,79 @@
-from sklearn.datasets import load_iris
-import numpy as np
 import tensorflow as tf
-from sklearn.metrics import accuracy_score
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import OneHotEncoder
-import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-tf.set_random_seed(66)
 
-dataset = load_iris()
-x_data = dataset.data
-y_data = dataset.target.reshape(-1,1)
+tf.compat.v1.set_random_seed(502)
 
-ohe = OneHotEncoder()
-ohe.fit(y_data)
-y_data = ohe.transform(y_data).toarray()
-
-print(x_data.shape)
-print(y_data.shape)
-
-x_train, x_test, y_train, y_test = train_test_split (x_data, y_data, train_size = 0.7, random_state=104)
+#1. 데이터 
+x_data = [[0, 0], [0, 1], [1, 0], [1, 1]]  # [4, 2]
+y_data = [[0], [1], [1], [0]]              # [4, 1]
 
 
-x = tf.compat.v1.placeholder('float',shape=[None,4])
-y = tf.compat.v1.placeholder('float',shape=[None,3])
+#2. 모델구성
+# input layer
+x = tf.compat.v1.placeholder(tf.float32, shape=[None, 2])   # 각각의 공간을 만듬
+y = tf.compat.v1.placeholder(tf.float32, shape=[None, 1])   # 각각의 공간을 만듬
 
-w = tf.compat.v1.Variable(tf.random.normal([4,3],name = 'weight'))
-b = tf.compat.v1.Variable(tf.random.normal([1,3]), name = 'bias')
+# hidden layer
+first_w = tf.compat.v1.Variable(tf.random_normal([2, 64]))
+first_b = tf.compat.v1.Variable(tf.random_normal([64]))
+first_hidden_layer = tf.compat.v1.matmul(x, first_w) + first_b
 
-hypothesis = tf.nn.softmax(tf.matmul(x, w) + b)
+w = tf.compat.v1.Variable(tf.random_normal([64, 128]))      # random_normal로 변수값을 랜덤으로 지정시킴 
+b = tf.compat.v1.Variable(tf.random_normal([128]))
+hidden_layer = tf.compat.v1.matmul(first_hidden_layer, w) + b
 
-# loss = tf.reduce_mean(tf.square(hypothesis - y)) # mse
-loss = tf.reduce_mean(-tf.reduce_sum(y * tf.log(hypothesis), axis=1)) # categorical_crossentropy
+w = tf.compat.v1.Variable(tf.random_normal([128, 256]))
+b = tf.compat.v1.Variable(tf.random_normal([256]))
+hidden_layer = tf.compat.v1.matmul(hidden_layer, w) + b
 
-optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.01).minimize(loss)
+last_w = tf.compat.v1.Variable(tf.random_normal([256, 1]))
+last_b = tf.compat.v1.Variable(tf.random_normal([1]))
 
-with tf.Session() as sess:
+
+#2. 모델
+hypothesis = tf.compat.v1.sigmoid(tf.matmul(hidden_layer, last_w) + last_b)
+
+
+#3-1. 컴파일
+loss = -tf.reduce_mean(y*tf.log(hypothesis)+(1-y)*tf.log(1-hypothesis)) 
+
+# optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.01)  # 멀티에서는 이렇게 안하니까 nan으로 출력되었음..
+optimizer = tf.compat.v1.train.AdamOptimizer(learning_rate=0.01)
+train = optimizer.minimize(loss)
+
+
+# 3-2 훈련
+with tf.compat.v1.Session() as sess:
     sess.run(tf.global_variables_initializer())
+    
+    epoch = 100
+    for epoch in range(epoch):
+        cost_val, hy_val, _ = sess.run([loss, hypothesis, train],
+                                       feed_dict={x : x_data, y : y_data})
+        
+        if epoch % 20 == 0:
+            print(epoch, "loss : ", cost_val, "\n", hy_val)
+            
 
-    for step in range(2001):
-        _, w_val, = sess.run([optimizer, loss], feed_dict = {x:x_train,y:y_train})
-        if step % 200 ==0:
-            print(step, w_val)
+#4. 예측
+    y_predict = sess.run(tf.cast(hy_val > 0.5, dtype=tf.float32))
+# 2진분류식
+# cast로 반올림 대신 조건걸음 이거말고 반올림도 상관없음
+# cast의 역할은 해당 조건이 만족하면 1 아니면 0으로 반환한다.
 
-    y_acc_test = sess.run(tf.argmax(y_test, 1))
-    predict = sess.run(tf.argmax(sess.run(hypothesis, feed_dict={x:x_test}), 1))
-    accuracy = tf.reduce_mean(tf.cast(tf.equal(predict, y_acc_test),dtype=tf.float32))
-    a = sess.run(accuracy,feed_dict = {x:x_test,y:y_test})
-    print("\nacc : ", a)
+    from sklearn.metrics import r2_score, mean_absolute_error, accuracy_score
+    acc = accuracy_score(y_data, y_predict)
+    print("acc : ", acc)
+    
+    mae = mean_absolute_error(y_data, hy_val)
+    print("men : ", mae)
+
+
+
+
+
+
+
+
+
+
+

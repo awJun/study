@@ -46,34 +46,34 @@ test_set = pd.read_csv(path + "test.csv", index_col=0)
 
 all_data_set = pd.concat((train_set, test_set)).reset_index(drop=True)
 
-# 그래프 및 상관관계 확인
-import matplotlib.pyplot as plt
-import seaborn as sns
-plt.figure(figsize=(14,20))
-sns.set_theme(style="white") 
-cols=['ProdTaken','Age', 'TypeofContact', 'CityTier', 'DurationOfPitch', 'Occupation',
-    'Gender', 'NumberOfPersonVisiting', 'NumberOfFollowups',
-    'ProductPitched', 'PreferredPropertyStar', 'MaritalStatus',
-    'NumberOfTrips', 'Passport', 'PitchSatisfactionScore', 'OwnCar',
-    'NumberOfChildrenVisiting', 'Designation', 'MonthlyIncome']
-for i, variable in enumerate(cols):
-                     plt.subplot(10,2,i+1)
-                     order = all_data_set[variable].value_counts(ascending=False).index   
-                     #sns.set_palette(list_palette[i]) # to set the palette
-                     sns.set_palette('Set2')
-                     ax=sns.countplot(x=all_data_set[variable], data=all_data_set )
-                     sns.despine(top=True,right=True,left=True) # to remove side line from graph
-                     for p in ax.patches:
-                           percentage = '{:.1f}%'.format(100 * p.get_height()/len(all_data_set[variable]))
-                           x = p.get_x() + p.get_width() / 2 - 0.05
-                           y = p.get_y() + p.get_height()
-                           plt.annotate(percentage, (x, y),ha='center')
-                     plt.tight_layout()
-                     plt.title(cols[i].upper())
-sns.set_palette(sns.color_palette("Set2", 8))
-plt.figure(figsize=(15,10))
-sns.heatmap(all_data_set.corr(),annot=True)
-plt.show()
+# # 그래프 및 상관관계 확인
+# import matplotlib.pyplot as plt
+# import seaborn as sns
+# plt.figure(figsize=(14,20))
+# sns.set_theme(style="white") 
+# cols=['ProdTaken','Age', 'TypeofContact', 'CityTier', 'DurationOfPitch', 'Occupation',
+#     'Gender', 'NumberOfPersonVisiting', 'NumberOfFollowups',
+#     'ProductPitched', 'PreferredPropertyStar', 'MaritalStatus',
+#     'NumberOfTrips', 'Passport', 'PitchSatisfactionScore', 'OwnCar',
+#     'NumberOfChildrenVisiting', 'Designation', 'MonthlyIncome']
+# for i, variable in enumerate(cols):
+#                      plt.subplot(10,2,i+1)
+#                      order = all_data_set[variable].value_counts(ascending=False).index   
+#                      #sns.set_palette(list_palette[i]) # to set the palette
+#                      sns.set_palette('Set2')
+#                      ax=sns.countplot(x=all_data_set[variable], data=all_data_set )
+#                      sns.despine(top=True,right=True,left=True) # to remove side line from graph
+#                      for p in ax.patches:
+#                            percentage = '{:.1f}%'.format(100 * p.get_height()/len(all_data_set[variable]))
+#                            x = p.get_x() + p.get_width() / 2 - 0.05
+#                            y = p.get_y() + p.get_height()
+#                            plt.annotate(percentage, (x, y),ha='center')
+#                      plt.tight_layout()
+#                      plt.title(cols[i].upper())
+# sns.set_palette(sns.color_palette("Set2", 8))
+# plt.figure(figsize=(15,10))
+# sns.heatmap(all_data_set.corr(),annot=True)
+# plt.show()
 
 
 #######[ 데이터 정보 확인 ]##########################################################################################################################
@@ -411,5 +411,7 @@ submission = pd.read_csv(path + 'sample_submission.csv',#예측에서 쓸거야!
 submission['ProdTaken'] = y_summit
 submission.to_csv('test10.csv',index=False)
 
-
+# 최상의 점수 :  0.9045300878972279
+# acc : 0.9534883720930233
+# 걸린 시간 : 4.554198980331421
 
