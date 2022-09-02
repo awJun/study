@@ -22,8 +22,8 @@ mms = MinMaxScaler()
 mas = MaxAbsScaler()
 rbs = RobustScaler()
 qtf = QuantileTransformer() 
-ptf1 = PowerTransformer(method='yeo-johnson')
-ptf2 = PowerTransformer(method='box-cox')
+ptf1 = PowerTransformer(method='yeo-johnson') # 양수, 양수 모두 돌아간다.
+ptf2 = PowerTransformer(method='box-cox')     # 양수만 돌아간다.
 
 scalers = [sts, mms, mas, rbs, qtf, ptf1, ptf2]
 for scaler in scalers:
