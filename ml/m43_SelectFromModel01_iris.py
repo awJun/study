@@ -115,7 +115,7 @@ for thresh in thresholds:
     y_predict = selection_model.predict(select_x_test)
     score = r2_score(y_test, y_predict)
     
-    print("Thresh = %.3f, n=%d, R2: %.2f%% "
+    print("Thresh = %.3f, n=%d, R2: %.2f%% "   # %.2f%% : 소수점 2번째 자리까지 출력해라라는 뜻 
           %(thresh, select_x_train.shape[1], score*100))
     
     

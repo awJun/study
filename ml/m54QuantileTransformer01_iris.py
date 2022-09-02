@@ -3,7 +3,8 @@
 scaler = [MinMaxScaler, MaxAbsScaler, StandardScaler, RobustScaler, QuantileTransformer, PowerTransformer] 
 위에  스케일러들 테스트임
 
-PowerTransformer(method='yeo_johnson')   QuantileTransformer(method='BOX_COX')   메소드를 넣으면 에러 발생해서 일단 빼고 돌렸음 ..ㅠ
+PowerTransformer(method='yeo_johnson')   PowerTransformer(method='BOX_COX)   # 메소드를 넣으면 에러 발생해서 일단 빼고 돌렸음 
+  # 위에 두개는 괄호안에 메소드를 정의하면 돌아가는 데이터가 있고 안돌아가는 데이터가 있다 그러므로 디폴트로도 도전해보는 것을 추천한다.
 
 """
 
