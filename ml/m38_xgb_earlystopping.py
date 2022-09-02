@@ -5,6 +5,8 @@
 model.fit(x_train, y_train,
           early_stopping_rounds=10,   # 10번동안 갱신이 없으면 훈련을 종료하겠다.
           eval_set=[(x_test, y_test)],   # validation 설정해야지 얼리스탑핑이 걸린다.    / eval_set은 매트릭스와 같은거임
+                                         # eval_set=[(x_test, y_test)]는 얼리스타핑을 어떤것을 기준으로 걸 것인가를 넣는거다.
+                                         # eval_set=[(x_test, y_test)]애가 validation 설정이랑 같은거라고함
           eval_metric='error'   # 공식문서에서 사용가능 항목 확인 https://xgboost.readthedocs.io/en/stable/parameter.html?highlight=subsample
           # 회귀 : rmse, mae, rmsle...
           # 이진 : error, auc..., logloss...
@@ -33,7 +35,7 @@ model = XGBClassifier(random_state=123,
 model.fit(x_train, y_train,
           early_stopping_rounds=10,   # 10번동안 갱신이 없으면 훈련을 종료하겠다.
           eval_set=[(x_test, y_test)],   # validation 설정해야지 얼리스탑핑이 걸린다.    / eval_set은 매트릭스와 같은거임
-          eval_metric='error
+          eval_metric='error         # 로그값이랑 평가짚가
 
 
 

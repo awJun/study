@@ -29,8 +29,6 @@ validation 데이터로 사용하게된다.
 cross_val_score를 사용하면 train_test_split을 사용할 필요가 없다.
 cross_val_score(model, x, y, cv=kfold) 형태로 사용되기 때문이다.
 cross_val_score(model, x, y, cv=kfold) 과정에서 fit과 컴파일도 같이 진행된다.
-
-
 """
 
 from sklearn.datasets import load_iris

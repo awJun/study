@@ -2,9 +2,13 @@ import pandas as pd
 import numpy as np
 import glob
 
+###[ 해당 경로의 파일들을 리스트형태로 하나로 가져옴 가져옴 ]#######################################
 path = './_data/dacon_Bok/'
 all_input_list = sorted(glob.glob(path + 'train_input/*.csv'))
 all_target_list = sorted(glob.glob(path + 'train_target/*.csv'))
+
+#######[ 데이터셋 분리 ]#####################################################################
+# [행: ] 행일경우 val이고 [ :열]이면 train이다.
 
 train_input_list = all_input_list[:50]
 train_target_list = all_target_list[:50]
@@ -16,6 +20,8 @@ val_target_list = all_target_list[50:]
 print(val_input_list)
 print(len(val_input_list))  # 8
 
+
+######[ 위에서 받아온 리스트 자료들을 키와 벨류 형태로 분리작업 ]#################################################################
 def aaa(input_paths, target_paths): #, infer_mode):
     input_paths = input_paths
     target_paths = target_paths
@@ -52,6 +58,9 @@ x_test, y_test = aaa(val_input_list, val_target_list) #, False)
 # print(y_train.shape)  # (1607,)
 # print(x_test.shape)   # (206, 1440, 37)
 # print(y_test.shape)   # (206,)
+
+######[ 위에서 받아온 리스트 자료들을 키와 벨류 형태로 분리작업 ]#################################################################
+
 
 x_train = x_train.reshape(1607, 1440 * 37)   
 x_test = x_test.reshape(206, 1440 * 37)

@@ -78,7 +78,7 @@ model.fit(x_train, y_train, early_stopping_rounds=10,
 print('테스트 스코어: ', model.score(x_test, y_test))
 
 print('-----------------------------------------------------------------------')
-hist = model.evals_result()
+hist = model.evals_result()   # evals_result : 평가 결과를 반환해준다.
 print(hist)
 
 # [실습] 그래프 그리기

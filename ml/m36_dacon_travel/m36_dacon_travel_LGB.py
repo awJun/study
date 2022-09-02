@@ -358,36 +358,66 @@ kfold = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=123)
 
 ###[ CatBoostClassifier의 파라미터 지정 ]#####################################################################################################
 
-cat_paramets = {"learning_rate" : [0.20909079092170735],
-                'depth' : [8],
-                'od_pval' : [0.236844398775451],
-                'model_size_reg': [0.30614059763442997],
-                'l2_leaf_reg' :[5.535171839105427]}
+# cat_paramets = {"learning_rate" : [0.20909079092170735],
+#                 'depth' : [8],
+#                 'od_pval' : [0.236844398775451],
+#                 'model_size_reg': [0.30614059763442997],
+#                 'l2_leaf_reg' :[5.535171839105427]}
+Bayesian_params = {
+    "max_depth" : (6, 16),
+    "num_leaves" : (24, 64),
+    "min_child_samples" : (10, 200),
+    "min_child_weight" : (1, 50),
+    "subsample" : (0.5, 1),
+    "colsample_bytree" : (0.5, 1),
+    "max_bin" : (10, 500),
+    "reg_lambda" : (0.001, 10),
+    "reg_alpha" : (0.01, 50)
+}
 
+def lgb_hamsu(max_depth, num_leaves, min_child_samples, min_child_weight,
+              subsample, colsample_bytree, max_bin, reg_lambda, reg_alpha
+              ):
+    cat_paramets = {
+        'n_estimators':500, "learning_rate":0.02,
+        'max_depth' : int(round(max_depth)),                             # int형태로 받아야해서 flout를 반올림 후 int로 변환 (무조건 정수형)
+        'num_leaves' : int(round(num_leaves)),                           # int형태로 받아야해서 flout를 반올림 후 int로 변환 (무조건 정수형)
+        'min_child_samples' : int(round(min_child_samples)),             # int형태로 받아야해서 flout를 반올림 후 int로 변환 (무조건 정수형)
+        'min_child_weight' : int(round(min_child_weight)),               # int형태로 받아야해서 flout를 반올림 후 int로 변환 (무조건 정수형)
+        'subsample' : max(min(subsample, 1), 0),                         # 0~1 사이의 값이 들어와야한다.  1이상이면 1 
+        'colsample_bytree' : max(min(colsample_bytree, 1), 0),           # 0~1 사이의 값이 들어와야한다.  1이상이면 1 
+        'max_bin' : max(int(round(max_bin)), 10),                        # 무조건 10 이상의 정수를 받아야한다.
+        'reg_lambda' : max(reg_lambda, 0),                               # 무조건 양수만 받아야한다.
+        'reg_alpha' : max(reg_alpha, 0)                                  # 무조건 양수만 받아야한다.
+    }
+    
 ###[ 모델 및 랜덤그리드서치 지정 ]############################################################################################################
-from sklearn.model_selection import GridSearchCV,RandomizedSearchCV
-from catboost import CatBoostRegressor,CatBoostClassifier
+    from sklearn.model_selection import GridSearchCV,RandomizedSearchCV
+    from catboost import CatBoostRegressor,CatBoostClassifier
+    from xgboost import XGBClassifier
+    from lightgbm import LGBMClassifier
+# cat = CatBoostClassifier(random_state=123, verbose=False, n_estimators=500)
+    cat = LGBMClassifier(random_state=123, verbose=False, n_estimators=500)
 
-cat = CatBoostClassifier(random_state=123, verbose=False, n_estimators=500)
-
-model = RandomizedSearchCV(cat, cat_paramets, cv=kfold, n_jobs=-1)
+    model = RandomizedSearchCV(cat, cat_paramets, cv=kfold, n_jobs=-1)
 
 # print(cat.feature_importances_)
 ###[ 훈련, 컴파일 및 시간체크 ]###############################################################################################################  
-import time 
-start_time = time.time()
-model.fit(x_train,y_train)   
-end_time = time.time()-start_time 
+    import time 
+    start_time = time.time()
+    model.fit(x_train,y_train)   
+    end_time = time.time()-start_time 
 
 
 ###[ feature_importances 작업 ]##############################################################################################
 # train과 test를 나누기 전에 제거해야하므로 위에서 작업할 예정
 # feature_importances를 사용할 때는 그리드 서치가 있으면 안되므로 이처럼 작업을 진행했음
 # 여기서는 수치가 최소가 3점대이므로 삭제할 필요가 없음 그래도 상관관계 계수 그패르를 위에서 그려서 확인해볼 예정
+# 위에서는 작업대신 상관계수 그래프로 확인했음 이거와 그래프의 차이는 훈련 후 해당 열의 중요도를 수치로 보는 것과
+#    그래프로 어떤 열과 연관이 큰지 확인하는 차이임
 
-
-cat.fit(x_train,y_train) 
-print(cat.feature_importances_)  # 훈련중에 컬럼 중요도
+    cat.fit(x_train,y_train) 
+    print(cat.feature_importances_)  # 훈련중에 컬럼 중요도
 
 # [ 8.08058299  3.86459127  7.70876826 11.41683277  5.54011217  3.74391457
 #   7.62074527  8.63980597  8.84762174  8.45591204  9.86389975 10.72708653
@@ -395,23 +425,23 @@ print(cat.feature_importances_)  # 훈련중에 컬럼 중요도
 
 
 ###[ 평가, 예측  ]##############################################################################################
-from sklearn.metrics import r2_score, accuracy_score
-y_predict = model.predict(x_test)
-results = accuracy_score(y_test,y_predict)
-print('최적의 매개변수 : ',model.best_params_)
-print('최상의 점수 : ',model.best_score_)
-print('acc :',results)
-print('걸린 시간 :',end_time)
+    from sklearn.metrics import r2_score, accuracy_score
+    y_predict = model.predict(x_test)
+    results = accuracy_score(y_test,y_predict)
+    print('최적의 매개변수 : ',model.best_params_)
+    print('최상의 점수 : ',model.best_score_)
+    print('acc :',results)
+    print('걸린 시간 :',end_time)
 
 ###[ csv파일 작업 ]##############################################################################################
-y_summit = model.predict(test_set)
-y_summit = np.round(y_summit,0)
-submission = pd.read_csv(path + 'sample_submission.csv',#예측에서 쓸거야!!
+    y_summit = model.predict(test_set)
+    y_summit = np.round(y_summit,0)
+    submission = pd.read_csv(path + 'sample_submission.csv',#예측에서 쓸거야!!
                       )
-submission['ProdTaken'] = y_summit
-submission.to_csv('test10.csv',index=False)
+    submission['ProdTaken'] = y_summit
+    submission.to_csv('test10.csv',index=False)
 
-# 최상의 점수 :  0.9045300878972279
-# acc : 0.9534883720930233
-# 걸린 시간 : 4.554198980331421
-
+# 최적의 매개변수 :  {'od_pval': 0.236844398775451, 'model_size_reg': 0.30614059763442997, 'learning_rate': 0.20909079092170735, 'l2_leaf_reg': 5.535171839105427, 'depth': 8}
+# 최상의 점수 :  0.8844091794932983
+# acc : 0.936046511627907
+# 걸린 시간 : 2.706111192703247

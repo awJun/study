@@ -54,7 +54,7 @@ import warnings
 warnings.filterwarnings('ignore') # warnig 출력 안함
 
 # 1. 데이터
-path = 'D:\study_data\_data\kaggle_titanic/'
+path = './_data/kaggle_titanic/'
 train_set = pd.read_csv(path+'train.csv')
 test_set = pd.read_csv(path+'test.csv')
 
@@ -82,6 +82,8 @@ print(x)
 x = np.array(x)
 y = np.array(y).reshape(-1, 1) # 벡터로 표시되어 있는 y데이터를 행렬로 전환
 
+
+
 import matplotlib.pyplot as plt
 import math
 def outliers(data_out):
@@ -97,7 +99,7 @@ def outliers(data_out):
     return np.where((data_out>upper_bound) | (data_out<lower_bound))
 
 def outliers_printer(dataset):
-    plt.figure(figsize=(10,8))
+    plt.figure(figsize=(128,128))
     for i in range(dataset.shape[1]):
         col = dataset[:, i]
         outliers_loc = outliers(col)

@@ -1,12 +1,15 @@
 """"
 [핵심]
+각각의 컬럼들의 연관성을 확인하기 위해서 사용한다.
+
 print(datasets.feature_names)로 해당 데이터의 컬럼들의 이름을 확인하고
 
+### [ 해당 과정에서 사용한 데이터는 iris라이브러리이므로해당 과정을 해준것임 아니면 에러남]####
 df = pd.DataFrame(x, columns=[['sepal length (cm)', 'sepal width (cm)',
                     'petal length (cm)', 'petal width (cm)']])
 
 x = datasets['data']에서 np로 받은 데이터를 괄호안에 컬럼들의 이름들을 넣어서 df로 변환함
-
+################################################################################################
 
 [ df에 y를 추가 ]
 df['target(Y)'] = y  # df에 y를 넣는데 그 이름을 target(Y)로 하겠다
