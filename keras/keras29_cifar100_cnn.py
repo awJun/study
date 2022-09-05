@@ -28,9 +28,9 @@ std = np.std(x_train, axis=(0 , 1 , 2 , 3))
 x_train = (x_train-mean)/std
 x_test = (x_test-mean)/std
 
-x_train = x_train.reshape(50000, 32, 32, 3)
+x_train = x_train.reshape(50000, 32, 32, 3)   # 갯수: 50000 / 전체 이미지 크기:32, 32  /  색깔: 3 (3은 컬러 /  1은 흑색)
 x_test = x_test.reshape(10000, 32, 32, 3)
-print(x_train.shape)    # (50000, 32, 32, 3)
+print(x_train.shape)    # (50000, 32, 32, 3)  # 3이면 컬러  /  1이면 흑백
 print(np.unique(x_train, return_counts=True))
 
 # One Hot Encoding
@@ -42,7 +42,7 @@ print(y_train.shape, y_test.shape)
 
 #2. 모델링 
 model = Sequential()
-model.add(Conv2D(filters=64, kernel_size=(3, 3), padding='same', 
+model.add(Conv2D(filters=64, kernel_size=(3, 3), padding='same', # kernel_size=(3, 3) 위에 전체 중에서 3, 3으로 잘라서 연산하겠다. 그리고   아웃풋 : filters=64 
                  activation='relu', input_shape=(32, 32, 3)))
 model.add(MaxPooling2D(2, 2))  
 model.add(Dropout(0.25))     

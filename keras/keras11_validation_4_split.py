@@ -1,3 +1,13 @@
+"""
+###[ 핵심 ]########################################################################
+
+model.compile(loss="mse", optimizer='adam')
+model.fit(x_train, y_train, epochs=100, batch_size=1, validation_split=0.25)
+# validation_split=0.25 데이터의 0.25를 validation로 빼서 사용하겠다. 라는 뜻
+
+###################################################################################
+"""
+
 import numpy as np
 import pandas as pd
 
