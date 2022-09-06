@@ -17,6 +17,8 @@ tf.random.set_seed(777)
 print(x_train.shape, y_train.shape)     # (50000, 32, 32, 3) (50000, 1)
 print(x_test.shape, y_test.shape)       # (10000, 32, 32, 3) (10000, 1)
 
+print()
+
 # scale (이미지를 0 ~ 255 -> 0 ~ 1 범위로 만들어줌)
 x_train = x_train.astype('float32')
 x_test = x_test.astype('float32' )

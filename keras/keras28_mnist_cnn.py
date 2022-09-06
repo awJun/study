@@ -14,9 +14,9 @@ from matplotlib import font_manager, rc
 print(x_train.shape, y_train.shape)     # (60000, 28, 28) (60000,)
 print(x_test.shape, y_test.shape)       # (10000, 28, 28) (10000,)
 
-x_train = x_train.reshape(60000, 28, 28, 1)  # (60000, 28, 28) (60000,)
+x_train = x_train.reshape(60000, 28, 28, 1)  # (60000, 28, 28) (60000,)  # 갯수: 50000 / 전체 이미지 크기:32, 32  /  색깔: 3 (3은
 x_test = x_test.reshape(10000, 28, 28, 1)   # (10000, 28, 28) (10000,)
-# print(x_train.shape)    # (60000, 28, 28)
+print(x_train.shape)    # (60000, 28, 28, 1) # # (50000, 32, 32, 3)  # 3이면 컬러  /  1이면 흑백
 # print(np.unique(x_train, return_counts=True))  # [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 
@@ -33,10 +33,10 @@ x_test = x_test.reshape(10000, 28, 28, 1)   # (10000, 28, 28) (10000,)
 # print(y_train)
 # print(y_train.shape)
 
-
+# 갯수: 50000 / 전체 이미지 크기:32, 32  /  색깔: 3 (3은
 #2. 모델링 
 model = Sequential()
-model.add(Conv2D(filters=32, kernel_size=(4, 4),    
+model.add(Conv2D(filters=32, kernel_size=(4, 4),  # kernel_size=(3, 3) 위에 전체 중에서 3, 3으로 잘라서 연산하겠다. 그리고   아웃풋 : filters=64   
                  padding='same', 
                  input_shape=(28, 28, 1)))      
 model.add(MaxPooling2D(2, 2))           
