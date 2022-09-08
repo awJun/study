@@ -67,10 +67,33 @@ print("[8,9,10의 결과", result)
 
 
 
+# Model: "sequential"
+# _________________________________________________________________
+# Layer (type)                 Output Shape              Param #
+# =================================================================
+# lstm (LSTM)                  (None, 10)                480
+# _________________________________________________________________
+# dense (Dense)                (None, 5)                 55
+# _________________________________________________________________
+# dense_1 (Dense)              (None, 1)                 6
+# =================================================================
+# Total params: 541
+# Trainable params: 541
+# Non-trainable params: 0
 
 
+# ==> 연산량이 많아짐
+# g, no. of FFNNs in a unit (RNN has 1, GRU has 3, LSTM has 4)
+# h, size of hidden units
+# i, dimension/size of input
+# Since every FFNN(feed forward neural network) has h(h+i) + h parameters, we have
 
 
+# [simpleRNN] uints: 10 ==> 10*(10+1)+10 = 120
+# [LSTM] units : 10 ==> 4*(10*(10+1)+10) = 480
+#                       4*(20*(20+1)+10) = 1760
+# 결론 : LSTM = simpleRNN * 4
+# 숫자 4의 의미는 cell state, input gate, output gate, forget gate
 
 
 

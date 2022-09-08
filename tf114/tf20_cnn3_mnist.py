@@ -1,6 +1,10 @@
 """
-tf.compat.v1.disable_eager_execution()를 사용하면
+[해당 프로젝트 설명]
+https://colab.research.google.com/drive/1Kxmxi8RmzpydE6soHyZ0yed4mWTM07uD
 
+
+
+tf.compat.v1.disable_eager_execution()를 사용하면
 
 initializer=tf.compat.v1.keras.initializers.glorot_normal())
 

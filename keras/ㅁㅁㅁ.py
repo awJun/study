@@ -2,17 +2,15 @@ import numpy as np
 from keras.preprocessing.image import ImageDataGenerator
 from keras.preprocessing.image import DirectoryIterator
 from keras.layers import MaxPooling2D, Dropout
-
+from sympy import Max
+import tensorboard 
 
 #1. 데이터 로드
 
-
-#=[ 증폭된 데이터 불러옴 ]=======================================================
 x_train = np.load('d:/study_data/_save/_npy/cat_dog/keras49_06_train_x.npy')
 y_train = np.load('d:/study_data/_save/_npy/cat_dog/keras49_06_train_y.npy')
 x_test = np.load('d:/study_data/_save/_npy/cat_dog/keras49_06_test_x.npy')
 y_test = np.load('d:/study_data/_save/_npy/cat_dog/keras49_06_test_y.npy')
-#==============================================================================
 
 
 #2. 모델
@@ -58,22 +56,3 @@ print('val_accuracy :', val_accuracy[-1])
 
 print("=====================================================================")
 print("걸린시간 : ", end_time)
-
-# #그래프로 비교
-# import matplotlib.pyplot as plt
-# from matplotlib import font_manager, rc
-
-# font_path = 'C:\Windows\Fonts\malgun.ttf'
-# font = font_manager.FontProperties(fname=font_path).get_name()
-# rc('font', family=font)
-# plt.figure(figsize=(9,6))
-# plt.plot(hist.history['loss'], marker='.', c='red', label='loss')
-# plt.plot(hist.history['val_loss'], marker='.', c='blue', label='val_loss')
-# plt.plot(hist.history['accuracy'], marker='.', c='orange', label='accuracy')
-# plt.plot(hist.history['val_accuracy'], marker='.', c='green', label='val_accuracy')
-# plt.grid()    
-# plt.title('로스값과 검증로스값')    
-# plt.ylabel('loss')
-# plt.xlabel('epochs')
-# plt.legend()   
-# plt.show()

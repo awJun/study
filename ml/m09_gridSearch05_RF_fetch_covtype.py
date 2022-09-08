@@ -85,7 +85,7 @@ model = GridSearchCV(RandomForestClassifier(), parameters, cv=kfold, verbose=1, 
 # 3. 컴파일, 훈련
 import time
 start = time.time()
-model.fit(x_train, y_train)
+model.fit(x_train, y_train, epochs=30, validation_split=0.4)
 end = time.time()
 
 print('최적의 매개변수: ', model.best_estimator_)
