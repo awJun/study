@@ -11,6 +11,8 @@ input_shape은 네트워크에 주입할 이미지 텐서의 크기입니다. �
 
  # CNN연산 : 3 x 3 (필터 크기) x 32 (#입력 채널) x 64(#출력 채널) + 64 = 18496 입니다.  / https://gaussian37.github.io/dl-keras-number-of-cnn-param/
  
+ [프로젝트 참고]
+ https://colab.research.google.com/drive/1Yeo80i0eEkI8fdIrTo_V2Qrup9yOsWV2#scrollTo=U7HBskCfhUFZ
 """
 
 import numpy as np

@@ -1,5 +1,6 @@
 import numpy as np 
 from keras.preprocessing.image import ImageDataGenerator
+from keras.applications import VGG19
 
 #=[ 증폭된 데이터 불러옴 ]=======================================================
 # keras49_6__cat_dog_flow_save_npy.py
@@ -18,11 +19,14 @@ y_test = np.load('d:/study_data/_save/_npy/cat_dog/keras49_06_test_y.npy')
 from tensorflow.python.keras.models import Sequential
 from tensorflow.python.keras.layers import Dense,Conv2D,Flatten
 from sklearn.metrics import r2_score,accuracy_score
-model = Sequential()
+keras_model = VGG19(weights="imagenet", include_top=False,  
+                input_shape=(150, 150, 3))
 
+model = Sequential()
+model.add(keras_model) 
 model.add(Flatten())
-model.add(Dense(10, activation='relu'))
-model.add(Dense(10, activation='relu'))
+model.add(Dense(128, activation='relu'))  
+model.add(Dense(64, activation='relu'))  
 model.add(Dense(10, activation='softmax'))
 # model.summary()
 
@@ -45,10 +49,9 @@ val_loss = hist.history['val_loss']
 print('loss :', loss[-1])       
 print('val_loss :', val_loss[-1])
 print('accuracy :', accuracy[-1])
-print('val_accuracy :', val_accuracy[-1])
+print('val_accuracy :', val_accuracy[-1])   # 위에서 history를 사용해서 값이 여러개가 출력된다 그중 제일 최근의 로스인 마지막 부분을 가져와서 출력했다.
 
-
-# loss : 0.3074779808521271
-# val_loss : 0.697265625
-# accuracy : 0.8462499976158142
-# val_accuracy : 0.5099999904632568
+# loss : 0.6939136981964111
+# val_loss : 0.6937953233718872
+# accuracy : 0.5074999928474426
+# val_accuracy : 0.49000000953674316
