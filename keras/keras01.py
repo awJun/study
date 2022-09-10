@@ -31,8 +31,8 @@ model.add(Dense(1))  # 최종 y의 값
 model.compile(loss='mse', optimizer='adam')    
 # lose: 오차값을 계산    optimizer: MSE에 최적화를 adam으로 하겠다인거 같음 ;;   
 model.fit(x, y, epochs=1000)  # ( ) 괄호 안에는 각각 다 파라미터라고 부름    
-# fit: 훈련을 시킬 것 이다 (x, y를 100번)                                           
-# 훈련시킬 x y ㄱ밧을 달라                                                                                 
+# fit: 훈련을 시킬 것 이다 (x, y를 100번)                                              
+# 훈련시킬 x y ㄱ밧을 달라                                                                                       
 # 이 과정을 통해 w 값이 생겼다 이 과정이 lo w      
 
 # model에 가중된 w값이 들어있다.
@@ -58,7 +58,7 @@ print('4의 예측값 : ', result)
 # 데이터 전후처리는 훈련전 가장 중요 이 과정으로 정제된 데이터를 추출할 수 있다.
 
 # (하이퍼 파라미터 튜닝 과정)
-# 훈련량 레이어 노드 
+# 훈련량 레이어 노드  
  
  
    
