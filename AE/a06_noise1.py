@@ -9,6 +9,8 @@
 
 [해당 프로젝트 설명]
 https://colab.research.google.com/drive/1ZQl3-PBeTR6z36vtmr98T3kEjjSqng8Z#scrollTo=uBXkYyfwdOCd
+위에 프로젝트에서는 결과가 그림으로 안나옴.. ㅠ 그림은 이걸로 보자
+
 """
 
 
@@ -57,7 +59,7 @@ fig, ((ax1, ax2, ax3, ax4, ax5), (ax6, ax7, ax8, ax9, ax10),
     plt.subplots(3, 5, figsize=(20, 7))
     
 # 이미지 다섯 개를 무작위로 고른다.
-random_images = random = random.sample(range(output.shape[0]), 5)
+random_images = random.sample(range(output.shape[0]), 5)
 
 # 원본(입력) 이미지를 맨 위에 그린다.
 for i, ax in enumerate([ax1, ax2, ax3, ax4, ax5]):

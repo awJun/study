@@ -21,11 +21,11 @@ x_test_noised = np.clip(x_test_noised, a_min=0, a_max=1)
 def autoencoder(hidden_layer_size):
     model = Sequential()
     model.add(Conv2D(filters=hidden_layer_size, kernel_size=(2, 2), strides=2, input_shape=(28, 28, 1), activation='relu'))
-    # model.add(Flatten())
+    model.add(Flatten())
     model.add(Dense(units=10, activation='relu'))
     model.add(Dense(units=5, activation='relu'))
-    model.add(Dense(units=1, activation='sigmoid'))
     model.add(UpSampling2D(size=(2, 2), interpolation='nearest'))
+    model.add(Dense(units=1, activation='sigmoid'))
 
     model.summary()
     return model
