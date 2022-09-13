@@ -55,29 +55,29 @@ cumsum = np.cumsum(pca_EVR) # 누적합
 print(cumsum)
 
 
-import matplotlib.pyplot as plt
-plt.plot(cumsum)
-plt.grid()
-plt.show()
+# import matplotlib.pyplot as plt
+# plt.plot(cumsum)
+# plt.grid()
+# plt.show()
 
 
-'''
-x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random_state=1234, shuffle=True)
-# 2. 모델
-from sklearn.ensemble import RandomForestRegressor
-from xgboost import XGBRegressor
-model = RandomForestRegressor()
-# 3. 훈련
-model.fit(x_train, y_train)
-# 4. 평가, 예측
-results = model.score(x_test, y_test)
-print('결과: ', results)
-'''
+# '''
+# x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.8, random_state=1234, shuffle=True)
+# # 2. 모델
+# from sklearn.ensemble import RandomForestRegressor
+# from xgboost import XGBRegressor
+# model = RandomForestRegressor()
+# # 3. 훈련
+# model.fit(x_train, y_train)
+# # 4. 평가, 예측
+# results = model.score(x_test, y_test)
+# print('결과: ', results)
+# '''
 
-# 모든 칼럼
-# 결과:  0.9187290554452663
+# # 모든 칼럼
+# # 결과:  0.9187290554452663
 
-# PCA 12
-# 결과:  0.8563581772863746
+# # PCA 12
+# # 결과:  0.8563581772863746
 
 
