@@ -30,22 +30,9 @@ from sklearn.model_selection import train_test_split
 
 x_train,x_test,y_train,y_test=train_test_split(x, y, train_size=0.7,shuffle=True,random_state=70)
 
-x_train = np.save("D:/study_data/_save/_npy/men_women/keras47_04_x_train.a08.npy",arr=x_train)
-x_test = np.save("D:/study_data/_save/_npy/men_women/keras47_04_x_test.a08.npy",arr=x_test)
+# x_train = np.save("D:/study_data/_save/_npy/men_women/keras47_04_x_train.a08.npy",arr=x_train)
+# x_test = np.save("D:/study_data/_save/_npy/men_women/keras47_04_x_test.a08.npy",arr=x_test)
 
-
-test_image = ImageDataGenerator(
-    rescale=1./255)
-
-dog = test_image.flow_from_directory(
-    'C:/study/Photo/', # 이 경로의 이미지파일을 불러 수치화
-    target_size=(150,150),# 크기들을 일정하게 맞춰준다.
-    batch_size=1,
-    class_mode='binary', 
-    # color_mode='grayscale', #디폴트값은 컬러
-    # shuffle=True,
-    )
-dog_test = np.save("D:/study_data/_save/_npy/men_women/keras47_04_dog_test.a08.npy",arr=dog)
 
 # #2.모델
 # from tensorflow.python.keras.models import Sequential

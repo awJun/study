@@ -108,10 +108,10 @@ start_time = time.time()
 model.fit(x_train, y_train, epochs=1, batch_size=100000)
 end_time = time.time() -start_time
 
-#4. 평가, 예측
-loss = model.evaluate(x_test, y_test)
-print("loss : ", loss)
 
+
+
+#4. 평가,예측
 y_predict = model.predict(x_test)
 from sklearn.metrics import r2_score
 r2 = r2_score(y_test, y_predict)   
@@ -125,7 +125,6 @@ print("r2 스코어 : ", r2)
 # # .reshape(1, 3, 1) 안에 1, 3, 1인 이유는 x.reshape(7, 3, 1)에서 3, 1 부분을  input_shape=(3, 1)에 넣어서 사용해서 3, 1 부분을
 # #   넣고 뒤에 1을 곱하는 형식으로 3차춴으로 만들어 줬다
 
-#4. 평가,예측
 loss = model.evaluate(x_test, y_test)
 print('loss :', loss)
 

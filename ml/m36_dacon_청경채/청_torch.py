@@ -16,14 +16,16 @@ import warnings
 warnings.filterwarnings(action='ignore') 
 
 
-# In[2]:
 
-device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
+########### [Hyperparameter Setting] ###########
 
+USE_CUDA = torch.cuda.is_available()
+DEVICE = torch.device('cuda:0' if USE_CUDA else 'cpu')
+# print(torch.__version__, DEVICE) # 1.12.1 cuda:0
 
+# device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
-# In[3]:
-# Hyperparameter 설정
+########### [Hyperparameter Setting] ###########
 
 CFG = {
     'EPOCHS':5,
@@ -33,9 +35,8 @@ CFG = {
 }
 
 
+################ [Fixed RandomSeed] ##############
 
-# In[4]:
-# 고정 랜덤 시드 
 def seed_everything(seed):
     random.seed(seed)
     os.environ['PYTHONHASHSEED'] = str(seed)
@@ -48,21 +49,10 @@ def seed_everything(seed):
 seed_everything(CFG['SEED']) # Seed 고정
 
 
+################# [Data Pre-processing] ##################
 
-
-# In[5]:
-# 데이터 사전 처리
-
-all_input_list = sorted(glob.glob('./_data/dacon_Bok/train_input/*.csv'))
-all_target_list = sorted(glob.glob('./_data/dacon_Bok/train_target/*.csv'))
-
-
-# glob.glob : 사용자가 제시한 조건에 맞는 파일명을 리스트 형식으로 반환한다. 
-# https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=siniphia&logNo=221397012627
-
-
-# In[6]:
-
+all_input_list = sorted(glob.glob('D:/study_data/_data/dacon_Bok/train_input'))
+all_target_list = sorted(glob.glob('D:/study_data/_data/dacon_Bok/train_target'))
 
 train_input_list = all_input_list[:50]
 train_target_list = all_target_list[:50]
@@ -71,9 +61,7 @@ val_input_list = all_input_list[50:]
 val_target_list = all_target_list[50:]
 
 
-
-# In[7]:
-# 사용자 지정 데이터 세트
+#################### [CustomDataset] ######################
 
 class CustomDataset(Dataset):
     def __init__(self, input_paths, target_paths, infer_mode):
@@ -113,16 +101,17 @@ class CustomDataset(Dataset):
         return len(self.data_list)
 
 
-# In[8]:
+
 train_dataset = CustomDataset(train_input_list, train_target_list, False)
-train_loader = DataLoader(train_dataset, batch_size = CFG['BATCH_SIZE'], shuffle=True, num_workers=0)
+train_loader = DataLoader(train_dataset, batch_size = CFG['BATCH_SIZE'], shuffle=True, num_workers=6)
 
 val_dataset = CustomDataset(val_input_list, val_target_list, False)
-val_loader = DataLoader(val_dataset, batch_size=CFG['BATCH_SIZE'], shuffle=False, num_workers=0)
+val_loader = DataLoader(val_dataset, batch_size=CFG['BATCH_SIZE'], shuffle=False, num_workers=6)
 
 
-# In[9]:
-# 모델 정의
+
+#################### [Model Define] ######################
+
 class BaseModel(nn.Module):
     def __init__(self):
         super(BaseModel, self).__init__()
@@ -137,11 +126,12 @@ class BaseModel(nn.Module):
         return output
 
 
-# In[10]:
-# Train
-def train(model, optimizer, train_loader, val_loader, scheduler, device):
-    model.to(device)
-    criterion = nn.L1Loss().to(device)
+
+######################## [Train] ##########################
+
+def train(model, optimizer, train_loader, val_loader, scheduler, DEVICE):
+    model.to(DEVICE)
+    criterion = nn.L1Loss().to(DEVICE)
     
     best_loss = 9999
     best_model = None
@@ -149,8 +139,8 @@ def train(model, optimizer, train_loader, val_loader, scheduler, device):
         model.train()
         train_loss = []
         for X, Y in tqdm(iter(train_loader)):
-            X = X.to(device)
-            Y = Y.to(device)
+            X = X.to(DEVICE)
+            Y = Y.to(DEVICE)
             
             optimizer.zero_grad()
             
@@ -162,7 +152,7 @@ def train(model, optimizer, train_loader, val_loader, scheduler, device):
             
             train_loss.append(loss.item())
                     
-        val_loss = validation(model, val_loader, criterion, device)
+        val_loss = validation(model, val_loader, criterion, DEVICE)
         
         print(f'Train Loss : [{np.mean(train_loss):.5f}] Valid Loss : [{val_loss:.5f}]')
         
@@ -175,14 +165,15 @@ def train(model, optimizer, train_loader, val_loader, scheduler, device):
     return best_model
 
 
-# In[11]:
-def validation(model, val_loader, criterion, device):
+
+
+def validation(model, val_loader, criterion, DEVICE):
     model.eval()
     val_loss = []
     with torch.no_grad():
         for X, Y in tqdm(iter(val_loader)):
-            X = X.float().to(device)
-            Y = Y.float().to(device)
+            X = X.float().to(DEVICE)
+            Y = Y.float().to(DEVICE)
             
             model_pred = model(X)
             loss = criterion(model_pred, Y)
@@ -192,38 +183,30 @@ def validation(model, val_loader, criterion, device):
     return np.mean(val_loss)
 
 
-# 훈련
-def run():
-    torch.multiprocessing.freeze_support()
-    print('loop')
-    
-if __name__ == '__main__':
-    run()
-    
-        
-# In[12]:
+######################## [Run!!] ##########################
+
 model = BaseModel()
 model.eval()
 optimizer = torch.optim.Adam(params = model.parameters(), lr = CFG["LEARNING_RATE"])
 scheduler = None
 
-best_model = train(model, optimizer, train_loader, val_loader, scheduler, device)
+best_model = train(model, optimizer, train_loader, val_loader, scheduler, DEVICE)
 
 
+######################## [Inference] ##########################
 
-# In[13]:
-# Inference <-- 추론
-test_input_list = sorted(glob.glob('/test_input/*.csv'))
+test_input_list = sorted(glob.glob('./test_input/*.csv'))
 test_target_list = sorted(glob.glob('./test_target/*.csv'))
 
-# In[14]:
-def inference_per_case(model, test_loader, test_path, device):
-    model.to(device)
+
+
+def inference_per_case(model, test_loader, test_path, DEVICE):
+    model.to(DEVICE)
     model.eval()
     pred_list = []
     with torch.no_grad():
         for X in iter(test_loader):
-            X = X.float().to(device)
+            X = X.float().to(DEVICE)
             
             model_pred = model(X)
             
@@ -234,45 +217,24 @@ def inference_per_case(model, test_loader, test_path, device):
     submit_df = pd.read_csv(test_path)
     submit_df['rate'] = pred_list
     submit_df.to_csv(test_path, index=False)
+    
+    
+    
+for test_input_path, test_target_path in zip(test_input_list, test_target_list):
+    test_dataset = CustomDataset([test_input_path], [test_target_path], True)
+    test_loader = DataLoader(test_dataset, batch_size = CFG['BATCH_SIZE'], shuffle=False, num_workers=0)
+    inference_per_case(best_model, test_loader, test_target_path, DEVICE)
 
 
-    # In[15]:
-    for test_input_path, test_target_path in zip(test_input_list, test_target_list):
-        test_dataset = CustomDataset([test_input_path], [test_target_path], True)
-        test_loader = DataLoader(test_dataset, batch_size = CFG['BATCH_SIZE'], shuffle=False, num_workers=0)
-        inference_per_case(best_model, test_loader, test_target_path, device)
 
 
 
-    path2 = 'D:/study_data/_data/dacon_Bok/test_target/' # ".은 현재 폴더"
-    targetlist = ['TEST_01.csv','TEST_02.csv','TEST_03.csv','TEST_04.csv','TEST_05.csv','TEST_06.csv']
-    # [29, 35, 26, 32, 37, 36]
-    empty_list = []
-    for i in targetlist:
-        test_target2 = pd.read_csv(path2+i)
-        empty_list.append(test_target2)
-        
-    empty_list[0]['rate'] = submit_df[:29]
-    empty_list[0].to_csv(path2+'TEST_01.csv')
-    empty_list[1]['rate'] = submit_df[29:29+35]
-    empty_list[1].to_csv(path2+'TEST_02.csv')
-    empty_list[2]['rate'] = submit_df[29+35:29+35+26]
-    empty_list[2].to_csv(path2+'TEST_03.csv')
-    empty_list[3]['rate'] = submit_df[29+35+26:29+35+26+32]
-    empty_list[3].to_csv(path2+'TEST_04.csv')
-    empty_list[4]['rate'] = submit_df[29+35+26+32:29+35+26+32+37]
-    empty_list[4].to_csv(path2+'TEST_05.csv')
-    empty_list[5]['rate'] = submit_df[29+35+26+32+37:29+35+26+32+37+36]
-    empty_list[5].to_csv(path2+'TEST_06.csv')
-    # submission = submission.fillna(submission.mean())
-    # submission = submission.astype(int)
 
-
-    import os
-    import zipfile
-    filelist = ['TEST_01.csv','TEST_02.csv','TEST_03.csv','TEST_04.csv','TEST_05.csv', 'TEST_06.csv']
-    os.chdir("D:/study_data/_data\dacon_Bok/test_target")
-    with zipfile.ZipFile("submission.zip", 'w') as my_zip:
-        for i in filelist:
-            my_zip.write(i)
-        my_zip.close()
+######################## [submission save] ##########################
+import zipfile
+os.chdir("D:/study_data/_data/dacon_Bok/test_target/")
+submission = zipfile.ZipFile("../submission.zip", 'w')
+for path in test_target_list:
+    path = path.split('/')[-1]
+    submission.write(path)
+submission.close()

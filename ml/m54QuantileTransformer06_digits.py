@@ -19,7 +19,8 @@ from sklearn.pipeline import make_pipeline
 
 datasets = load_digits()
 x, y = datasets.data, datasets.target
-# print(x.shape, y.shape)    # (150, 4) (150,)
+print(x.shape, y.shape)    # (1797, 64) (1797,)
+print(np.unique(y))
 
 x_train, x_test, y_train, y_test = train_test_split(x, y,
                                                     train_size=0.8,
