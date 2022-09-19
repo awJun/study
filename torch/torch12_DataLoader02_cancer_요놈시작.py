@@ -68,7 +68,7 @@ print(train_set[0][1])   # 해당 행의 유니크 값
 print(len(train_set))   # 398
 
 train_loader = DataLoader(train_set, batch_size=40, shuffle=True)
-test_loader = DataLoader(test_set, batch_size=40, shuffle=True)
+test_loader = DataLoader(test_set, batch_size=40, shuffle=False)
 
 
 # #2. 모델
