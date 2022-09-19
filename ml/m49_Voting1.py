@@ -34,6 +34,7 @@ print("보킹 결과 : ", round(score, 4))  # 소수 4번째 자리까지 출력
 """
 
 
+from enum import unique
 import numpy as np
 import pandas as pd
 
@@ -51,12 +52,18 @@ datasets = load_breast_cancer()
 # df = pd.DataFrame(datasets.data, columns=datasets.feature_names)   # x 데이터만 들어감
 # print(df.head(7))
 
+
+
+
 x_train, x_test, y_train, y_test = train_test_split(datasets.data, datasets.target,
                                                     train_size=0.8,
                                                     shuffle=True,
                                                     random_state=123,
                                                     stratify=datasets.target
                                                     )
+
+print(unique(y_train))
+exit()
 
 scaler = StandardScaler()
 x_trian = scaler.fit_transform(x_train)

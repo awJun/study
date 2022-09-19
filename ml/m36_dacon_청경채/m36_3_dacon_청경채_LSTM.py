@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 import glob
 
-path = './_data/dacon_Bok/'
+path = 'D:\study_data\_data\dacon_Bok/'
 all_input_list = sorted(glob.glob(path + 'train_input/*.csv'))
 all_target_list = sorted(glob.glob(path + 'train_target/*.csv'))
 
@@ -46,66 +46,69 @@ def aaa(input_paths, target_paths): #, infer_mode):
         for label in target_df["rate"]:
             label_list.append(label)
     return np.array(data_list), np.array(label_list)
-    print('끗.')
+print('끗.')
 
 x_train, y_train = aaa(train_input_list, train_target_list) #, False)
 x_test, y_test = aaa(val_input_list, val_target_list) #, False)
 
-# print(x_train.shape)  # (1607, 1440, 37)
-# print(y_train.shape)  # (1607,)
-# print(x_test.shape)   # (2019, 1440, 37)
-# print(y_test.shape)   # (2019,)
-
+print(x_train.shape)  # (1607, 1440, 37)
+print(y_train.shape)  # (1607,)
+print(x_test.shape)   # (2019, 1440, 37)
+print(y_test.shape)   # (2019,)
+# exit()
 #--[ 스케일러 작업]- - - - - - - - - - - - - - - - - -(데이터 안에 값들의 차이을 줄여줌(평균으로 만들어주는 작업))
 from sklearn.preprocessing import MinMaxScaler, StandardScaler # 클래스 가능성이 높음
 from sklearn.preprocessing import MaxAbsScaler, RobustScaler
 
+# print(x_train.shape)
+# exit()
 x_train = x_train.reshape(1607, 1440 * 37)              
-x_test = x_test.reshape(206, 1440 * 37) 
+x_test = x_test.reshape(2019, 1440 * 37) 
 
 
-scaler =  MinMaxScaler()
-# scaler = StandardScaler()
+# scaler =  MinMaxScaler()
+scaler = StandardScaler()
 # # scaler = MaxAbsScaler()
 # # scaler = RobustScaler()
                                 
 scaler.fit(x_train)
 x_train = scaler.transform(x_train) # x_train을 수치로 변환해준다.
 x_test = scaler.transform(x_test) 
-#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-#--[차원 변형 작업]- - - - - - - - - - - - - - - - - - - - - - - 
+#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#--[차원 변형 작업]- - - - - - - - - - - - - - - - - - - - - - - -
 x_train = x_train.reshape(1607, 1440, 37)              
-x_test = x_test.reshape(206, 1440, 37)
+x_test = x_test.reshape(2019, 1440, 37)
 
 print(x_train.shape)  # (10, 3, 1)  <-- "2, 2 ,1"는 input_shape값
 print(x_test.shape)   # (3, 3, 1)
-#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
 
 from tensorflow.python.keras.models import Sequential
-from tensorflow.python.keras.layers import Dense, LSTM 
+from tensorflow.python.keras.layers import Dense, LSTM, Dropout
 model = Sequential()                            # input_shape=(3, 1) == input_length=3, input_dim=1)
 # model.add(SimpleRNN(units=100,activation='relu' ,input_shape=(3, 1)))   # [batch, timesteps, feature]
 
-model.add(LSTM(units=10 ,input_length=1440, input_dim=37))   #SimpleRNN를 거치면 3차원이 2차원으로 간다.
+model.add(LSTM(units=32 ,input_length=1440, input_dim=37))   #SimpleRNN를 거치면 3차원이 2차원으로 간다.
 # model.add(SimpleRNN(10))       # <-- 3차원이 아니라 2차원을 넣어서 에러가 발생함.[참고]
-model.add(Dense(10, activation='relu'))
-model.add(Dense(10, activation='relu'))
-model.add(Dense(10, activation='relu'))
+model.add(Dense(32, activation='relu'))
+model.add(Dropout(0.3))
+model.add(Dense(16, activation='relu'))
+model.add(Dropout(0.2))
 model.add(Dense(1))
 model.summary()
 
 #3. 컴파일, 훈련
 from tensorflow.python.keras.callbacks import EarlyStopping
 import time
-earlyStopping = EarlyStopping(monitor='val_loss', patience=50, mode='min', verbose=1,
+earlyStopping = EarlyStopping(monitor='val_loss', patience=10, mode='min', verbose=1,
                               restore_best_weights=True) 
 
 model.compile(loss='mse', optimizer='adam')
 
 start_time = time.time()
-model.fit(x_train, y_train, epochs=1, batch_size=100000)
+model.fit(x_train, y_train, epochs=50, batch_size=100000)
 end_time = time.time() -start_time
 
 
@@ -171,14 +174,3 @@ with zipfile.ZipFile("submission.zip", 'w') as my_zip:
 
 ###[ r2_score ]###########################
 # 결과:  0.8070573257161597
-
-
-
-
-
-
-
-
-
-
-

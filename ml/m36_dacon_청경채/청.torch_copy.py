@@ -15,17 +15,7 @@ from tqdm.auto import tqdm
 import warnings
 warnings.filterwarnings(action='ignore') 
 
-
-
-########### [Hyperparameter Setting] ###########
-
-USE_CUDA = torch.cuda.is_available()
-DEVICE = torch.device('cuda:0' if USE_CUDA else 'cpu')
-# print(torch.__version__, DEVICE) # 1.12.1 cuda:0
-
-# device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
-
-########### [Hyperparameter Setting] ###########
+device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
 CFG = {
     'EPOCHS':5,
@@ -33,9 +23,6 @@ CFG = {
     'BATCH_SIZE':16,
     'SEED':41
 }
-
-
-################ [Fixed RandomSeed] ##############
 
 def seed_everything(seed):
     random.seed(seed)
@@ -48,9 +35,6 @@ def seed_everything(seed):
 
 seed_everything(CFG['SEED']) # Seed 고정
 
-
-################# [Data Pre-processing] ##################
-
 all_input_list = sorted(glob.glob('D:/study_data/_data/dacon_Bok/train_input/*.csv'))
 all_target_list = sorted(glob.glob('D:/study_data/_data/dacon_Bok/train_target/*.csv'))
 
@@ -59,9 +43,6 @@ train_target_list = all_target_list[:50]
 
 val_input_list = all_input_list[50:]
 val_target_list = all_target_list[50:]
-
-
-#################### [CustomDataset] ######################
 
 class CustomDataset(Dataset):
     def __init__(self, input_paths, target_paths, infer_mode):
@@ -99,18 +80,12 @@ class CustomDataset(Dataset):
         
     def __len__(self):
         return len(self.data_list)
-
-
-
+    
 train_dataset = CustomDataset(train_input_list, train_target_list, False)
-train_loader = DataLoader(train_dataset, batch_size = CFG['BATCH_SIZE'], shuffle=True, num_workers=6)
+train_loader = DataLoader(train_dataset, batch_size = CFG['BATCH_SIZE'], shuffle=True, num_workers=0)
 
 val_dataset = CustomDataset(val_input_list, val_target_list, False)
-val_loader = DataLoader(val_dataset, batch_size=CFG['BATCH_SIZE'], shuffle=False, num_workers=6)
-
-
-
-#################### [Model Define] ######################
+val_loader = DataLoader(val_dataset, batch_size=CFG['BATCH_SIZE'], shuffle=False, num_workers=0)
 
 class BaseModel(nn.Module):
     def __init__(self):
@@ -124,14 +99,10 @@ class BaseModel(nn.Module):
         hidden, _ = self.lstm(x)
         output = self.classifier(hidden[:,-1,:])
         return output
-
-
-
-######################## [Train] ##########################
-
-def train(model, optimizer, train_loader, val_loader, scheduler, DEVICE):
-    model.to(DEVICE)
-    criterion = nn.L1Loss().to(DEVICE)
+    
+def train(model, optimizer, train_loader, val_loader, scheduler, device):
+    model.to(device)
+    criterion = nn.L1Loss().to(device)
     
     best_loss = 9999
     best_model = None
@@ -139,8 +110,8 @@ def train(model, optimizer, train_loader, val_loader, scheduler, DEVICE):
         model.train()
         train_loss = []
         for X, Y in tqdm(iter(train_loader)):
-            X = X.to(DEVICE)
-            Y = Y.to(DEVICE)
+            X = X.to(device)
+            Y = Y.to(device)
             
             optimizer.zero_grad()
             
@@ -152,7 +123,7 @@ def train(model, optimizer, train_loader, val_loader, scheduler, DEVICE):
             
             train_loss.append(loss.item())
                     
-        val_loss = validation(model, val_loader, criterion, DEVICE)
+        val_loss = validation(model, val_loader, criterion, device)
         
         print(f'Train Loss : [{np.mean(train_loss):.5f}] Valid Loss : [{val_loss:.5f}]')
         
@@ -164,16 +135,13 @@ def train(model, optimizer, train_loader, val_loader, scheduler, DEVICE):
             best_model = model
     return best_model
 
-
-
-
-def validation(model, val_loader, criterion, DEVICE):
+def validation(model, val_loader, criterion, device):
     model.eval()
     val_loss = []
     with torch.no_grad():
         for X, Y in tqdm(iter(val_loader)):
-            X = X.float().to(DEVICE)
-            Y = Y.float().to(DEVICE)
+            X = X.float().to(device)
+            Y = Y.float().to(device)
             
             model_pred = model(X)
             loss = criterion(model_pred, Y)
@@ -182,31 +150,23 @@ def validation(model, val_loader, criterion, DEVICE):
             
     return np.mean(val_loss)
 
-
-######################## [Run!!] ##########################
-
 model = BaseModel()
 model.eval()
 optimizer = torch.optim.Adam(params = model.parameters(), lr = CFG["LEARNING_RATE"])
 scheduler = None
 
-best_model = train(model, optimizer, train_loader, val_loader, scheduler, DEVICE)
-
-
-######################## [Inference] ##########################
+best_model = train(model, optimizer, train_loader, val_loader, scheduler, device)
 
 test_input_list = sorted(glob.glob('D:/study_data/_data/dacon_Bok/test_input/*.csv'))
 test_target_list = sorted(glob.glob('D:/study_data/_data/dacon_Bok/test_target/*.csv'))
 
-
-
-def inference_per_case(model, test_loader, test_path, DEVICE):
-    model.to(DEVICE)
+def inference_per_case(model, test_loader, test_path, device):
+    model.to(device)
     model.eval()
     pred_list = []
     with torch.no_grad():
         for X in iter(test_loader):
-            X = X.float().to(DEVICE)
+            X = X.float().to(device)
             
             model_pred = model(X)
             
@@ -218,23 +178,16 @@ def inference_per_case(model, test_loader, test_path, DEVICE):
     submit_df['rate'] = pred_list
     submit_df.to_csv(test_path, index=False)
     
-    
-    
 for test_input_path, test_target_path in zip(test_input_list, test_target_list):
     test_dataset = CustomDataset([test_input_path], [test_target_path], True)
     test_loader = DataLoader(test_dataset, batch_size = CFG['BATCH_SIZE'], shuffle=False, num_workers=0)
-    inference_per_case(best_model, test_loader, test_target_path, DEVICE)
-
-
-
-
-
-
-######################## [submission save] ##########################
+    inference_per_case(best_model, test_loader, test_target_path, device)
+    
 import zipfile
-os.chdir("D:/study_data/_data/dacon_Bok/test_target/")   # 저장할 파일 경로로 추정
-submission = zipfile.ZipFile("../submission.zip", 'w')   # 파일명으로 추정
+os.chdir("D:/study_data/_data/dacon_Bok/test_target")
+submission = zipfile.ZipFile("../submission.zip", 'w')
 for path in test_target_list:
     path = path.split('/')[-1]
     submission.write(path)
 submission.close()
+

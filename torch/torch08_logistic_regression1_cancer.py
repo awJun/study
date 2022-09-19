@@ -62,7 +62,7 @@ model = nn.Sequential(
 ).to(DEVICE)
 
 #3. 컴파일, 훈련
-critenrion = nn.BCELoss()    # # BCE : 바이너리크로스엔트로피   / 이진분류
+criterion = nn.BCELoss()    # # BCE : 바이너리크로스엔트로피   / 이진분류
 
 optimizer = optim.Adam(model.parameters(), lr=0.01)
 
@@ -78,20 +78,20 @@ def train(model, criterion, optimizer, x_train, y_train):
 
 EPOCHS = 100
 for epoch in range(1, EPOCHS+1):
-    loss = train(model, critenrion, optimizer, x_train, y_train)
+    loss = train(model, criterion, optimizer, x_train, y_train)
     print("epoch: {}, loss: {:.8f}.".format(epoch, loss))   # "loss: {:.8f}  / 소수점 8번째까지만 출력해라"라는 뜻이다.
 
 #4. 평가, 예측
 print("=========== 평가, 예측 =============")
-def evaluate(model, criterion, x_train, y_train): #그라디언티 적용 안해서 옵티마이저 필ㅇ없음? ??
+def evaluate(model, criterion, x_test, y_test): #그라디언티 적용 안해서 옵티마이저 필ㅇ없음? ??
     model.eval()
     
     with torch.no_grad():
         hypothesis = model(x_test)
-        loss = critenrion(hypothesis, y_test)
+        loss = criterion(hypothesis, y_test)
     return loss.item()
 
-loss = evaluate(model, critenrion, x_test, y_test)
+loss = evaluate(model, criterion, x_test, y_test)
 print("loss : ", loss)
 
 # y_predict = model(x_test)
